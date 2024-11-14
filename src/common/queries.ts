@@ -59,6 +59,7 @@ export const productsQuery = graphql(`
 export const productBySlugQuery = graphql(`
   query ProductBySlug($slug: String!) {
     product(slug: $slug) {
+      id
       name
       description
       assets {
