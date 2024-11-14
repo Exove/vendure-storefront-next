@@ -1,9 +1,6 @@
 import { activeOrderFragment } from "@/common/queries";
-import {
-  formatCurrency,
-  getActiveOrder,
-  getLoggedInUser,
-} from "@/common/utils";
+import { formatCurrency } from "@/common/utils";
+import { getActiveOrder, getLoggedInUser } from "@/common/utils-server";
 import CreateOrder from "@/components/create-order";
 import { getFragmentData } from "@/gql/fragment-masking";
 

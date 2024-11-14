@@ -1,6 +1,6 @@
 import { API_URL } from "@/common/constants";
 import { productBySlugQuery } from "@/common/queries";
-import AddToOrder from "@/components/add-to-order";
+import SelectVariant from "@/components/select-variant";
 import { request } from "graphql-request";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -35,14 +35,8 @@ export default async function ProductPage({ params }: PageProps) {
           <h1 className="text-4xl font-bold mb-8">{product.name}</h1>
           <p className="text-lg">{product.description}</p>
         </div>
-        <div className="flex flex-col gap-5">
-          {product.variants.map((variant) => (
-            <div key={variant.id}>
-              {variant.name}: {variant.price} e
-              <AddToOrder productVariantId={variant.id} />
-            </div>
-          ))}
-        </div>
+
+        <SelectVariant variants={product.variants} />
       </div>
     </div>
   );

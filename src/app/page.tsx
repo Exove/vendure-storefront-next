@@ -2,7 +2,7 @@ import Link from "next/link";
 import { API_URL } from "../common/constants";
 import { activeOrderFragment, productsQuery } from "../common/queries";
 import { request } from "graphql-request";
-import { getActiveOrder } from "@/common/utils";
+import { getActiveOrder } from "@/common/utils-server";
 import { getFragmentData } from "../gql/fragment-masking";
 
 export default async function Home() {
@@ -13,7 +13,7 @@ export default async function Home() {
     await getActiveOrder()
   );
 
-  console.log("activeOrder:", activeOrder?.totalWithTax);
+  console.log("activeOrder:", activeOrder?.id);
 
   return (
     <div className="max-w-screen-md mx-auto py-20">
