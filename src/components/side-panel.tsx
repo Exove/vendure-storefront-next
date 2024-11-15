@@ -1,5 +1,6 @@
 "use client";
 
+import { CartContext } from "@/app/templates/product-template";
 import {
   Dialog,
   DialogPanel,
@@ -7,13 +8,14 @@ import {
   TransitionChild,
 } from "@headlessui/react";
 import clsx from "clsx";
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect, useContext } from "react";
 
 interface MenuDialogProps {
   openLabel: React.ReactNode;
   children: React.ReactNode;
   fullWidthButton?: boolean;
   position?: "left" | "right";
+  open?: boolean;
 }
 
 export default function SidePanel({
@@ -23,6 +25,15 @@ export default function SidePanel({
   position = "right",
 }: MenuDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
+  let { open, setOpen } = useContext(CartContext);
+
+  useEffect(() => {
+    setIsOpen(open);
+  }, [open]);
+
+  useEffect(() => {
+    setOpen(isOpen);
+  }, [isOpen]);
 
   return (
     <>
@@ -64,7 +75,7 @@ export default function SidePanel({
               className={clsx(
                 "fixed top-0 h-screen w-full max-w-[500px] p-2",
                 position === "left" && "left-0",
-                position === "right" && "right-0"
+                position === "right" && "right-0",
               )}
             >
               <DialogPanel className="h-full w-full max-w-[500px] rounded-lg bg-white">

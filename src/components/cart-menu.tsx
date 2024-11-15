@@ -1,18 +1,37 @@
 "use client";
 
-import { useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import SidePanel from "./side-panel";
+import { CartContext } from "@/app/templates/product-template";
+import useSWR, { mutate } from "swr";
+import { activeOrderAction } from "@/app/actions";
 
 export default function CartMenu() {
+  let { open } = useContext(CartContext);
+
+  const { data, error } = useSWR("order", activeOrderAction, {
+    revalidateOnFocus: false,
+    revalidateOnMount: true,
+  });
+
+  if (error) throw error;
+
   useEffect(() => {
-    console.log("moi");
-  }, []);
+    if (open) {
+      mutate("order");
+    }
+  }, [open]);
 
   return (
-    <SidePanel openLabel="Cart">
+    <SidePanel openLabel={`Cart ${data?.totalQuantity}`} open={open}>
       <div className="p-4 text-black">
         <h2 className="text-xl font-bold">Shopping Cart</h2>
-        <p>Cart items will be shown here</p>
+        {data?.lines.map((item) => (
+          <div key={item.id}>
+            {item.productVariant.name} x {item.quantity}
+            {/* {formatCurrency(item.productVariant. * item.quantity)} */}
+          </div>
+        ))}
       </div>
     </SidePanel>
   );

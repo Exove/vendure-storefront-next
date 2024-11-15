@@ -1,6 +1,8 @@
 import Link from "next/link";
 import CartMenu from "./cart-menu";
 import Logout from "./logout";
+import { useContext } from "react";
+import { CartContext } from "@/app/templates/product-template";
 
 export default function Header() {
   return (

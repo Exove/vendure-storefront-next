@@ -3,10 +3,11 @@
 import { API_URL } from "@/common/constants";
 import { addItemToOrderMutation } from "@/common/queries";
 import { GraphQLClient } from "graphql-request";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import clsx from "clsx";
 import QuantitySelector from "./quantity-selector";
 import { formatCurrency } from "@/common/utils";
+import { CartContext } from "@/app/templates/product-template";
 
 interface SelectVariantProps {
   variants: {
@@ -23,6 +24,7 @@ export default function SelectVariant({
 }: SelectVariantProps) {
   const [selectedVariant, setSelectedVariant] = useState(variants[0]);
   const [quantity, setQuantity] = useState(initialQuantity);
+  let { open, setOpen } = useContext(CartContext);
 
   const addToCart = async () => {
     try {
@@ -49,7 +51,7 @@ export default function SelectVariant({
               "inline-block py-2 px-4 ring-1 rounded cursor-pointer",
               selectedVariant.id === variant.id
                 ? "ring-blue-500"
-                : "ring-gray-600"
+                : "ring-gray-600",
             )}
           >
             <input
@@ -70,7 +72,10 @@ export default function SelectVariant({
 
       <div>
         <button
-          onClick={addToCart}
+          onClick={async () => {
+            await addToCart();
+            setOpen(true);
+          }}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
           Add to cart

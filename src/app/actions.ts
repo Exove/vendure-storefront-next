@@ -6,7 +6,10 @@ import {
   transitionToStateMutation,
   setOrderShippingMethodMutation,
   addPaymentToOrderMutation,
+  activeOrderFragment,
 } from "@/common/queries";
+import { getFragmentData } from "@/gql";
+import { getActiveOrder } from "@/common/utils-server";
 
 export async function placeOrder() {
   const cookieStore = await cookies();
@@ -55,4 +58,11 @@ export async function placeOrder() {
     console.error("Failed to place order:", error);
     throw error;
   }
+}
+
+export const activeOrderAction = async () => {
+  return getFragmentData(
+    activeOrderFragment,
+    await getActiveOrder()
+  );
 }
