@@ -38,8 +38,6 @@ export function Carousel({
     if (emblaApi) emblaApi.scrollNext();
   }, [emblaApi]);
 
-  console.log("showDots", showDots);
-
   return (
     <div className="relative flex flex-col gap-6">
       <div className="flex items-center gap-1">
@@ -48,7 +46,7 @@ export function Carousel({
             onClick={scrollPrev}
             className={clsx(
               modal
-                ? "text-slate-600 absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-1"
+                ? "absolute left-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white p-1 text-slate-600"
                 : "text-inherit",
             )}
           >
@@ -66,7 +64,7 @@ export function Carousel({
             onClick={scrollNext}
             className={clsx(
               modal
-                ? "text-slate-600 absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-1"
+                ? "absolute right-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white p-1 text-slate-600"
                 : "text-inherit",
             )}
           >
@@ -95,7 +93,7 @@ export function Carousel({
         </div>
       )}
       {modal && (
-        <div className="absolute left-1/2 -translate-x-1/2 bottom-10 px-2 py-1 rounded-md bg-white text-black">
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 rounded-md bg-white px-2 py-1 text-black">
           {selectedIndex + 1} / {scrollSnaps.length}
         </div>
       )}

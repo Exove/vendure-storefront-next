@@ -70,11 +70,11 @@ export default function SidePanel({
                 position === "right" && "right-0",
               )}
             >
-              <DialogPanel className="h-full w-full max-w-[500px] rounded-lg bg-white">
+              <DialogPanel className="h-full w-full max-w-[500px] rounded-lg bg-white p-4 text-black">
                 <div className="flex justify-end p-4 text-black">
                   <button onClick={() => setIsOpen(false)}>
                     <span className="sr-only">Close cart</span>
-                    <XMarkIcon className="w-8 h-8" />
+                    <XMarkIcon className="h-8 w-8" />
                   </button>
                 </div>
 

@@ -244,3 +244,27 @@ export const getOrderByCodeQuery = graphql(`
     }
   }
 `);
+
+export const removeItemFromOrderMutation = graphql(`
+  mutation RemoveItemFromOrder($orderLineId: ID!) {
+    removeOrderLine(orderLineId: $orderLineId) {
+      ...ActiveOrder
+      ... on ErrorResult {
+        errorCode
+        message
+      }
+    }
+  }
+`);
+
+export const adjustOrderLineMutation = graphql(`
+  mutation AdjustOrderLine($orderLineId: ID!, $quantity: Int!) {
+    adjustOrderLine(orderLineId: $orderLineId, quantity: $quantity) {
+      ...ActiveOrder
+      ... on ErrorResult {
+        errorCode
+        message
+      }
+    }
+  }
+`);

@@ -6,7 +6,10 @@ import {
   activeCustomerQuery,
   activeOrderFragment,
   activeOrderQuery,
+  adjustOrderLineMutation,
+  removeItemFromOrderMutation,
 } from "./queries";
+import { RemoveItemFromOrderMutation } from "../gql/graphql";
 
 export async function getActiveOrder() {
   const cookieStore = await cookies();
@@ -20,6 +23,40 @@ export async function getActiveOrder() {
   });
   const { activeOrder } = await graphQLClient.request(activeOrderQuery);
   return activeOrder;
+}
+
+export async function removeItemFromOrder(orderLineId: string) {
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get("session");
+  const sessionSigCookie = cookieStore.get("session.sig");
+
+  const graphQLClient = new GraphQLClient(API_URL, {
+    headers: {
+      Cookie: `session=${sessionCookie?.value}; session.sig=${sessionSigCookie?.value}`,
+    },
+  });
+  const { removeOrderLine } = await graphQLClient.request(
+    removeItemFromOrderMutation,
+    { orderLineId },
+  );
+  return removeOrderLine;
+}
+
+export async function adjustOrderLine(orderLineId: string, quantity: number) {
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get("session");
+  const sessionSigCookie = cookieStore.get("session.sig");
+
+  const graphQLClient = new GraphQLClient(API_URL, {
+    headers: {
+      Cookie: `session=${sessionCookie?.value}; session.sig=${sessionSigCookie?.value}`,
+    },
+  });
+  const { adjustOrderLine } = await graphQLClient.request(
+    adjustOrderLineMutation,
+    { orderLineId, quantity },
+  );
+  return adjustOrderLine;
 }
 
 export async function getActiveOrderWithFragment() {

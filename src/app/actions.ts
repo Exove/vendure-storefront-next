@@ -7,11 +7,16 @@ import {
   setOrderShippingMethodMutation,
   addPaymentToOrderMutation,
   activeOrderFragment,
+  adjustOrderLineMutation,
 } from "@/common/queries";
 import { getFragmentData } from "@/gql";
-import { getActiveOrder } from "@/common/utils-server";
+import {
+  adjustOrderLine,
+  getActiveOrder,
+  removeItemFromOrder,
+} from "@/common/utils-server";
 
-export async function placeOrder() {
+export async function placeOrderAction() {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get("session");
   const sessionSigCookie = cookieStore.get("session.sig");
@@ -25,7 +30,7 @@ export async function placeOrder() {
     // Set shipping method
     const { setOrderShippingMethod } = await graphQLClient.request(
       setOrderShippingMethodMutation,
-      { id: ["1"] }
+      { id: ["1"] },
     );
 
     if ("errorCode" in setOrderShippingMethod) {
@@ -49,7 +54,7 @@ export async function placeOrder() {
             shouldErrorOnSettle: false,
           },
         },
-      }
+      },
     );
 
     console.log("addPaymentToOrder", addPaymentToOrder);
@@ -61,8 +66,31 @@ export async function placeOrder() {
 }
 
 export const activeOrderAction = async () => {
-  return getFragmentData(
-    activeOrderFragment,
-    await getActiveOrder()
-  );
-}
+  const result = await getActiveOrder();
+  if (!result) {
+    throw new Error("No active order found");
+  }
+  if ("errorCode" in result) {
+    throw new Error("An error occurred fetching the active order");
+  }
+  return getFragmentData(activeOrderFragment, result);
+};
+
+export const removeItemFromOrderAction = async (orderLineId: string) => {
+  const result = await removeItemFromOrder(orderLineId);
+  if ("errorCode" in result) {
+    throw new Error(result.message);
+  }
+  return getFragmentData(activeOrderFragment, result);
+};
+
+export const adjustOrderLineAction = async (
+  orderLineId: string,
+  quantity: number,
+) => {
+  const result = await adjustOrderLine(orderLineId, quantity);
+  if ("errorCode" in result) {
+    throw new Error(result.message);
+  }
+  return getFragmentData(activeOrderFragment, result);
+};

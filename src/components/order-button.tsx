@@ -1,12 +1,12 @@
 "use client";
 
-import { placeOrder } from "../app/actions";
+import { placeOrderAction } from "../app/actions";
 
 export default function OrderButton() {
   return (
     <button
-      onClick={() => placeOrder()}
-      className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+      onClick={() => placeOrderAction()}
+      className="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
     >
       Place Order
     </button>

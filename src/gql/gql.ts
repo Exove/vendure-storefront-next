@@ -29,6 +29,8 @@ const documents = {
     "\n  mutation TransitionToState($state: String!) {\n    transitionOrderToState(state: $state) {\n      ...ActiveOrder\n      ... on OrderStateTransitionError {\n        errorCode\n        message\n        transitionError\n        fromState\n        toState\n      }\n    }\n  }\n": types.TransitionToStateDocument,
     "\n  mutation AddPaymentToOrder($input: PaymentInput!) {\n    addPaymentToOrder(input: $input) {\n      ...ActiveOrder\n      ... on ErrorResult {\n        errorCode\n        message\n      }\n    }\n  }\n": types.AddPaymentToOrderDocument,
     "\n  query GetOrderByCode($code: String!) {\n    orderByCode(code: $code) {\n      id\n      state\n    }\n  }\n": types.GetOrderByCodeDocument,
+    "\n  mutation RemoveItemFromOrder($orderLineId: ID!) {\n    removeOrderLine(orderLineId: $orderLineId) {\n      ...ActiveOrder\n      ... on ErrorResult {\n        errorCode\n        message\n      }\n    }\n  }\n": types.RemoveItemFromOrderDocument,
+    "\n  mutation AdjustOrderLine($orderLineId: ID!, $quantity: Int!) {\n    adjustOrderLine(orderLineId: $orderLineId, quantity: $quantity) {\n      ...ActiveOrder\n      ... on ErrorResult {\n        errorCode\n        message\n      }\n    }\n  }\n": types.AdjustOrderLineDocument,
 };
 
 /**
@@ -105,6 +107,14 @@ export function graphql(source: "\n  mutation AddPaymentToOrder($input: PaymentI
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query GetOrderByCode($code: String!) {\n    orderByCode(code: $code) {\n      id\n      state\n    }\n  }\n"): (typeof documents)["\n  query GetOrderByCode($code: String!) {\n    orderByCode(code: $code) {\n      id\n      state\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation RemoveItemFromOrder($orderLineId: ID!) {\n    removeOrderLine(orderLineId: $orderLineId) {\n      ...ActiveOrder\n      ... on ErrorResult {\n        errorCode\n        message\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation RemoveItemFromOrder($orderLineId: ID!) {\n    removeOrderLine(orderLineId: $orderLineId) {\n      ...ActiveOrder\n      ... on ErrorResult {\n        errorCode\n        message\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation AdjustOrderLine($orderLineId: ID!, $quantity: Int!) {\n    adjustOrderLine(orderLineId: $orderLineId, quantity: $quantity) {\n      ...ActiveOrder\n      ... on ErrorResult {\n        errorCode\n        message\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation AdjustOrderLine($orderLineId: ID!, $quantity: Int!) {\n    adjustOrderLine(orderLineId: $orderLineId, quantity: $quantity) {\n      ...ActiveOrder\n      ... on ErrorResult {\n        errorCode\n        message\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

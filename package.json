@@ -18,11 +18,11 @@
     "embla-carousel-wheel-gestures": "^8.0.1",
     "graphql": "^16.9.0",
     "graphql-request": "^7.1.2",
+    "motion": "^11.11.17",
     "next": "15.0.3",
     "react": "19.0.0-rc-66855b96-20241106",
     "react-dom": "19.0.0-rc-66855b96-20241106",
-    "swr": "^2.2.5",
-    "tailwindcss-motion": "^0.4.3-beta"
+    "swr": "^2.2.5"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "5.0.3",
@@ -34,6 +34,7 @@
     "eslint-config-next": "15.0.3",
     "postcss": "^8",
     "prettier": "^3.3.3",
+    "prettier-plugin-tailwindcss": "^0.6.8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.6.3"
   }

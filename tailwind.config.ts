@@ -14,5 +14,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-motion")],
+  plugins: [],
 } satisfies Config;
