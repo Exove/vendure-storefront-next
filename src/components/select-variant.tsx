@@ -24,7 +24,7 @@ export default function SelectVariant({
 }: SelectVariantProps) {
   const [selectedVariant, setSelectedVariant] = useState(variants[0]);
   const [quantity, setQuantity] = useState(initialQuantity);
-  let { open, setOpen } = useContext(CartContext);
+  let { setCartQuantity, cartQuantity } = useContext(CartContext);
 
   const addToCart = async () => {
     try {
@@ -37,6 +37,7 @@ export default function SelectVariant({
       });
     } catch (error) {
       console.error("Failed to add item to cart:", error);
+      throw error;
     }
   };
 
@@ -74,7 +75,7 @@ export default function SelectVariant({
         <button
           onClick={async () => {
             await addToCart();
-            setOpen(true);
+            setCartQuantity(cartQuantity + 1);
           }}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >

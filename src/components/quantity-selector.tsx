@@ -1,5 +1,6 @@
 "use client";
 
+import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 
 interface QuantitySelectorProps {
@@ -34,8 +35,7 @@ export default function QuantitySelector({
         className="w-8 h-8 flex items-center justify-center rounded"
         disabled={quantity <= 1}
       >
-        {/* TODO: Add icons */}
-        --
+        <MinusIcon className="w-4 h-4 stroke-[3]" />
       </button>
       <input
         type="number"
@@ -51,7 +51,7 @@ export default function QuantitySelector({
         onClick={increment}
         className="w-8 h-8 flex items-center justify-center rounded"
       >
-        +
+        <PlusIcon className="w-4 h-4 stroke-[3]" />
       </button>
     </div>
   );

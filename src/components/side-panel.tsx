@@ -7,6 +7,7 @@ import {
   Transition,
   TransitionChild,
 } from "@headlessui/react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import { Fragment, useState, useEffect, useContext } from "react";
 
@@ -25,15 +26,6 @@ export default function SidePanel({
   position = "right",
 }: MenuDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
-  let { open, setOpen } = useContext(CartContext);
-
-  useEffect(() => {
-    setIsOpen(open);
-  }, [open]);
-
-  useEffect(() => {
-    setOpen(isOpen);
-  }, [isOpen]);
 
   return (
     <>
@@ -81,8 +73,8 @@ export default function SidePanel({
               <DialogPanel className="h-full w-full max-w-[500px] rounded-lg bg-white">
                 <div className="flex justify-end p-4 text-black">
                   <button onClick={() => setIsOpen(false)}>
-                    <span className="sr-only">Close mobile menu</span>
-                    Close
+                    <span className="sr-only">Close cart</span>
+                    <XMarkIcon className="w-8 h-8" />
                   </button>
                 </div>
 

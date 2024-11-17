@@ -37,6 +37,7 @@ export default function Login() {
     } catch (error) {
       console.error("Failed to login:", error);
       setError("Failed to login");
+      throw error;
     }
   };
 
