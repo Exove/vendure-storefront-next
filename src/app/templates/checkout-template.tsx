@@ -17,6 +17,7 @@ import ShippingMethodSelector from "@/components/shipping-method-selector";
 import PaymentMethodSelector from "@/components/payment-method-selector";
 import ShippingAddressForm from "@/components/shipping-address-form";
 import OrderSummary from "@/components/order-summary";
+import Button from "@/components/button";
 
 export const CartContext = createContext<{
   cartQuantity: number;
@@ -98,12 +99,9 @@ export default function CheckoutTemplate({
                   />
                   <ShippingMethodSelector shippingMethods={shippingMethods} />
                   <PaymentMethodSelector paymentMethods={paymentMethods} />
-                  <button
-                    type="submit"
-                    className="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
-                  >
+                  <Button type="submit" fullWidth>
                     Place Order
-                  </button>
+                  </Button>
                 </form>
               </div>
               <OrderSummary order={order} />

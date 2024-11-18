@@ -64,6 +64,7 @@ export default function Button({
       whileTap={{ scale: style !== "disabled" ? 1.02 : 1 }}
       onClick={onClick}
       type={type}
+      className={clsx(widthStyles, "flex justify-center")}
     >
       {innerContent}
     </motion.button>

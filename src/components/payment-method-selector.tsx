@@ -1,4 +1,5 @@
 import { GetPaymentMethodsQuery } from "@/gql/graphql";
+import RadioOption from "./radio-option";
 
 interface PaymentMethodSelectorProps {
   paymentMethods: GetPaymentMethodsQuery["eligiblePaymentMethods"];
@@ -12,21 +13,12 @@ export default function PaymentMethodSelector({
       <h2 className="text-xl font-semibold">Maksutapa</h2>
       <div className="space-y-2">
         {paymentMethods.map((method) => (
-          <label
+          <RadioOption
             key={method.id}
-            className="flex cursor-pointer items-center gap-3 rounded-lg border p-4 hover:bg-gray-50"
-          >
-            <input
-              type="radio"
-              name="paymentMethod"
-              value={method.code}
-              className="h-4 w-4"
-              required
-            />
-            <div>
-              <div className="font-medium">{method.name}</div>
-            </div>
-          </label>
+            value={method.code}
+            name={method.name}
+            groupName="paymentMethod"
+          />
         ))}
       </div>
     </div>
