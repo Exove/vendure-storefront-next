@@ -79,6 +79,8 @@ export default function CheckoutTemplate({
       );
     } catch (error) {
       console.error("Failed to create address:", error);
+    } finally {
+      window.location.href = `/order-complete/${order?.code}`;
     }
   };
 
@@ -86,12 +88,12 @@ export default function CheckoutTemplate({
     <CartContext.Provider value={{ cartQuantity, setCartQuantity }}>
       <Container>
         <Header />
-        <div className="mx-auto max-w-screen-xl py-16">
+        <div className="mx-auto mb-32 max-w-screen-xl pt-16">
           <h1 className="mb-8 text-3xl font-bold">Checkout</h1>
           {order && order.lines.length > 0 ? (
             <div className="grid grid-cols-1 gap-20 md:grid-cols-2">
               <div className="flex flex-col gap-12">
-                <form onSubmit={handleSubmitAddress} className="space-y-4">
+                <form onSubmit={handleSubmitAddress} className="space-y-10">
                   <ShippingAddressForm
                     activeUser={activeUser}
                     editingAddress={editingAddress}

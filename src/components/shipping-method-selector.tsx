@@ -16,7 +16,7 @@ export default function ShippingMethodSelector({
           <RadioOption
             key={method.id}
             name={method.name}
-            value={method.code}
+            value={method.id}
             groupName="shippingMethod"
           />
         ))}

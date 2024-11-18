@@ -16,14 +16,17 @@ export default function ShippingAddressForm({
     <section>
       <div className="flex items-baseline justify-between">
         <h2 className="mb-4 text-xl font-semibold">Shipping Address</h2>
-        <button
-          type="button"
-          onClick={() => setEditingAddress(!editingAddress)}
-        >
-          {editingAddress ? "Cancel" : "Edit"}
-        </button>
+        {activeUser?.addresses?.[0] && (
+          <button
+            type="button"
+            onClick={() => setEditingAddress(!editingAddress)}
+          >
+            {editingAddress ? "Cancel" : "Edit"}
+          </button>
+        )}
       </div>
 
+      {/* Use existing address by default */}
       {!editingAddress && activeUser?.addresses?.[0] ? (
         <div>
           <input
@@ -49,7 +52,6 @@ export default function ShippingAddressForm({
           <div>
             <div>{activeUser?.addresses?.[0]?.fullName}</div>
             <div>{activeUser?.addresses?.[0]?.streetLine1}</div>
-            <div>{activeUser?.addresses?.[0]?.streetLine2}</div>
             <div>
               {activeUser?.addresses?.[0]?.postalCode}{" "}
               {activeUser?.addresses?.[0]?.city}
@@ -60,6 +62,7 @@ export default function ShippingAddressForm({
         <motion.div
           animate={{ opacity: 1, scale: 1 }}
           initial={{ opacity: 0.5, scale: 0.95 }}
+          className="space-y-4"
         >
           <div>
             <label htmlFor="fullName" className="block text-sm text-slate-400">

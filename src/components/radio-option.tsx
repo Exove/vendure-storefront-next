@@ -15,7 +15,7 @@ export default function RadioOption({
         type="radio"
         name={groupName}
         value={value}
-        className="h-4 w-4"
+        className="h-4 w-4 appearance-none rounded-full border border-slate-400 bg-transparent checked:border-4 checked:border-blue-500"
         required
       />
       <div>

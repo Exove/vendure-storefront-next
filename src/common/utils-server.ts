@@ -10,6 +10,7 @@ import {
   createCustomerAddressMutation,
   getPaymentMethodsQuery,
   getShippingMethodsQuery,
+  orderByCodeQuery,
   removeItemFromOrderMutation,
 } from "./queries";
 import { CreateAddressInput } from "../gql/graphql";
@@ -85,4 +86,9 @@ export async function getShippingMethods() {
     getShippingMethodsQuery,
   );
   return eligibleShippingMethods;
+}
+export async function getOrder(id: string) {
+  const client = await getAuthenticatedClient();
+  const { orderByCode } = await client.request(orderByCodeQuery, { code: id });
+  return orderByCode;
 }
