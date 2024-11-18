@@ -7,9 +7,10 @@ import {
   activeOrderFragment,
   activeOrderQuery,
   adjustOrderLineMutation,
+  createCustomerAddressMutation,
   removeItemFromOrderMutation,
 } from "./queries";
-import { RemoveItemFromOrderMutation } from "../gql/graphql";
+import { CreateAddressInput } from "../gql/graphql";
 
 export async function getActiveOrder() {
   const cookieStore = await cookies();
@@ -76,4 +77,21 @@ export async function getLoggedInUser() {
   });
   const { activeCustomer } = await graphQLClient.request(activeCustomerQuery);
   return activeCustomer;
+}
+
+export async function createCustomerAddress(input: CreateAddressInput) {
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get("session");
+  const sessionSigCookie = cookieStore.get("session.sig");
+
+  const graphQLClient = new GraphQLClient(API_URL, {
+    headers: {
+      Cookie: `session=${sessionCookie?.value}; session.sig=${sessionSigCookie?.value}`,
+    },
+  });
+  const { createCustomerAddress } = await graphQLClient.request(
+    createCustomerAddressMutation,
+    { input },
+  );
+  return createCustomerAddress;
 }

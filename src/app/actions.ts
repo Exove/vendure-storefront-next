@@ -7,14 +7,15 @@ import {
   setOrderShippingMethodMutation,
   addPaymentToOrderMutation,
   activeOrderFragment,
-  adjustOrderLineMutation,
 } from "@/common/queries";
 import { getFragmentData } from "@/gql";
 import {
   adjustOrderLine,
+  createCustomerAddress,
   getActiveOrder,
   removeItemFromOrder,
 } from "@/common/utils-server";
+import { CreateAddressInput } from "@/gql/graphql";
 
 export async function placeOrderAction() {
   const cookieStore = await cookies();
@@ -67,12 +68,7 @@ export async function placeOrderAction() {
 
 export const activeOrderAction = async () => {
   const result = await getActiveOrder();
-  if (!result) {
-    throw new Error("No active order found");
-  }
-  if ("errorCode" in result) {
-    throw new Error("An error occurred fetching the active order");
-  }
+
   return getFragmentData(activeOrderFragment, result);
 };
 
@@ -93,4 +89,11 @@ export const adjustOrderLineAction = async (
     throw new Error(result.message);
   }
   return getFragmentData(activeOrderFragment, result);
+};
+
+export const createCustomerAddressAction = async (
+  input: CreateAddressInput,
+) => {
+  const result = await createCustomerAddress(input);
+  return result;
 };

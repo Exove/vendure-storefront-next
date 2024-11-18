@@ -24,6 +24,9 @@ export const activeOrderFragment = graphql(`
       productVariant {
         id
         name
+        product {
+          slug
+        }
         sku
       }
       featuredAsset {
@@ -265,6 +268,31 @@ export const adjustOrderLineMutation = graphql(`
         errorCode
         message
       }
+    }
+  }
+`);
+
+export const createCustomerAddressMutation = graphql(`
+  mutation CreateCustomerAddress($input: CreateAddressInput!) {
+    createCustomerAddress(input: $input) {
+      id
+      createdAt
+      updatedAt
+      fullName
+      company
+      streetLine1
+      streetLine2
+      city
+      province
+      postalCode
+      country {
+        code
+        name
+      }
+      phoneNumber
+      defaultShippingAddress
+      defaultBillingAddress
+      customFields
     }
   }
 `);

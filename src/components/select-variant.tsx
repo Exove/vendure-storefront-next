@@ -8,6 +8,8 @@ import clsx from "clsx";
 import QuantitySelector from "./quantity-selector";
 import { formatCurrency } from "@/common/utils";
 import { CartContext } from "@/app/templates/product-template";
+import { motion } from "motion/react";
+import Button from "./button";
 
 interface SelectVariantProps {
   variants: {
@@ -43,13 +45,13 @@ export default function SelectVariant({
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex flex-col gap-2 items-start">
+      <div className="flex flex-col items-start gap-2">
         {variants.map((variant) => (
           <label
             key={variant.id}
             htmlFor={variant.id}
             className={clsx(
-              "inline-block py-2 px-4 ring-1 rounded cursor-pointer",
+              "inline-block cursor-pointer rounded px-4 py-2 ring-1",
               selectedVariant.id === variant.id
                 ? "ring-blue-500"
                 : "ring-gray-600",
@@ -72,15 +74,14 @@ export default function SelectVariant({
       <QuantitySelector initialQuantity={quantity} onChange={setQuantity} />
 
       <div>
-        <button
+        <Button
           onClick={async () => {
             await addToCart();
             setCartQuantity(cartQuantity + 1);
           }}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
           Add to cart
-        </button>
+        </Button>
       </div>
     </div>
   );

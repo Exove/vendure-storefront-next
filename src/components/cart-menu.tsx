@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import SidePanel from "./side-panel";
 import { CartContext } from "@/app/templates/product-template";
 import useSWR, { mutate } from "swr";
@@ -12,11 +12,11 @@ import {
 } from "@/app/actions";
 import Link from "next/link";
 import { ShoppingBagIcon, TrashIcon } from "@heroicons/react/24/outline";
-import clsx from "clsx";
 import Heading from "./heading";
 import QuantitySelector from "./quantity-selector";
 import { formatCurrency } from "@/common/utils";
 import Image from "next/image";
+import Button from "./button";
 
 export default function CartMenu() {
   let { cartQuantity } = useContext(CartContext);
@@ -52,7 +52,7 @@ export default function CartMenu() {
             <motion.div
               animate={{ scale: 1.2 }}
               className="flex h-6 w-6 items-center justify-center rounded-full border text-xs"
-              key={order.totalQuantity}
+              key={cartQuantity}
             >
               {order.totalQuantity}
             </motion.div>
@@ -73,18 +73,30 @@ export default function CartMenu() {
               {order?.lines.map((item) => (
                 <motion.div key={item.id} exit={{ opacity: 0 }}>
                   <div className="flex gap-4">
-                    <Image
-                      src={
-                        item.featuredAsset?.preview ?? "/placeholder-image.jpg"
-                      }
-                      alt={item.productVariant.name}
-                      width={96}
-                      height={96}
-                      className="h-24 w-24 flex-shrink-0 rounded-md object-cover"
-                    />
+                    <Link
+                      href={`/products/${item.productVariant.product.slug}`}
+                      className="flex-shrink-0"
+                    >
+                      <Image
+                        src={
+                          item.featuredAsset?.preview ??
+                          "/placeholder-image.jpg"
+                        }
+                        alt={item.productVariant.name}
+                        width={96}
+                        height={96}
+                        className="h-24 w-24 rounded-md object-cover"
+                      />
+                    </Link>
                     <div className="flex w-full flex-col gap-6">
                       <div className="flex w-full justify-between">
-                        <div>{item.productVariant.name}</div>
+                        <div>
+                          <Link
+                            href={`/products/${item.productVariant.product.slug}`}
+                          >
+                            {item.productVariant.name}
+                          </Link>
+                        </div>
                         <div>{formatCurrency(item.linePriceWithTax)}</div>
                       </div>
                       <div className="flex items-center justify-between">
@@ -114,12 +126,11 @@ export default function CartMenu() {
             <span>Subtotal</span>
             <span>{formatCurrency(order?.subTotalWithTax ?? 0)}</span>
           </div>
-          <Link
-            href="/checkout"
-            className="block rounded bg-black px-4 py-3 text-center text-white"
-          >
-            Checkout
-          </Link>
+          <div>
+            <Button href="/checkout" fullWidth>
+              Checkout
+            </Button>
+          </div>
         </div>
       </div>
     </SidePanel>
