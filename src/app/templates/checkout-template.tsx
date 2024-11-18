@@ -3,7 +3,11 @@
 import { formatCurrency } from "@/common/utils";
 import Container from "@/components/container";
 import Header from "@/components/header";
-import { GetActiveCustomerQuery, GetPaymentMethodsQuery } from "@/gql/graphql";
+import {
+  GetActiveCustomerQuery,
+  GetPaymentMethodsQuery,
+  GetShippingMethodsQuery,
+} from "@/gql/graphql";
 import useSWR, { mutate } from "swr";
 import { activeOrderAction, placeOrderAction } from "../actions";
 import { createContext, useEffect, useState } from "react";
@@ -18,14 +22,18 @@ export const CartContext = createContext<{
 interface CheckoutTemplateProps {
   activeUser: GetActiveCustomerQuery["activeCustomer"];
   paymentMethods: GetPaymentMethodsQuery["eligiblePaymentMethods"];
+  shippingMethods: GetShippingMethodsQuery["eligibleShippingMethods"];
 }
 
 export default function CheckoutTemplate({
   activeUser,
   paymentMethods,
+  shippingMethods,
 }: CheckoutTemplateProps) {
   const [cartQuantity, setCartQuantity] = useState(0);
   const [editingAddress, setEditingAddress] = useState(false);
+
+  console.log(shippingMethods);
 
   const { data: order, error } = useSWR("order/add", activeOrderAction, {
     revalidateOnFocus: false,
@@ -64,6 +72,7 @@ export default function CheckoutTemplate({
           countryCode: "FI",
         },
         formData.get("paymentMethod") as string,
+        formData.get("shippingMethod") as string,
       );
     } catch (error) {
       console.error("Failed to create address:", error);
@@ -228,6 +237,27 @@ export default function CheckoutTemplate({
                       />
                       <label htmlFor={method.id} className="text-sm">
                         {method.name}
+                      </label>
+                    </div>
+                  ))}
+                  <h2 className="mb-4 mt-8 text-xl font-semibold">
+                    Shipping Method
+                  </h2>
+                  {shippingMethods.map((method) => (
+                    <div key={method.id} className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        id={`shipping-${method.id}`}
+                        name="shippingMethod"
+                        value={method.id}
+                        className="h-4 w-4"
+                        required
+                      />
+                      <label
+                        htmlFor={`shipping-${method.id}`}
+                        className="text-sm"
+                      >
+                        {method.name} - {formatCurrency(method.priceWithTax)}
                       </label>
                     </div>
                   ))}

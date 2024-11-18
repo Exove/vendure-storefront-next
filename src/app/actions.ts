@@ -27,6 +27,7 @@ export async function placeOrderAction(
     countryCode: string;
   },
   paymentMethod: string,
+  shippingMethod: string,
 ) {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get("session");
@@ -53,7 +54,7 @@ export async function placeOrderAction(
     // Set shipping method
     const { setOrderShippingMethod } = await graphQLClient.request(
       setOrderShippingMethodMutation,
-      { id: ["1"] },
+      { id: [shippingMethod] },
     );
 
     if ("errorCode" in setOrderShippingMethod) {

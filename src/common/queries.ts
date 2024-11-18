@@ -184,6 +184,9 @@ export const getShippingMethodsQuery = graphql(`
     eligibleShippingMethods {
       id
       price
+      priceWithTax
+      code
+      name
       description
     }
   }

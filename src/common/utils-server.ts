@@ -9,6 +9,7 @@ import {
   adjustOrderLineMutation,
   createCustomerAddressMutation,
   getPaymentMethodsQuery,
+  getShippingMethodsQuery,
   removeItemFromOrderMutation,
 } from "./queries";
 import { CreateAddressInput } from "../gql/graphql";
@@ -76,4 +77,12 @@ export async function getPaymentMethods() {
     getPaymentMethodsQuery,
   );
   return eligiblePaymentMethods;
+}
+
+export async function getShippingMethods() {
+  const client = await getAuthenticatedClient();
+  const { eligibleShippingMethods } = await client.request(
+    getShippingMethodsQuery,
+  );
+  return eligibleShippingMethods;
 }

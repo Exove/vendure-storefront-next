@@ -23,7 +23,7 @@ const documents = {
     "\n  query GetActiveCustomer {\n    activeCustomer {\n      id\n      firstName\n      lastName\n      emailAddress\n      addresses {\n        id\n        fullName\n        company\n        streetLine1\n        streetLine2\n        city\n        province\n        postalCode\n        country {\n          code\n          name\n        }\n        phoneNumber\n        defaultShippingAddress\n        defaultBillingAddress\n      }\n    }\n  }\n": types.GetActiveCustomerDocument,
     "\n  mutation LogOut {\n    logout {\n      success\n    }\n  }\n": types.LogOutDocument,
     "\n  mutation SetOrderShippingAddress($input: CreateAddressInput!) {\n    setOrderShippingAddress(input: $input) {\n      ...ActiveOrder\n      ... on ErrorResult {\n        errorCode\n        message\n      }\n    }\n  }\n": types.SetOrderShippingAddressDocument,
-    "\n  query GetShippingMethods {\n    eligibleShippingMethods {\n      id\n      price\n      description\n    }\n  }\n": types.GetShippingMethodsDocument,
+    "\n  query GetShippingMethods {\n    eligibleShippingMethods {\n      id\n      price\n      priceWithTax\n      code\n      name\n      description\n    }\n  }\n": types.GetShippingMethodsDocument,
     "\n  mutation SetShippingMethod($id: [ID!]!) {\n    setOrderShippingMethod(shippingMethodId: $id) {\n      ...ActiveOrder\n      ... on ErrorResult {\n        errorCode\n        message\n      }\n    }\n  }\n": types.SetShippingMethodDocument,
     "\n  query GetPaymentMethods {\n    eligiblePaymentMethods {\n      id\n      name\n      code\n      isEligible\n    }\n  }\n": types.GetPaymentMethodsDocument,
     "\n  mutation TransitionToState($state: String!) {\n    transitionOrderToState(state: $state) {\n      ...ActiveOrder\n      ... on OrderStateTransitionError {\n        errorCode\n        message\n        transitionError\n        fromState\n        toState\n      }\n    }\n  }\n": types.TransitionToStateDocument,
@@ -87,7 +87,7 @@ export function graphql(source: "\n  mutation SetOrderShippingAddress($input: Cr
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query GetShippingMethods {\n    eligibleShippingMethods {\n      id\n      price\n      description\n    }\n  }\n"): (typeof documents)["\n  query GetShippingMethods {\n    eligibleShippingMethods {\n      id\n      price\n      description\n    }\n  }\n"];
+export function graphql(source: "\n  query GetShippingMethods {\n    eligibleShippingMethods {\n      id\n      price\n      priceWithTax\n      code\n      name\n      description\n    }\n  }\n"): (typeof documents)["\n  query GetShippingMethods {\n    eligibleShippingMethods {\n      id\n      price\n      priceWithTax\n      code\n      name\n      description\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
