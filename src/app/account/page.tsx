@@ -1,4 +1,4 @@
-import { getLoggedInUser } from "@/common/utils-server";
+import { getLoggedInUser, getOrderById } from "@/common/utils-server";
 import Container from "@/components/container";
 import Header from "@/components/header";
 import Heading from "@/components/heading";
@@ -16,6 +16,9 @@ export default async function AccountPage() {
     );
   }
 
+  const order = await getOrderById(user.id);
+
+  console.log(order);
   return (
     <Container>
       <Header />

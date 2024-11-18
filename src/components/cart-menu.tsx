@@ -19,7 +19,7 @@ import Image from "next/image";
 import Button from "./button";
 
 export default function CartMenu() {
-  let { cartQuantity } = useContext(CartContext);
+  const { cartQuantity } = useContext(CartContext);
 
   const { data: order, error } = useSWR("order/add", activeOrderAction, {
     revalidateOnFocus: false,

@@ -21,7 +21,7 @@ export default function ShippingAddressForm({
             type="button"
             onClick={() => setEditingAddress(!editingAddress)}
           >
-            {editingAddress ? "Cancel" : "Edit"}
+            {editingAddress ? "Cancel" : "Change Address"}
           </button>
         )}
       </div>

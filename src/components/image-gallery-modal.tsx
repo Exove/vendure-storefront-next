@@ -35,7 +35,7 @@ export default function ImageGalleryModal({
             onClick={() => setIsOpen(false)}
             className="absolute right-4 top-4 z-30 rounded-full bg-slate-200 p-2"
           >
-            <span className="sr-only">Close"</span>
+            <span className="sr-only">Close</span>
             <XMarkIcon className="h-8 w-8 stroke-2 text-slate-600" />
           </button>
           <DialogPanel className="overflow-y-scroll">{children}</DialogPanel>

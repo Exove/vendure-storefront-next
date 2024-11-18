@@ -1,6 +1,5 @@
 "use client";
 
-import { CartContext } from "@/app/templates/product-template";
 import {
   Dialog,
   DialogPanel,
@@ -9,7 +8,7 @@ import {
 } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
-import { Fragment, useState, useEffect, useContext } from "react";
+import { Fragment, useState } from "react";
 
 interface MenuDialogProps {
   openLabel: React.ReactNode;

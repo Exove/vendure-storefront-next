@@ -300,50 +300,65 @@ export const createCustomerAddressMutation = graphql(`
   }
 `);
 
+// For orders that are completed
+export const orderFragment = graphql(`
+  fragment Order on Order {
+    id
+    type
+    orderPlacedAt
+    code
+    state
+    active
+    totalWithTax
+    customer {
+      firstName
+      lastName
+    }
+    shipping
+    shippingLines {
+      shippingMethod {
+        name
+      }
+    }
+    shippingAddress {
+      fullName
+      streetLine1
+      postalCode
+      city
+    }
+    lines {
+      id
+      unitPriceWithTax
+      quantity
+      linePriceWithTax
+      productVariant {
+        id
+        name
+        product {
+          slug
+        }
+        sku
+      }
+      featuredAsset {
+        id
+        preview
+      }
+    }
+  }
+`);
+
 export const orderByCodeQuery = graphql(`
   query OrderByCode($code: String!) {
     orderByCode(code: $code) {
-      id
-      type
-      orderPlacedAt
-      code
-      state
-      active
-      totalWithTax
-      customer {
-        firstName
-        lastName
-      }
-      shipping
-      shippingLines {
-        shippingMethod {
-          name
-        }
-      }
-      shippingAddress {
-        fullName
-        streetLine1
-        postalCode
-        city
-      }
-      lines {
-        id
-        unitPriceWithTax
-        quantity
-        linePriceWithTax
-        productVariant {
-          id
-          name
-          product {
-            slug
-          }
-          sku
-        }
-        featuredAsset {
-          id
-          preview
-        }
-      }
+      ...Order
+    }
+  }
+`);
+
+export const orderQuery = graphql(`
+  query Order($id: ID!) {
+    order(id: $id) {
+      ...Order
     }
   }
 `);

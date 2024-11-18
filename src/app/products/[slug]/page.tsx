@@ -5,14 +5,10 @@ import { Product } from "@/gql/graphql";
 import { request } from "graphql-request";
 import { notFound } from "next/navigation";
 
-interface ProductPageProps {
-  params: {
-    slug: string;
-  };
-}
+type Params = Promise<{ slug: string }>;
 
-export default async function ProductPage({ params }: ProductPageProps) {
-  const { slug } = await params;
+export default async function ProductPage(props: { params: Params }) {
+  const { slug } = await props.params;
   const { product } = await request(API_URL, productBySlugQuery, {
     slug: slug,
   });

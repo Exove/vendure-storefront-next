@@ -1,13 +1,11 @@
 import Container from "@/components/container";
 import Header from "@/components/header";
-import { getOrder } from "@/common/utils-server";
+import { getOrderByCode } from "@/common/utils-server";
 
-export default async function OrderCompletePage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const order = await getOrder(params.id);
+type Params = Promise<{ slug: string }>;
+
+export default async function Page(props: { params: Params }) {
+  const order = await getOrderByCode((await props.params).slug);
 
   if (!order) {
     return <div>Order not found</div>;

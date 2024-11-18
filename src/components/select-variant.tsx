@@ -8,7 +8,6 @@ import clsx from "clsx";
 import QuantitySelector from "./quantity-selector";
 import { formatCurrency } from "@/common/utils";
 import { CartContext } from "@/app/templates/product-template";
-import { motion } from "motion/react";
 import Button from "./button";
 
 interface SelectVariantProps {
@@ -26,7 +25,7 @@ export default function SelectVariant({
 }: SelectVariantProps) {
   const [selectedVariant, setSelectedVariant] = useState(variants[0]);
   const [quantity, setQuantity] = useState(initialQuantity);
-  let { setCartQuantity, cartQuantity } = useContext(CartContext);
+  const { setCartQuantity, cartQuantity } = useContext(CartContext);
 
   const addToCart = async () => {
     try {
