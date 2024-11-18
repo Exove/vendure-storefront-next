@@ -85,195 +85,200 @@ export default function CheckoutTemplate({
         <Header />
         <div className="mx-auto max-w-screen-xl py-16">
           <h1 className="mb-8 text-3xl font-bold">Checkout</h1>
-
-          <div className="grid grid-cols-1 gap-20 md:grid-cols-2">
-            <div className="flex flex-col gap-12">
-              <form onSubmit={handleSubmitAddress} className="space-y-4">
-                <section>
-                  <div className="flex items-baseline justify-between">
-                    <h2 className="mb-4 text-xl font-semibold">
-                      Shipping Address
-                    </h2>
-                    <button
-                      type="button"
-                      onClick={() => setEditingAddress(!editingAddress)}
-                    >
-                      {editingAddress ? "Cancel" : "Edit"}
-                    </button>
-                  </div>
-
-                  {!editingAddress && activeUser?.addresses?.[0] ? (
-                    <div>
-                      <input
-                        type="hidden"
-                        name="fullName"
-                        value={activeUser?.addresses[0].fullName || ""}
-                      />
-                      <input
-                        type="hidden"
-                        name="streetLine1"
-                        value={activeUser?.addresses[0].streetLine1 || ""}
-                      />
-                      <input
-                        type="hidden"
-                        name="city"
-                        value={activeUser?.addresses[0].city || ""}
-                      />
-                      <input
-                        type="hidden"
-                        name="postalCode"
-                        value={activeUser?.addresses[0].postalCode || ""}
-                      />
-                      <div>
-                        <div>{activeUser?.addresses?.[0]?.fullName}</div>
-                        <div>{activeUser?.addresses?.[0]?.streetLine1}</div>
-                        <div>{activeUser?.addresses?.[0]?.streetLine2}</div>
-                        <div>
-                          {activeUser?.addresses?.[0]?.postalCode}{" "}
-                          {activeUser?.addresses?.[0]?.city}
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <motion.div
-                      animate={{ opacity: 1, scale: 1 }}
-                      initial={{ opacity: 0.5, scale: 0.95 }}
-                    >
-                      <div>
-                        <label
-                          htmlFor="fullName"
-                          className="block text-sm text-slate-400"
-                        >
-                          Full Name
-                        </label>
-                        <input
-                          type="text"
-                          id="fullName"
-                          name="fullName"
-                          className="mt-1 block w-full rounded-md p-2 text-black"
-                          required
-                        />
-                      </div>
-
-                      <div>
-                        <label
-                          htmlFor="streetLine1"
-                          className="block text-sm text-slate-400"
-                        >
-                          Street Address
-                        </label>
-                        <input
-                          type="text"
-                          id="streetLine1"
-                          name="streetLine1"
-                          className="mt-1 block w-full rounded-md p-2 text-black"
-                          required
-                        />
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <label
-                            htmlFor="city"
-                            className="block text-sm text-slate-400"
-                          >
-                            City
-                          </label>
-                          <input
-                            type="text"
-                            id="city"
-                            name="city"
-                            className="mt-1 block w-full rounded-md p-2 text-black"
-                            required
-                          />
-                        </div>
-
-                        <div>
-                          <label
-                            htmlFor="postalCode"
-                            className="block text-sm text-slate-400"
-                          >
-                            Postal Code
-                          </label>
-                          <input
-                            type="text"
-                            id="postalCode"
-                            name="postalCode"
-                            className="mt-1 block w-full rounded-md p-2 text-black"
-                            required
-                          />
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          id="saveAddress"
-                          name="saveAddress"
-                          className="h-4 w-4 rounded border-gray-300"
-                        />
-                        <label
-                          htmlFor="saveAddress"
-                          className="text-sm text-slate-400"
-                        >
-                          Save address
-                        </label>
-                      </div>
-                    </motion.div>
-                  )}
-                </section>
-
-                <section>
-                  <h2 className="mb-4 text-xl font-semibold">Payment Method</h2>
-                  {paymentMethods.map((method) => (
-                    <div key={method.id} className="flex items-center gap-2">
-                      <input
-                        type="radio"
-                        id={method.id}
-                        name="paymentMethod"
-                        value={method.code}
-                        className="h-4 w-4"
-                        required
-                      />
-                      <label htmlFor={method.id} className="text-sm">
-                        {method.name}
-                      </label>
-                    </div>
-                  ))}
-                  <h2 className="mb-4 mt-8 text-xl font-semibold">
-                    Shipping Method
-                  </h2>
-                  {shippingMethods.map((method) => (
-                    <div key={method.id} className="flex items-center gap-2">
-                      <input
-                        type="radio"
-                        id={`shipping-${method.id}`}
-                        name="shippingMethod"
-                        value={method.id}
-                        className="h-4 w-4"
-                        required
-                      />
-                      <label
-                        htmlFor={`shipping-${method.id}`}
-                        className="text-sm"
+          {order && order.lines.length > 0 ? (
+            <div className="grid grid-cols-1 gap-20 md:grid-cols-2">
+              <div className="flex flex-col gap-12">
+                <form onSubmit={handleSubmitAddress} className="space-y-4">
+                  <section>
+                    <div className="flex items-baseline justify-between">
+                      <h2 className="mb-4 text-xl font-semibold">
+                        Shipping Address
+                      </h2>
+                      <button
+                        type="button"
+                        onClick={() => setEditingAddress(!editingAddress)}
                       >
-                        {method.name} - {formatCurrency(method.priceWithTax)}
-                      </label>
+                        {editingAddress ? "Cancel" : "Edit"}
+                      </button>
                     </div>
-                  ))}
-                  <button
-                    type="submit"
-                    className="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
-                  >
-                    Place Order
-                  </button>
-                </section>
-              </form>
-            </div>
 
-            <section className="sticky top-4">
-              <h2 className="mb-4 text-xl font-semibold">Order Summary</h2>
-              {order?.lines.length ? (
+                    {!editingAddress && activeUser?.addresses?.[0] ? (
+                      <div>
+                        <input
+                          type="hidden"
+                          name="fullName"
+                          value={activeUser?.addresses[0].fullName || ""}
+                        />
+                        <input
+                          type="hidden"
+                          name="streetLine1"
+                          value={activeUser?.addresses[0].streetLine1 || ""}
+                        />
+                        <input
+                          type="hidden"
+                          name="city"
+                          value={activeUser?.addresses[0].city || ""}
+                        />
+                        <input
+                          type="hidden"
+                          name="postalCode"
+                          value={activeUser?.addresses[0].postalCode || ""}
+                        />
+                        <div>
+                          <div>{activeUser?.addresses?.[0]?.fullName}</div>
+                          <div>{activeUser?.addresses?.[0]?.streetLine1}</div>
+                          <div>{activeUser?.addresses?.[0]?.streetLine2}</div>
+                          <div>
+                            {activeUser?.addresses?.[0]?.postalCode}{" "}
+                            {activeUser?.addresses?.[0]?.city}
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <motion.div
+                        animate={{ opacity: 1, scale: 1 }}
+                        initial={{ opacity: 0.5, scale: 0.95 }}
+                      >
+                        <div>
+                          <label
+                            htmlFor="fullName"
+                            className="block text-sm text-slate-400"
+                          >
+                            Full Name
+                          </label>
+                          <input
+                            type="text"
+                            id="fullName"
+                            name="fullName"
+                            className="mt-1 block w-full rounded-md p-2 text-black"
+                            required
+                          />
+                        </div>
+
+                        <div>
+                          <label
+                            htmlFor="streetLine1"
+                            className="block text-sm text-slate-400"
+                          >
+                            Street Address
+                          </label>
+                          <input
+                            type="text"
+                            id="streetLine1"
+                            name="streetLine1"
+                            className="mt-1 block w-full rounded-md p-2 text-black"
+                            required
+                          />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label
+                              htmlFor="city"
+                              className="block text-sm text-slate-400"
+                            >
+                              City
+                            </label>
+                            <input
+                              type="text"
+                              id="city"
+                              name="city"
+                              className="mt-1 block w-full rounded-md p-2 text-black"
+                              required
+                            />
+                          </div>
+
+                          <div>
+                            <label
+                              htmlFor="postalCode"
+                              className="block text-sm text-slate-400"
+                            >
+                              Postal Code
+                            </label>
+                            <input
+                              type="text"
+                              id="postalCode"
+                              name="postalCode"
+                              className="mt-1 block w-full rounded-md p-2 text-black"
+                              required
+                            />
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            id="saveAddress"
+                            name="saveAddress"
+                            className="h-4 w-4 rounded border-gray-300"
+                          />
+                          <label
+                            htmlFor="saveAddress"
+                            className="text-sm text-slate-400"
+                          >
+                            Save address
+                          </label>
+                        </div>
+                      </motion.div>
+                    )}
+                  </section>
+
+                  <section>
+                    <h2 className="mb-4 mt-8 text-xl font-semibold">
+                      Shipping Method
+                    </h2>
+                    {shippingMethods.map((method) => (
+                      <div key={method.id} className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          id={`shipping-${method.id}`}
+                          name="shippingMethod"
+                          value={method.id}
+                          className="h-4 w-4"
+                          required
+                        />
+                        <label
+                          htmlFor={`shipping-${method.id}`}
+                          className="text-sm"
+                        >
+                          {method.name} - {formatCurrency(method.priceWithTax)}
+                        </label>
+                      </div>
+                    ))}
+                  </section>
+
+                  <section>
+                    <h2 className="mb-4 text-xl font-semibold">
+                      Payment Method
+                    </h2>
+                    {paymentMethods.map((method) => (
+                      <div key={method.id} className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          id={method.id}
+                          name="paymentMethod"
+                          value={method.code}
+                          className="h-4 w-4"
+                          required
+                        />
+                        <label htmlFor={method.id} className="text-sm">
+                          {method.name}
+                        </label>
+                      </div>
+                    ))}
+
+                    <button
+                      type="submit"
+                      className="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+                    >
+                      Place Order
+                    </button>
+                  </section>
+                </form>
+              </div>
+
+              <section className="sticky top-4">
+                <h2 className="mb-4 text-xl font-semibold">Order Summary</h2>
                 <div className="flex flex-col gap-16">
                   <div className="space-y-4">
                     {order?.lines.map((item) => (
@@ -305,11 +310,11 @@ export default function CheckoutTemplate({
                     </div>
                   </div>
                 </div>
-              ) : (
-                <div>Empty Cart</div>
-              )}
-            </section>
-          </div>
+              </section>
+            </div>
+          ) : (
+            <div>Empty Cart</div>
+          )}
         </div>
       </Container>
     </CartContext.Provider>
