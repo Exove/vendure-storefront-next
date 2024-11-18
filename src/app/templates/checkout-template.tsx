@@ -53,6 +53,8 @@ export default function CheckoutTemplate({
         postalCode: formData.get("postalCode") as string,
         countryCode: "FI",
       });
+
+      await placeOrderAction();
     } catch (error) {
       console.error("Failed to create address:", error);
     }
@@ -67,33 +69,60 @@ export default function CheckoutTemplate({
 
           <div className="grid grid-cols-1 gap-20 md:grid-cols-2">
             <div className="flex flex-col gap-12">
-              <section>
-                <div className="flex items-baseline justify-between">
-                  <h2 className="mb-4 text-xl font-semibold">
-                    Shipping Address
-                  </h2>
-                  <button onClick={() => setEditingAddress(!editingAddress)}>
-                    {editingAddress ? "Cancel" : "Edit"}
-                  </button>
-                </div>
-                {!editingAddress ? (
-                  <div className="space-y-4">
-                    <div>
-                      <div>{activeUser?.addresses?.[0]?.fullName}</div>
-                      <div>{activeUser?.addresses?.[0]?.streetLine1}</div>
-                      <div>{activeUser?.addresses?.[0]?.streetLine2}</div>
+              <form onSubmit={handleSubmitAddress} className="space-y-4">
+                <section>
+                  <div className="flex items-baseline justify-between">
+                    <h2 className="mb-4 text-xl font-semibold">
+                      Shipping Address
+                    </h2>
+                    <button
+                      type="button"
+                      onClick={() => setEditingAddress(!editingAddress)}
+                    >
+                      {editingAddress ? "Cancel" : "Edit"}
+                    </button>
+                  </div>
+                  {!editingAddress && activeUser?.addresses?.[0] && (
+                    <>
+                      <input
+                        type="hidden"
+                        name="fullName"
+                        value={activeUser?.addresses[0].fullName || ""}
+                      />
+                      <input
+                        type="hidden"
+                        name="streetLine1"
+                        value={activeUser?.addresses[0].streetLine1 || ""}
+                      />
+                      <input
+                        type="hidden"
+                        name="city"
+                        value={activeUser?.addresses[0].city || ""}
+                      />
+                      <input
+                        type="hidden"
+                        name="postalCode"
+                        value={activeUser?.addresses[0].postalCode || ""}
+                      />
+                    </>
+                  )}
+                  {!editingAddress ? (
+                    <div className="space-y-4">
                       <div>
-                        {activeUser?.addresses?.[0]?.postalCode}{" "}
-                        {activeUser?.addresses?.[0]?.city}
+                        <div>{activeUser?.addresses?.[0]?.fullName}</div>
+                        <div>{activeUser?.addresses?.[0]?.streetLine1}</div>
+                        <div>{activeUser?.addresses?.[0]?.streetLine2}</div>
+                        <div>
+                          {activeUser?.addresses?.[0]?.postalCode}{" "}
+                          {activeUser?.addresses?.[0]?.city}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ) : (
-                  <motion.div
-                    animate={{ opacity: 1, scale: 1 }}
-                    initial={{ opacity: 0.5, scale: 0.95 }}
-                  >
-                    <form onSubmit={handleSubmitAddress} className="space-y-4">
+                  ) : (
+                    <motion.div
+                      animate={{ opacity: 1, scale: 1 }}
+                      initial={{ opacity: 0.5, scale: 0.95 }}
+                    >
                       <div>
                         <label
                           htmlFor="fullName"
@@ -174,27 +203,27 @@ export default function CheckoutTemplate({
                           Save as default address
                         </label>
                       </div>
-                      <button
+                      {/* <button
                         type="submit"
                         className="mt-4 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
                       >
                         Save Address
-                      </button>
-                    </form>
-                  </motion.div>
-                )}
-              </section>
+                      </button> */}
+                    </motion.div>
+                  )}
+                </section>
 
-              <section className="">
-                <h2 className="mb-4 text-xl font-semibold">Payment Method</h2>
-                Standard Payment
-              </section>
-              <button
-                onClick={() => placeOrderAction()}
-                className="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
-              >
-                Place Order
-              </button>
+                <section className="">
+                  <h2 className="mb-4 text-xl font-semibold">Payment Method</h2>
+                  Standard Payment
+                </section>
+                <button
+                  type="submit"
+                  className="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+                >
+                  Place Order
+                </button>
+              </form>
             </div>
 
             <div>
