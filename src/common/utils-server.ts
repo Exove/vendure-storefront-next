@@ -8,35 +8,33 @@ import {
   activeOrderQuery,
   adjustOrderLineMutation,
   createCustomerAddressMutation,
+  getPaymentMethodsQuery,
   removeItemFromOrderMutation,
 } from "./queries";
 import { CreateAddressInput } from "../gql/graphql";
 
-export async function getActiveOrder() {
+// Create reusable function to get GraphQL client with auth cookies
+async function getAuthenticatedClient() {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get("session");
   const sessionSigCookie = cookieStore.get("session.sig");
 
-  const graphQLClient = new GraphQLClient(API_URL, {
+  return new GraphQLClient(API_URL, {
     headers: {
       Cookie: `session=${sessionCookie?.value}; session.sig=${sessionSigCookie?.value}`,
     },
   });
-  const { activeOrder } = await graphQLClient.request(activeOrderQuery);
+}
+
+export async function getActiveOrder() {
+  const client = await getAuthenticatedClient();
+  const { activeOrder } = await client.request(activeOrderQuery);
   return activeOrder;
 }
 
 export async function removeItemFromOrder(orderLineId: string) {
-  const cookieStore = await cookies();
-  const sessionCookie = cookieStore.get("session");
-  const sessionSigCookie = cookieStore.get("session.sig");
-
-  const graphQLClient = new GraphQLClient(API_URL, {
-    headers: {
-      Cookie: `session=${sessionCookie?.value}; session.sig=${sessionSigCookie?.value}`,
-    },
-  });
-  const { removeOrderLine } = await graphQLClient.request(
+  const client = await getAuthenticatedClient();
+  const { removeOrderLine } = await client.request(
     removeItemFromOrderMutation,
     { orderLineId },
   );
@@ -44,19 +42,11 @@ export async function removeItemFromOrder(orderLineId: string) {
 }
 
 export async function adjustOrderLine(orderLineId: string, quantity: number) {
-  const cookieStore = await cookies();
-  const sessionCookie = cookieStore.get("session");
-  const sessionSigCookie = cookieStore.get("session.sig");
-
-  const graphQLClient = new GraphQLClient(API_URL, {
-    headers: {
-      Cookie: `session=${sessionCookie?.value}; session.sig=${sessionSigCookie?.value}`,
-    },
+  const client = await getAuthenticatedClient();
+  const { adjustOrderLine } = await client.request(adjustOrderLineMutation, {
+    orderLineId,
+    quantity,
   });
-  const { adjustOrderLine } = await graphQLClient.request(
-    adjustOrderLineMutation,
-    { orderLineId, quantity },
-  );
   return adjustOrderLine;
 }
 
@@ -66,32 +56,24 @@ export async function getActiveOrderWithFragment() {
 }
 
 export async function getLoggedInUser() {
-  const cookieStore = await cookies();
-  const sessionCookie = cookieStore.get("session");
-  const sessionSigCookie = cookieStore.get("session.sig");
-
-  const graphQLClient = new GraphQLClient(API_URL, {
-    headers: {
-      Cookie: `session=${sessionCookie?.value}; session.sig=${sessionSigCookie?.value}`,
-    },
-  });
-  const { activeCustomer } = await graphQLClient.request(activeCustomerQuery);
+  const client = await getAuthenticatedClient();
+  const { activeCustomer } = await client.request(activeCustomerQuery);
   return activeCustomer;
 }
 
 export async function createCustomerAddress(input: CreateAddressInput) {
-  const cookieStore = await cookies();
-  const sessionCookie = cookieStore.get("session");
-  const sessionSigCookie = cookieStore.get("session.sig");
-
-  const graphQLClient = new GraphQLClient(API_URL, {
-    headers: {
-      Cookie: `session=${sessionCookie?.value}; session.sig=${sessionSigCookie?.value}`,
-    },
-  });
-  const { createCustomerAddress } = await graphQLClient.request(
+  const client = await getAuthenticatedClient();
+  const { createCustomerAddress } = await client.request(
     createCustomerAddressMutation,
     { input },
   );
   return createCustomerAddress;
+}
+
+export async function getPaymentMethods() {
+  const client = await getAuthenticatedClient();
+  const { eligiblePaymentMethods } = await client.request(
+    getPaymentMethodsQuery,
+  );
+  return eligiblePaymentMethods;
 }

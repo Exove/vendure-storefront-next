@@ -1,13 +1,9 @@
 "use client";
 
-import { activeOrderFragment } from "@/common/queries";
 import { formatCurrency } from "@/common/utils";
-import { getActiveOrder, getLoggedInUser } from "@/common/utils-server";
 import Container from "@/components/container";
 import Header from "@/components/header";
-import OrderButton from "@/components/order-button";
-import { getFragmentData } from "@/gql/fragment-masking";
-import { GetActiveCustomerQuery } from "@/gql/graphql";
+import { GetActiveCustomerQuery, GetPaymentMethodsQuery } from "@/gql/graphql";
 import useSWR, { mutate } from "swr";
 import { activeOrderAction, placeOrderAction } from "../actions";
 import { createContext, useEffect, useState } from "react";
@@ -21,10 +17,12 @@ export const CartContext = createContext<{
 
 interface CheckoutTemplateProps {
   activeUser: GetActiveCustomerQuery["activeCustomer"];
+  paymentMethods: GetPaymentMethodsQuery["eligiblePaymentMethods"];
 }
 
 export default function CheckoutTemplate({
   activeUser,
+  paymentMethods,
 }: CheckoutTemplateProps) {
   const [cartQuantity, setCartQuantity] = useState(0);
   const [editingAddress, setEditingAddress] = useState(false);
@@ -46,15 +44,27 @@ export default function CheckoutTemplate({
     const formData = new FormData(e.currentTarget);
 
     try {
-      await createCustomerAddressAction({
-        fullName: formData.get("fullName") as string,
-        streetLine1: formData.get("streetLine1") as string,
-        city: formData.get("city") as string,
-        postalCode: formData.get("postalCode") as string,
-        countryCode: "FI",
-      });
+      if (formData.get("saveAddress")) {
+        await createCustomerAddressAction({
+          fullName: formData.get("fullName") as string,
+          streetLine1: formData.get("streetLine1") as string,
+          city: formData.get("city") as string,
+          postalCode: formData.get("postalCode") as string,
+          countryCode: "FI",
+          phoneNumber: "",
+        });
+      }
 
-      await placeOrderAction();
+      await placeOrderAction(
+        {
+          fullName: formData.get("fullName") as string,
+          streetLine1: formData.get("streetLine1") as string,
+          city: formData.get("city") as string,
+          postalCode: formData.get("postalCode") as string,
+          countryCode: "FI",
+        },
+        formData.get("paymentMethod") as string,
+      );
     } catch (error) {
       console.error("Failed to create address:", error);
     }
@@ -82,8 +92,9 @@ export default function CheckoutTemplate({
                       {editingAddress ? "Cancel" : "Edit"}
                     </button>
                   </div>
-                  {!editingAddress && activeUser?.addresses?.[0] && (
-                    <>
+
+                  {!editingAddress && activeUser?.addresses?.[0] ? (
+                    <div>
                       <input
                         type="hidden"
                         name="fullName"
@@ -104,10 +115,6 @@ export default function CheckoutTemplate({
                         name="postalCode"
                         value={activeUser?.addresses[0].postalCode || ""}
                       />
-                    </>
-                  )}
-                  {!editingAddress ? (
-                    <div className="space-y-4">
                       <div>
                         <div>{activeUser?.addresses?.[0]?.fullName}</div>
                         <div>{activeUser?.addresses?.[0]?.streetLine1}</div>
@@ -200,74 +207,78 @@ export default function CheckoutTemplate({
                           htmlFor="saveAddress"
                           className="text-sm text-slate-400"
                         >
-                          Save as default address
+                          Save address
                         </label>
                       </div>
-                      {/* <button
-                        type="submit"
-                        className="mt-4 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
-                      >
-                        Save Address
-                      </button> */}
                     </motion.div>
                   )}
                 </section>
 
-                <section className="">
+                <section>
                   <h2 className="mb-4 text-xl font-semibold">Payment Method</h2>
-                  Standard Payment
+                  {paymentMethods.map((method) => (
+                    <div key={method.id} className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        id={method.id}
+                        name="paymentMethod"
+                        value={method.code}
+                        className="h-4 w-4"
+                        required
+                      />
+                      <label htmlFor={method.id} className="text-sm">
+                        {method.name}
+                      </label>
+                    </div>
+                  ))}
+                  <button
+                    type="submit"
+                    className="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+                  >
+                    Place Order
+                  </button>
                 </section>
-                <button
-                  type="submit"
-                  className="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
-                >
-                  Place Order
-                </button>
               </form>
             </div>
 
-            <div>
-              <section className="sticky top-4">
-                <h2 className="mb-4 text-xl font-semibold">Order Summary</h2>
-                {order?.lines.length ? (
-                  <div className="flex flex-col gap-16">
-                    <div className="space-y-4">
-                      {order?.lines.map((item) => (
-                        <div key={item.id} className="flex justify-between">
-                          <div className="flex gap-2">
-                            <span>{item.productVariant.name}</span>
-                            {item.quantity > 1 && (
-                              <span>x {item.quantity}</span>
-                            )}
-                          </div>
-                          <span>{formatCurrency(item.linePriceWithTax)}</span>
+            <section className="sticky top-4">
+              <h2 className="mb-4 text-xl font-semibold">Order Summary</h2>
+              {order?.lines.length ? (
+                <div className="flex flex-col gap-16">
+                  <div className="space-y-4">
+                    {order?.lines.map((item) => (
+                      <div key={item.id} className="flex justify-between">
+                        <div className="flex gap-2">
+                          <span>{item.productVariant.name}</span>
+                          {item.quantity > 1 && <span>x {item.quantity}</span>}
                         </div>
-                      ))}
+                        <span>{formatCurrency(item.linePriceWithTax)}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <div className="flex justify-between">
+                      <span>Subtotal</span>
+                      <span>{formatCurrency(order?.subTotalWithTax)}</span>
                     </div>
-                    <div className="flex flex-col gap-2">
-                      <div className="flex justify-between">
-                        <span>Subtotal</span>
-                        <span>{formatCurrency(order?.subTotalWithTax)}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Shipping</span>
-                        <span>{formatCurrency(order?.shippingWithTax)}</span>
-                      </div>
-                      <div className="flex justify-between font-bold">
-                        <span>Total</span>
-                        <span>
-                          {formatCurrency(
-                            order?.subTotalWithTax + order?.shippingWithTax,
-                          )}
-                        </span>
-                      </div>
+                    <div className="flex justify-between">
+                      <span>Shipping</span>
+                      <span>{formatCurrency(order?.shippingWithTax)}</span>
+                    </div>
+                    <div className="flex justify-between font-bold">
+                      <span>Total</span>
+                      <span>
+                        {formatCurrency(
+                          order?.subTotalWithTax + order?.shippingWithTax,
+                        )}
+                      </span>
                     </div>
                   </div>
-                ) : (
-                  <div>Empty Cart</div>
-                )}
-              </section>
-            </div>
+                </div>
+              ) : (
+                <div>Empty Cart</div>
+              )}
+            </section>
           </div>
         </div>
       </Container>

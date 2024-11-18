@@ -7,6 +7,7 @@ import {
   setOrderShippingMethodMutation,
   addPaymentToOrderMutation,
   activeOrderFragment,
+  setOrderShippingAddressMutation,
 } from "@/common/queries";
 import { getFragmentData } from "@/gql";
 import {
@@ -17,7 +18,16 @@ import {
 } from "@/common/utils-server";
 import { CreateAddressInput } from "@/gql/graphql";
 
-export async function placeOrderAction() {
+export async function placeOrderAction(
+  shippingDetails: {
+    fullName: string;
+    streetLine1: string;
+    city: string;
+    postalCode: string;
+    countryCode: string;
+  },
+  paymentMethod: string,
+) {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get("session");
   const sessionSigCookie = cookieStore.get("session.sig");
@@ -26,6 +36,18 @@ export async function placeOrderAction() {
       Cookie: `session=${sessionCookie?.value}; session.sig=${sessionSigCookie?.value}`,
     },
   });
+
+  // Set shipping address
+  const { setOrderShippingAddress } = await graphQLClient.request(
+    setOrderShippingAddressMutation,
+    {
+      input: shippingDetails,
+    },
+  );
+
+  if ("errorCode" in setOrderShippingAddress) {
+    throw new Error(setOrderShippingAddress.message);
+  }
 
   try {
     // Set shipping method
@@ -48,7 +70,7 @@ export async function placeOrderAction() {
       addPaymentToOrderMutation,
       {
         input: {
-          method: "standard-payment",
+          method: paymentMethod,
           metadata: {
             shouldDecline: false,
             shouldError: false,
@@ -96,4 +118,33 @@ export const createCustomerAddressAction = async (
 ) => {
   const result = await createCustomerAddress(input);
   return result;
+};
+
+export const setOrderShippingAddressAction = async (
+  input: CreateAddressInput,
+) => {
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get("session");
+  const sessionSigCookie = cookieStore.get("session.sig");
+  const graphQLClient = new GraphQLClient(API_URL, {
+    headers: {
+      Cookie: `session=${sessionCookie?.value}; session.sig=${sessionSigCookie?.value}`,
+    },
+  });
+
+  try {
+    const { setOrderShippingAddress } = await graphQLClient.request(
+      setOrderShippingAddressMutation,
+      { input },
+    );
+
+    if ("errorCode" in setOrderShippingAddress) {
+      throw new Error(setOrderShippingAddress.message);
+    }
+
+    return getFragmentData(activeOrderFragment, setOrderShippingAddress);
+  } catch (error) {
+    console.error("Failed to set shipping address:", error);
+    throw error;
+  }
 };
