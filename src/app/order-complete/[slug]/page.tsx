@@ -1,6 +1,7 @@
 import Container from "@/components/container";
 import Header from "@/components/header";
 import { getOrderByCode } from "@/common/utils-server";
+import { formatCurrency } from "@/common/utils";
 
 type Params = Promise<{ slug: string }>;
 
@@ -21,7 +22,7 @@ export default async function Page(props: { params: Params }) {
           Thank you for your order! We will send you a confirmation email.
         </p>
         <div className="mt-8 space-y-6">
-          <div className="rounded-lg border p-6">
+          <div className="rounded-lg bg-slate-800 p-6">
             <h2 className="mb-4 text-xl font-semibold">Order Details</h2>
             <div className="space-y-2">
               <p>
@@ -32,12 +33,12 @@ export default async function Page(props: { params: Params }) {
               </p>
               <p>
                 <span className="font-medium">Order Date:</span>{" "}
-                {new Date(order.orderPlacedAt!).toLocaleDateString("en-US")}
+                {new Date(order.orderPlacedAt!).toLocaleDateString("fi-FI")}
               </p>
             </div>
           </div>
 
-          <div className="rounded-lg border p-6">
+          <div className="rounded-lg bg-slate-800 p-6">
             <h2 className="mb-4 text-xl font-semibold">Shipping Address</h2>
             <div className="space-y-2">
               <p>{order.shippingAddress?.fullName}</p>
@@ -49,30 +50,32 @@ export default async function Page(props: { params: Params }) {
             </div>
           </div>
 
-          <div className="rounded-lg border p-6">
+          <div className="rounded-lg bg-slate-800 p-6">
             <h2 className="mb-4 text-xl font-semibold">Shipping Method</h2>
             <p>{order.shippingLines[0]?.shippingMethod.name}</p>
           </div>
 
-          <div className="rounded-lg border p-6">
+          <div className="rounded-lg bg-slate-800 p-6">
             <h2 className="mb-4 text-xl font-semibold">Ordered Products</h2>
             <div className="space-y-4">
               {order.lines.map((line) => (
                 <div key={line.id} className="flex justify-between">
                   <div>
                     <p className="font-medium">{line.productVariant.name}</p>
-                    <p className="text-sm text-gray-600">
-                      Quantity: {line.quantity}
-                    </p>
+                    <p className="text-sm">Quantity: {line.quantity}</p>
                   </div>
-                  <p className="font-medium">{line.linePriceWithTax / 100} €</p>
+                  <p className="font-medium">
+                    {formatCurrency(line.linePriceWithTax)}
+                  </p>
                 </div>
               ))}
             </div>
             <div className="mt-4 border-t pt-4">
               <div className="flex justify-between">
                 <p className="font-medium">Total</p>
-                <p className="font-medium">{order.totalWithTax / 100} €</p>
+                <p className="font-medium">
+                  {formatCurrency(order.totalWithTax)}
+                </p>
               </div>
             </div>
           </div>

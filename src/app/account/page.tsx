@@ -1,4 +1,6 @@
-import { getLoggedInUser, getOrderById } from "@/common/utils-server";
+import { formatDate } from "@/common/utils";
+import { getLoggedInUser } from "@/common/utils-server";
+import BoxWrap from "@/components/box-wrap";
 import Container from "@/components/container";
 import Header from "@/components/header";
 import Heading from "@/components/heading";
@@ -16,9 +18,8 @@ export default async function AccountPage() {
     );
   }
 
-  const order = await getOrderById(user.id);
+  console.log(user);
 
-  console.log(order);
   return (
     <Container>
       <Header />
@@ -44,10 +45,10 @@ export default async function AccountPage() {
               </div>
             </section>
             <section>
-              <h2 className="mb-4 text-xl font-semibold">Addresses</h2>
+              <h2 className="mb-4 text-xl font-semibold">Address</h2>
               <div className="space-y-4">
                 {user.addresses?.map((address) => (
-                  <div key={address.id} className="rounded border p-4">
+                  <BoxWrap key={address.id}>
                     <div>{address.fullName}</div>
                     <div>{address.streetLine1}</div>
                     {address.streetLine2 && <div>{address.streetLine2}</div>}
@@ -56,19 +57,40 @@ export default async function AccountPage() {
                     </div>
                     <div>{address.country.name}</div>
                     {address.phoneNumber && <div>{address.phoneNumber}</div>}
-                  </div>
+                  </BoxWrap>
                 ))}
               </div>
             </section>
           </div>
           <div className="flex flex-col gap-16">
             <section>
-              <h2 className="mb-4 text-xl font-semibold">Orders</h2>
+              <h2 className="mb-4 text-xl font-semibold">Latest Order</h2>
               <div className="space-y-4">
-                <div>Order number</div>
-                <div>Date</div>
-                <div>Total</div>
-                <div>Status</div>
+                {user.orders?.items
+                  .filter((order) => order.state !== "AddingItems")
+                  .slice(-1)
+                  .map((order, index) => (
+                    <BoxWrap key={index}>
+                      <div className="text-sm text-slate-400">
+                        {formatDate(order.orderPlacedAt)}
+                      </div>
+                      <div className="flex items-start justify-between">
+                        <div className="space-y-2">
+                          {order.lines.map((line) => (
+                            <div
+                              key={line.productVariant.name}
+                              className="font-medium"
+                            >
+                              {line.productVariant.name}
+                            </div>
+                          ))}
+                        </div>
+                        <div className="rounded-full bg-slate-700 px-3 py-1 text-sm">
+                          {order.state}
+                        </div>
+                      </div>
+                    </BoxWrap>
+                  ))}
               </div>
             </section>
           </div>

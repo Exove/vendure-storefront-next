@@ -32,7 +32,7 @@ export default function QuantitySelector({
 
   return (
     <div className="flex items-center gap-4">
-      <div className="flex items-center rounded-md border border-gray-200">
+      <div className="flex items-center rounded-md bg-slate-700">
         <button
           onClick={decrement}
           className="flex h-8 w-8 items-center justify-center rounded-full"

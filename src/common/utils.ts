@@ -7,3 +7,11 @@ export function formatCurrency(value: number) {
     .format(majorUnits)
     .replace(",00", "");
 }
+
+export function formatDate(date: string) {
+  return new Date(date).toLocaleDateString("fi-FI", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}

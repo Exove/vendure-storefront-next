@@ -12,7 +12,6 @@ import {
   getShippingMethodsQuery,
   orderByCodeQuery,
   orderFragment,
-  orderQuery,
   removeItemFromOrderMutation,
 } from "./queries";
 import { CreateAddressInput } from "../gql/graphql";
@@ -93,10 +92,4 @@ export async function getOrderByCode(id: string) {
   const client = await getAuthenticatedClient();
   const { orderByCode } = await client.request(orderByCodeQuery, { code: id });
   return getFragmentData(orderFragment, orderByCode);
-}
-
-export async function getOrderById(id: string) {
-  const client = await getAuthenticatedClient();
-  const { order } = await client.request(orderQuery, { id: id });
-  return getFragmentData(orderFragment, order);
 }

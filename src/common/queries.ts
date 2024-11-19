@@ -138,6 +138,17 @@ export const activeCustomerQuery = graphql(`
       firstName
       lastName
       emailAddress
+      orders {
+        items {
+          state
+          orderPlacedAt
+          lines {
+            productVariant {
+              name
+            }
+          }
+        }
+      }
       addresses {
         id
         fullName
@@ -350,14 +361,6 @@ export const orderFragment = graphql(`
 export const orderByCodeQuery = graphql(`
   query OrderByCode($code: String!) {
     orderByCode(code: $code) {
-      ...Order
-    }
-  }
-`);
-
-export const orderQuery = graphql(`
-  query Order($id: ID!) {
-    order(id: $id) {
       ...Order
     }
   }

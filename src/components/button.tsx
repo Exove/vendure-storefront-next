@@ -32,7 +32,7 @@ export default function Button({
   const widthStyles = fullWidth ? "w-full" : "max-w-[270px]";
 
   const styleVariants = {
-    primary: "bg-purple-600 hover:bg-purple-700 active:bg-purple-800",
+    primary: "bg-purple-700 hover:bg-purple-600 active:bg-purple-700",
     secondary: "bg-zinc-600 hover:bg-zinc-700 active:bg-zinc-800",
     "primary-outlined":
       "text-purple-600 outline outline-2 outline-offset-[-2px] outline-purple-600 hover:bg-purple-600 hover:text-white active:bg-purple-800",
@@ -55,7 +55,17 @@ export default function Button({
   );
 
   if (href) {
-    return <Link href={href}>{innerContent}</Link>;
+    return (
+      <Link href={href}>
+        <motion.div
+          whileHover={{ scale: style !== "disabled" ? 1.02 : 1 }}
+          whileTap={{ scale: style !== "disabled" ? 1.0 : 1 }}
+          className="flex justify-center"
+        >
+          {innerContent}
+        </motion.div>
+      </Link>
+    );
   }
 
   return (

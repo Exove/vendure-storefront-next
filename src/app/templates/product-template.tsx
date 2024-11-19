@@ -24,9 +24,9 @@ export default function ProductTemplate({ product }: ProductTemplateProps) {
     <CartContext.Provider value={{ cartQuantity, setCartQuantity }}>
       <Container>
         <Header />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-20 mt-20">
+        <div className="mt-20 grid grid-cols-1 gap-20 md:grid-cols-2">
           <ImageGallery images={product.assets} />
-          <div className="flex flex-col gap-10">
+          <div className="flex flex-col gap-8">
             <div>
               <Heading level="h1" size="xl">
                 {product.name}
