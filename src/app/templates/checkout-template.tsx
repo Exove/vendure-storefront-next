@@ -93,11 +93,14 @@ export default function CheckoutTemplate({
             <div className="grid grid-cols-1 gap-20 md:grid-cols-2">
               <div className="flex flex-col gap-12">
                 <form onSubmit={handleSubmitAddress} className="space-y-10">
-                  <BoxWrap>
+                  <div>
+                    <h2 className="mb-6 text-xl font-medium">
+                      Shipping Address
+                    </h2>
                     <AddressFields
                       defaultAddress={activeUser?.addresses?.[0]}
                     />
-                  </BoxWrap>
+                  </div>
                   <ShippingMethodSelector shippingMethods={shippingMethods} />
                   <PaymentMethodSelector paymentMethods={paymentMethods} />
                   <Button type="submit" fullWidth>

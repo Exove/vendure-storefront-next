@@ -4,9 +4,10 @@ import Container from "@/components/container";
 import Header from "@/components/header";
 import Heading from "@/components/heading";
 import ImageGallery from "@/components/image-gallery";
-import SelectVariant from "@/components/select-variant";
 import { Product } from "@/gql/graphql";
 import { createContext, useState } from "react";
+import { formatCurrency } from "@/common/utils";
+import AddToCartOptions from "@/components/add-to-cart-options";
 
 export const CartContext = createContext<{
   cartQuantity: number;
@@ -20,6 +21,10 @@ interface ProductTemplateProps {
 export default function ProductTemplate({ product }: ProductTemplateProps) {
   const [cartQuantity, setCartQuantity] = useState(0);
 
+  const allVariantsHaveSamePrice = product.variants.every(
+    (variant) => variant.price === product.variants[0].price,
+  );
+
   return (
     <CartContext.Provider value={{ cartQuantity, setCartQuantity }}>
       <Container>
@@ -32,8 +37,16 @@ export default function ProductTemplate({ product }: ProductTemplateProps) {
                 {product.name}
               </Heading>
               <p className="text-lg">{product.description}</p>
+              {(allVariantsHaveSamePrice || product.variants.length === 1) && (
+                <p className="mt-4 text-2xl font-semibold text-blue-400">
+                  {formatCurrency(product.variants[0].price)}
+                </p>
+              )}
             </div>
-            <SelectVariant variants={product.variants} />
+            <AddToCartOptions
+              variants={product.variants}
+              displayPrice={!allVariantsHaveSamePrice}
+            />
           </div>
         </div>
       </Container>

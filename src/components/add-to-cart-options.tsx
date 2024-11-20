@@ -11,19 +11,21 @@ import { CartContext } from "@/app/templates/product-template";
 import Button from "./button";
 import Heading from "./heading";
 
-interface SelectVariantProps {
+interface AddToCartOptionsProps {
   variants: {
     id: string;
     name: string;
     price: number;
   }[];
   quantity?: number;
+  displayPrice?: boolean;
 }
 
-export default function SelectVariant({
+export default function AddToCartOptions({
   variants,
   quantity: initialQuantity = 1,
-}: SelectVariantProps) {
+  displayPrice = true,
+}: AddToCartOptionsProps) {
   const [selectedVariant, setSelectedVariant] = useState(variants[0]);
   const [quantity, setQuantity] = useState(initialQuantity);
   const { setCartQuantity, cartQuantity } = useContext(CartContext);
@@ -46,39 +48,43 @@ export default function SelectVariant({
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-8">
-        <div>
-          <Heading level="h2" size="xs">
-            Select Variant
-          </Heading>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {variants.map((variant) => (
-              <label
-                key={variant.id}
-                htmlFor={variant.id}
-                className={clsx(
-                  "flex cursor-pointer items-center justify-between rounded-lg border p-4 transition-all hover:border-blue-400",
-                  selectedVariant.id === variant.id
-                    ? "border-blue-500 bg-blue-500/10"
-                    : "border-slate-700 hover:bg-slate-800",
-                )}
-              >
-                <input
-                  type="radio"
-                  id={variant.id}
-                  name="variant"
-                  value={variant.id}
-                  checked={selectedVariant.id === variant.id}
-                  onChange={() => setSelectedVariant(variant)}
-                  className="hidden"
-                />
-                <span className="font-medium">{variant.name}</span>
-                <span className="text-lg font-semibold text-blue-400">
-                  {formatCurrency(variant.price)}
-                </span>
-              </label>
-            ))}
+        {variants.length > 1 && (
+          <div>
+            <Heading level="h2" size="xs">
+              Select Variant
+            </Heading>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {variants.map((variant) => (
+                <label
+                  key={variant.id}
+                  htmlFor={variant.id}
+                  className={clsx(
+                    "flex cursor-pointer items-center justify-between rounded-lg border p-4 transition-all focus-within:ring-2 focus-within:ring-blue-500 hover:border-blue-400",
+                    selectedVariant.id === variant.id
+                      ? "border-blue-500 bg-blue-500/10"
+                      : "border-slate-700 hover:bg-slate-800",
+                  )}
+                >
+                  <input
+                    type="radio"
+                    id={variant.id}
+                    name="variant"
+                    value={variant.id}
+                    checked={selectedVariant.id === variant.id}
+                    onChange={() => setSelectedVariant(variant)}
+                    className="sr-only"
+                  />
+                  <span className="font-medium">{variant.name}</span>
+                  {displayPrice && (
+                    <span className="text-lg font-semibold text-blue-400">
+                      {formatCurrency(variant.price)}
+                    </span>
+                  )}
+                </label>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         <div>
           <Heading level="h2" size="xs">

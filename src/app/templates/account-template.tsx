@@ -69,15 +69,25 @@ export default function AccountTemplate({ user }: AccountTemplateProps) {
               <h2 className="mb-4 text-xl font-semibold">
                 Personal Information
               </h2>
-              <div>
-                <div>
-                  {user?.firstName} {user?.lastName}
+              <BoxWrap>
+                <div className="space-y-2">
+                  <div>
+                    <span className="text-slate-400">Name:</span>{" "}
+                    <span className="font-medium text-slate-200">
+                      {user?.firstName} {user?.lastName}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-slate-400">Email:</span>{" "}
+                    <span className="font-medium text-slate-200">
+                      {user?.emailAddress}
+                    </span>
+                  </div>
                 </div>
-                <div>{user?.emailAddress}</div>
-              </div>
+              </BoxWrap>
             </section>
             <section>
-              <h2 className="mb-4 text-xl font-semibold">Address</h2>
+              <h2 className="mb-4 text-xl font-semibold">Shipping Address</h2>
               <div className="space-y-4">
                 {user?.addresses?.map((address) => (
                   <BoxWrap key={address.id}>

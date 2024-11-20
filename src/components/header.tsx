@@ -4,11 +4,11 @@ import { UserIcon } from "@heroicons/react/24/outline";
 
 export default function Header() {
   return (
-    <header className="max-w-screen-xl mx-auto py-6 flex items-center justify-between">
+    <header className="mx-auto flex min-h-20 max-w-screen-xl items-center justify-between py-6">
       <Link href="/">Home</Link>
-      <div className="flex gap-10 items-center">
+      <div className="flex items-center gap-10">
         <Link href="/account">
-          <UserIcon className="w-6 h-6" />
+          <UserIcon className="h-6 w-6" />
           <span className="sr-only">Account</span>
         </Link>
         <CartMenu />
