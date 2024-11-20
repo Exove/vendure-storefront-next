@@ -50,14 +50,14 @@ export default function CartMenu() {
           {order?.totalQuantity ? (
             <motion.div
               animate={{
-                scale: [0.8, 1.2],
+                scale: cartQuantity !== 0 ? [0.6, 1] : 1,
                 transition: {
                   type: "spring",
                   stiffness: 400,
                   damping: 10,
                 },
               }}
-              className="flex h-6 w-6 items-center justify-center rounded-full border text-xs"
+              className="flex h-7 w-7 items-center justify-center rounded-full border text-sm"
               key={cartQuantity}
             >
               {order.totalQuantity}
