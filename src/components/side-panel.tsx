@@ -13,9 +13,11 @@ import { Fragment, useState } from "react";
 interface MenuDialogProps {
   openLabel: React.ReactNode;
   children: React.ReactNode;
+  footer?: React.ReactNode;
   fullWidthButton?: boolean;
   position?: "left" | "right";
   open?: boolean;
+  title?: string;
 }
 
 export default function SidePanel({
@@ -23,6 +25,8 @@ export default function SidePanel({
   openLabel,
   fullWidthButton = false,
   position = "right",
+  footer,
+  title,
 }: MenuDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -70,14 +74,24 @@ export default function SidePanel({
               )}
             >
               <DialogPanel className="h-full w-full max-w-[500px] rounded-lg bg-slate-800 p-5">
-                <div className="flex justify-end">
-                  <button onClick={() => setIsOpen(false)}>
-                    <span className="sr-only">Close cart</span>
-                    <XMarkIcon className="h-10 w-10 rounded-full bg-slate-700 p-2 hover:bg-slate-600 active:bg-slate-700" />
-                  </button>
-                </div>
+                <div className="flex h-full max-w-[500px] flex-col">
+                  <div className="mb-4 flex items-end justify-between">
+                    {title ? (
+                      <h2 className="text-2xl font-bold">{title}</h2>
+                    ) : (
+                      <div />
+                    )}
 
-                {children}
+                    <button onClick={() => setIsOpen(false)}>
+                      <span className="sr-only">Close cart</span>
+                      <XMarkIcon className="h-10 w-10 rounded-full bg-slate-700 p-2 hover:bg-slate-600 active:bg-slate-700" />
+                    </button>
+                  </div>
+                  <div className="mt-2 flex-1 overflow-y-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                    {children}
+                  </div>
+                  {footer && <div>{footer}</div>}
+                </div>
               </DialogPanel>
             </div>
           </TransitionChild>
