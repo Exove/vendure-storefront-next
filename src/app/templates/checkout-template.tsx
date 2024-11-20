@@ -14,9 +14,10 @@ import { createCustomerAddressAction } from "../actions";
 
 import ShippingMethodSelector from "@/components/shipping-method-selector";
 import PaymentMethodSelector from "@/components/payment-method-selector";
-import ShippingAddressForm from "@/components/shipping-address-form";
 import OrderSummary from "@/components/order-summary";
 import Button from "@/components/button";
+import AddressFields from "@/components/address-fields";
+import BoxWrap from "@/components/box-wrap";
 
 export const CartContext = createContext<{
   cartQuantity: number;
@@ -35,7 +36,6 @@ export default function CheckoutTemplate({
   shippingMethods,
 }: CheckoutTemplateProps) {
   const [cartQuantity, setCartQuantity] = useState(0);
-  const [editingAddress, setEditingAddress] = useState(false);
 
   const { data: order, error } = useSWR("order/add", activeOrderAction, {
     revalidateOnFocus: false,
@@ -93,11 +93,11 @@ export default function CheckoutTemplate({
             <div className="grid grid-cols-1 gap-20 md:grid-cols-2">
               <div className="flex flex-col gap-12">
                 <form onSubmit={handleSubmitAddress} className="space-y-10">
-                  <ShippingAddressForm
-                    activeUser={activeUser}
-                    editingAddress={editingAddress}
-                    setEditingAddress={setEditingAddress}
-                  />
+                  <BoxWrap>
+                    <AddressFields
+                      defaultAddress={activeUser?.addresses?.[0]}
+                    />
+                  </BoxWrap>
                   <ShippingMethodSelector shippingMethods={shippingMethods} />
                   <PaymentMethodSelector paymentMethods={paymentMethods} />
                   <Button type="submit" fullWidth>

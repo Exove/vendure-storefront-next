@@ -13,8 +13,9 @@ import {
   orderByCodeQuery,
   orderFragment,
   removeItemFromOrderMutation,
+  updateCustomerAddressMutation,
 } from "./queries";
-import { CreateAddressInput } from "../gql/graphql";
+import { CreateAddressInput, UpdateAddressInput } from "../gql/graphql";
 
 // Create reusable function to get GraphQL client with auth cookies
 async function getAuthenticatedClient() {
@@ -71,6 +72,15 @@ export async function createCustomerAddress(input: CreateAddressInput) {
     { input },
   );
   return createCustomerAddress;
+}
+
+export async function updateCustomerAddress(input: UpdateAddressInput) {
+  const client = await getAuthenticatedClient();
+  const { updateCustomerAddress } = await client.request(
+    updateCustomerAddressMutation,
+    { input },
+  );
+  return updateCustomerAddress;
 }
 
 export async function getPaymentMethods() {

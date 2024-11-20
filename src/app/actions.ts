@@ -15,8 +15,9 @@ import {
   createCustomerAddress,
   getActiveOrder,
   removeItemFromOrder,
+  updateCustomerAddress,
 } from "@/common/utils-server";
-import { CreateAddressInput } from "@/gql/graphql";
+import { CreateAddressInput, UpdateAddressInput } from "@/gql/graphql";
 
 export async function placeOrderAction(
   shippingDetails: {
@@ -118,6 +119,13 @@ export const createCustomerAddressAction = async (
   input: CreateAddressInput,
 ) => {
   const result = await createCustomerAddress(input);
+  return result;
+};
+
+export const updateCustomerAddressAction = async (
+  input: UpdateAddressInput,
+) => {
+  const result = await updateCustomerAddress(input);
   return result;
 };
 

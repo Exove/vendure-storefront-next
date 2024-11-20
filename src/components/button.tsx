@@ -1,14 +1,11 @@
+"use client";
+
 import clsx from "clsx";
 import { motion } from "motion/react";
 import Link from "next/link";
 
 interface ButtonProps {
-  style?:
-    | "primary"
-    | "primary-outlined"
-    | "secondary"
-    | "secondary-outlined"
-    | "disabled";
+  style?: "primary" | "secondary" | "text" | "disabled";
   children: React.ReactNode;
   href?: string;
   onClick?: () => void;
@@ -26,18 +23,15 @@ export default function Button({
   size = "medium",
   fullWidth = false,
 }: ButtonProps) {
-  const baseStyles =
-    "rounded-lg px-8 py-4 text-center font-bold break-words text-white";
-  const sizeStyles = size === "small" && "!px-6 !py-3.5 !text-sm leading-tight";
+  const baseStyles = "rounded-lg px-8 py-4 text-center break-words text-white";
+  const sizeStyles = size === "small" && "!px-3 !py-2 !text-sm leading-tight";
   const widthStyles = fullWidth ? "w-full" : "max-w-[270px]";
 
   const styleVariants = {
-    primary: "bg-purple-700 hover:bg-purple-600 active:bg-purple-700",
-    secondary: "bg-zinc-600 hover:bg-zinc-700 active:bg-zinc-800",
-    "primary-outlined":
-      "text-purple-600 outline outline-2 outline-offset-[-2px] outline-purple-600 hover:bg-purple-600 hover:text-white active:bg-purple-800",
-    "secondary-outlined":
-      "text-zinc-600 outline outline-2 outline-offset-[-2px] outline-zinc-600 hover:bg-zinc-600 hover:text-white active:bg-zinc-800",
+    primary: "bg-purple-700 hover:bg-purple-600 active:bg-purple-700 font-bold",
+    secondary:
+      "text-slate-300 outline outline-1 outline-offset-[-2px] outline-slate-300 hover:bg-slate-900 active:bg-slate-950",
+    text: "text-slate-300 hover:text-slate-200 active:text-slate-300",
     disabled: "cursor-not-allowed bg-gray-500",
   };
 
@@ -70,8 +64,10 @@ export default function Button({
 
   return (
     <motion.button
-      whileHover={{ scale: style !== "disabled" ? 1.05 : 1 }}
-      whileTap={{ scale: style !== "disabled" ? 1.02 : 1 }}
+      whileHover={{
+        scale: style === "primary" ? 1.01 : 1,
+      }}
+      whileTap={{ scale: style === "primary" ? 1.0 : 1 }}
       onClick={onClick}
       type={type}
       className={clsx(widthStyles, "flex justify-center")}

@@ -49,6 +49,14 @@ export const productsQuery = graphql(`
       items {
         name
         slug
+        collections {
+          name
+        }
+        variantList {
+          items {
+            priceWithTax
+          }
+        }
         assets {
           source
           width
@@ -143,6 +151,7 @@ export const activeCustomerQuery = graphql(`
           state
           orderPlacedAt
           lines {
+            quantity
             productVariant {
               name
             }
@@ -304,9 +313,28 @@ export const createCustomerAddressMutation = graphql(`
         name
       }
       phoneNumber
-      defaultShippingAddress
-      defaultBillingAddress
-      customFields
+    }
+  }
+`);
+
+export const updateCustomerAddressMutation = graphql(`
+  mutation UpdateCustomerAddress($input: UpdateAddressInput!) {
+    updateCustomerAddress(input: $input) {
+      id
+      createdAt
+      updatedAt
+      fullName
+      company
+      streetLine1
+      streetLine2
+      city
+      province
+      postalCode
+      country {
+        code
+        name
+      }
+      phoneNumber
     }
   }
 `);

@@ -4,6 +4,7 @@ import { getLoggedInUser } from "@/common/utils-server";
 import Login from "@/components/login";
 
 import { Inter } from "next/font/google";
+import { Toaster } from "@/components/sonner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -29,6 +30,8 @@ export default async function RootLayout({
         className={`${inter.variable} bg-slate-900 font-sans text-slate-100`}
       >
         {activeUser ? children : <Login />}
+
+        <Toaster />
       </body>
     </html>
   );

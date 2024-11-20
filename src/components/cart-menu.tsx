@@ -12,7 +12,6 @@ import {
 } from "@/app/actions";
 import Link from "next/link";
 import { ShoppingBagIcon, TrashIcon } from "@heroicons/react/24/outline";
-import Heading from "./heading";
 import QuantitySelector from "./quantity-selector";
 import { formatCurrency } from "@/common/utils";
 import Image from "next/image";
@@ -70,79 +69,74 @@ export default function CartMenu() {
         </div>
       }
     >
-      <div className="flex h-full flex-col justify-between">
-        <div className="flex flex-col gap-6">
-          <Heading size="md" level="h2">
-            Shopping Cart
-          </Heading>
-          {order?.lines.length === 0 && (
-            <div className="mt-16 text-center text-slate-400">
-              Your cart is empty
-            </div>
-          )}
-          <div className="flex flex-col divide-y divide-slate-700">
-            <AnimatePresence>
-              {order?.lines.map((item) => (
-                <motion.div
-                  key={item.id}
-                  exit={{ opacity: 0 }}
-                  className="py-6 first:pt-0 last:pb-0"
-                >
-                  <div className="flex gap-6">
-                    <Link
-                      href={`/products/${item.productVariant.product.slug}`}
-                      className="flex-shrink-0 overflow-hidden rounded-lg"
-                    >
-                      <Image
-                        src={
-                          item.featuredAsset?.preview ??
-                          "/placeholder-image.jpg"
-                        }
-                        alt={item.productVariant.name}
-                        width={96}
-                        height={96}
-                        className="h-24 w-24 object-cover transition-transform hover:scale-110"
-                      />
-                    </Link>
-                    <div className="flex w-full flex-col justify-between">
-                      <div className="flex w-full justify-between">
-                        <div>
-                          <Link
-                            href={`/products/${item.productVariant.product.slug}`}
-                            className="font-medium hover:text-slate-300"
-                          >
-                            {item.productVariant.name}
-                          </Link>
-                        </div>
-                        <div className="font-medium">
-                          {formatCurrency(item.linePriceWithTax)}
-                        </div>
+      <div className="flex flex-col overflow-y-auto">
+        {order?.lines.length === 0 && (
+          <div className="mt-16 text-center text-slate-400">
+            Your cart is empty
+          </div>
+        )}
+        <div className="flex flex-col divide-y divide-slate-700">
+          <AnimatePresence>
+            {order?.lines.map((item) => (
+              <motion.div
+                key={item.id}
+                exit={{ opacity: 0 }}
+                className="py-6 first:pt-0 last:pb-0"
+              >
+                <div className="flex gap-6">
+                  <Link
+                    href={`/products/${item.productVariant.product.slug}`}
+                    className="flex-shrink-0 overflow-hidden rounded-lg"
+                  >
+                    <Image
+                      src={
+                        item.featuredAsset?.preview ?? "/placeholder-image.jpg"
+                      }
+                      alt={item.productVariant.name}
+                      width={96}
+                      height={96}
+                      className="h-24 w-24 object-cover transition-transform hover:scale-110"
+                    />
+                  </Link>
+                  <div className="flex w-full flex-col justify-between">
+                    <div className="flex w-full justify-between">
+                      <div>
+                        <Link
+                          href={`/products/${item.productVariant.product.slug}`}
+                          className="font-medium hover:text-slate-300"
+                        >
+                          {item.productVariant.name}
+                        </Link>
                       </div>
-                      <div className="flex items-center justify-between">
-                        <div className="flex w-full items-center justify-between">
-                          <QuantitySelector
-                            initialQuantity={item.quantity}
-                            onChange={(quantity) =>
-                              handleQuantityChange(item.id, quantity)
-                            }
-                          />
+                      <div className="font-medium">
+                        {formatCurrency(item.linePriceWithTax)}
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex w-full items-center justify-between">
+                        <QuantitySelector
+                          initialQuantity={item.quantity}
+                          onChange={(quantity) =>
+                            handleQuantityChange(item.id, quantity)
+                          }
+                        />
 
-                          <button
-                            onClick={() => handleRemoveItem(item.id)}
-                            className="transition-colors hover:text-red-500"
-                          >
-                            <TrashIcon className="h-8 w-8 rounded-full bg-red-900/50 p-2 transition-colors hover:bg-red-800" />
-                            <span className="sr-only">Remove from cart</span>
-                          </button>
-                        </div>
+                        <button
+                          onClick={() => handleRemoveItem(item.id)}
+                          className="transition-colors hover:text-red-500"
+                        >
+                          <TrashIcon className="h-8 w-8 rounded-full bg-red-900/50 p-2 transition-colors hover:bg-red-800" />
+                          <span className="sr-only">Remove from cart</span>
+                        </button>
                       </div>
                     </div>
                   </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
+
         {order?.lines.length && (
           <div className="mb-10 mt-8 flex flex-col gap-4 border-t border-slate-700 pt-6">
             <div className="flex w-full justify-between text-lg font-medium">

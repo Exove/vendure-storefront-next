@@ -30,7 +30,7 @@ export default function Heading({
         size === "lg" && "mb-6 text-2xl lg:text-3xl",
         size === "md" && "mb-6 text-xl lg:text-2xl",
         size === "sm" && "mb-4 text-lg",
-        size === "xs" && "mb-3 text-base",
+        size === "xs" && "mb-4 text-base",
         zeroMargin && "!mb-0",
       )}
       id={id}

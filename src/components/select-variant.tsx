@@ -45,21 +45,21 @@ export default function SelectVariant({
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-8">
         <div>
           <Heading level="h2" size="xs">
             Select Variant
           </Heading>
-          <div className="flex flex-col items-start gap-2">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             {variants.map((variant) => (
               <label
                 key={variant.id}
                 htmlFor={variant.id}
                 className={clsx(
-                  "inline-block cursor-pointer rounded px-4 py-2 ring-1",
+                  "flex cursor-pointer items-center justify-between rounded-lg border p-4 transition-all hover:border-blue-400",
                   selectedVariant.id === variant.id
-                    ? "ring-blue-500"
-                    : "ring-gray-600",
+                    ? "border-blue-500 bg-blue-500/10"
+                    : "border-slate-700 hover:bg-slate-800",
                 )}
               >
                 <input
@@ -71,11 +71,15 @@ export default function SelectVariant({
                   onChange={() => setSelectedVariant(variant)}
                   className="hidden"
                 />
-                {variant.name}: {formatCurrency(variant.price)}
+                <span className="font-medium">{variant.name}</span>
+                <span className="text-lg font-semibold text-blue-400">
+                  {formatCurrency(variant.price)}
+                </span>
               </label>
             ))}
           </div>
         </div>
+
         <div>
           <Heading level="h2" size="xs">
             Quantity
@@ -84,12 +88,14 @@ export default function SelectVariant({
         </div>
       </div>
 
-      <div>
+      <div className="mt-4">
         <Button
           onClick={async () => {
             await addToCart();
             setCartQuantity(cartQuantity + 1);
           }}
+          fullWidth
+          size="medium"
         >
           Add to cart
         </Button>
