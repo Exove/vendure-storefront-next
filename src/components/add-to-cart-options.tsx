@@ -11,7 +11,8 @@ import Button from "./button";
 import Heading from "./heading";
 import { useTranslations } from "next-intl";
 import { addItemToOrderMutation } from "@/common/mutations";
-import { getBearerToken } from "@/app/[locale]/actions";
+import { getBearerToken, setBearerToken } from "@/app/[locale]/actions";
+import { print } from "graphql";
 
 interface AddToCartOptionsProps {
   variants: {
@@ -36,20 +37,32 @@ export default function AddToCartOptions({
   const addToCart = async () => {
     try {
       const bearerToken = await getBearerToken();
+      const authHeaders: Record<string, string> = {
+        "Content-Type": "application/json",
+      };
+
+      if (bearerToken?.value) {
+        authHeaders.Authorization = `Bearer ${bearerToken.value}`;
+      }
 
       const graphQLClient = new GraphQLClient(API_URL, {
-        headers: {
-          "Content-Type": "application/json",
-          ...(bearerToken?.value && {
-            Authorization: `Bearer ${bearerToken.value}`,
-          }),
-        },
+        headers: authHeaders,
       });
 
-      await graphQLClient.request(addItemToOrderMutation, {
-        productVariantId: selectedVariant.id,
-        quantity,
-      });
+      const response = await graphQLClient.rawRequest(
+        print(addItemToOrderMutation),
+        {
+          productVariantId: selectedVariant.id,
+          quantity,
+        },
+      );
+
+      const authToken = response.headers.get("vendure-auth-token");
+      if (authToken && !bearerToken) {
+        await setBearerToken(authToken);
+      }
+
+      setCartQuantity(cartQuantity + quantity);
     } catch (error) {
       console.error("Failed to add item to cart:", error);
       throw error;

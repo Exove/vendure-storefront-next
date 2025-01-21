@@ -1,7 +1,5 @@
 {
   "common": {
-    "shop": "REBL Shop",
-    "description": "Get your favorite REBL products here!",
     "login": "Login",
     "logout": "Logout",
     "cart": "Cart",

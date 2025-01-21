@@ -1,7 +1,5 @@
 {
   "common": {
-    "shop": "REBL Kauppa",
-    "description": "Hanki suosikki REBL-tuotteesi täältä!",
     "login": "Kirjaudu",
     "logout": "Kirjaudu ulos",
     "cart": "Ostoskori",

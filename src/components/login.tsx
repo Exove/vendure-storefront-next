@@ -1,6 +1,6 @@
 "use client";
 
-import { API_URL, MOI, MOI_PRIVATE } from "@/common/constants";
+import { API_URL } from "@/common/constants";
 import { GraphQLClient } from "graphql-request";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
@@ -16,10 +16,6 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
-
-  console.log("Api URL", API_URL);
-  console.log("MOI", MOI);
-  console.log("MOI_PRIVATE", MOI_PRIVATE);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -37,13 +33,10 @@ export default function Login() {
           rememberMe: true,
         },
       );
-      console.log("response", response);
+
       // Set the bearer token in the cookies
       const authToken = response.headers.get("vendure-auth-token");
-
-      console.log("authToken", authToken);
       if (authToken) {
-        console.log("Bearer token:", authToken);
         await setBearerToken(authToken);
       }
 
