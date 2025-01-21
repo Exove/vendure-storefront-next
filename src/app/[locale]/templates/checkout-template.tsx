@@ -8,11 +8,7 @@ import {
   GetShippingMethodsQuery,
 } from "@/gql/graphql";
 import useSWR, { mutate } from "swr";
-import {
-  activeOrderAction,
-  placeOrderAction,
-  updateCustomerAction,
-} from "../actions";
+import { activeOrderAction, placeOrderAction } from "../actions";
 import { createContext, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/routing";
@@ -21,7 +17,6 @@ import PaymentMethodSelector from "@/components/payment-method-selector";
 import OrderSummary from "@/components/order-summary";
 import Button from "@/components/button";
 import AddressFields from "@/components/address-fields";
-import { toast } from "sonner";
 
 export const CartContext = createContext<{
   cartQuantity: number;
@@ -47,8 +42,6 @@ export default function CheckoutTemplate({
     revalidateOnMount: true,
   });
   if (error) throw error;
-  const creditBalance = activeUser?.customFields?.creditBalance ?? 0;
-  const subTotalInTokens = order?.subTotalWithTax / 100;
 
   useEffect(() => {
     if (cartQuantity) {
@@ -59,11 +52,6 @@ export default function CheckoutTemplate({
   const handleSubmitOrder = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-
-    if (subTotalInTokens > creditBalance) {
-      toast(t("checkout.notEnoughTokens"));
-      return;
-    }
 
     try {
       await placeOrderAction(
@@ -77,16 +65,11 @@ export default function CheckoutTemplate({
         formData.get("paymentMethod") as string,
         formData.get("shippingMethod") as string,
       );
+
+      console.log("order11", order);
     } catch (error) {
       console.error("Failed to create order:", error);
       throw error;
-    }
-    if (subTotalInTokens && creditBalance) {
-      await updateCustomerAction({
-        customFields: {
-          creditBalance: creditBalance - subTotalInTokens,
-        },
-      });
     }
 
     router.push(`/order-complete/${order?.code}`);

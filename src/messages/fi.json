@@ -24,7 +24,7 @@
     "title": "Tili",
     "notLoggedIn": "Et ole kirjautunut sisään.",
     "creditBalance": "Saldosi",
-    "tokens": "tokenia",
+    "tokens": "euroa",
     "shippingAddress": "Toimitusosoite",
     "saveChanges": "Tallenna muutokset",
     "emptyFields": "Tyhjennä kentät",
@@ -38,7 +38,7 @@
     "emptyCart": "Tyhjä ostoskori",
     "paymentMethod": "Maksutapa",
     "shippingMethod": "Toimitustapa",
-    "notEnoughTokens": "Ei tarpeeksi tokeneita"
+    "notEnoughTokens": "Ei tarpeeksi saldoa"
   },
   "cart": {
     "title": "Ostoskori",

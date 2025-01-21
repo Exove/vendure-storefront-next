@@ -23,8 +23,6 @@
   "account": {
     "title": "Account",
     "notLoggedIn": "You are not logged in.",
-    "creditBalance": "Credit Balance",
-    "tokens": "tokens",
     "shippingAddress": "Shipping Address",
     "saveChanges": "Save Changes",
     "emptyFields": "Empty Fields",
@@ -37,8 +35,7 @@
     "placeOrder": "Place Order",
     "emptyCart": "Empty Cart",
     "paymentMethod": "Payment Method",
-    "shippingMethod": "Shipping Method",
-    "notEnoughTokens": "Not enough tokens"
+    "shippingMethod": "Shipping Method"
   },
   "cart": {
     "title": "Shopping Cart",

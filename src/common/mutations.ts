@@ -175,3 +175,15 @@ export const updateCustomerMutation = graphql(`
     }
   }
 `);
+
+export const setCustomerForOrderMutation = graphql(`
+  mutation SetCustomerForOrder($input: CreateCustomerInput!) {
+    setCustomerForOrder(input: $input) {
+      ...ActiveOrder
+      ... on ErrorResult {
+        errorCode
+        message
+      }
+    }
+  }
+`);

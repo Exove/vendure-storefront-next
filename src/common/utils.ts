@@ -7,10 +7,13 @@ export function formatCurrency(
   if (!withLabel) {
     return amount;
   }
-  if (locale === "fi") {
-    return amount + " " + (amount === 1 ? "token" : "tokenia");
-  }
-  return amount + " " + (amount === 1 ? "token" : "tokens");
+
+  return new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: "EUR",
+  })
+    .format(amount)
+    .replace(",00", "");
 }
 
 export function formatDate(date: string) {
