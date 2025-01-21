@@ -42,77 +42,47 @@ export async function placeOrderAction(
 ) {
   const client = await getAuthenticatedClient();
 
-  try {
-    // Check if user is logged in
-    const activeCustomer = await getLoggedInUser();
+  // Check if user is logged in
+  const activeCustomer = await getLoggedInUser();
 
-    // Set customer details
-    if (!activeCustomer) {
-      const [firstName, ...lastNameParts] = shippingDetails.fullName.split(" ");
-      const { setCustomerForOrder } = await client.request(
-        setCustomerForOrderMutation,
-        {
-          input: {
-            firstName,
-            lastName: lastNameParts.join(" "),
-            emailAddress: "guest@example.com", // TODO: Get from form
-          },
-        },
-      );
-
-      if ("errorCode" in setCustomerForOrder) {
-        throw new Error(setCustomerForOrder.message);
-      }
-    }
-
-    // Set shipping address
-    const { setOrderShippingAddress } = await client.request(
-      setOrderShippingAddressMutation,
-      { input: shippingDetails },
-    );
-
-    if ("errorCode" in setOrderShippingAddress) {
-      throw new Error(setOrderShippingAddress.message);
-    }
-
-    // Set shipping method
-    const { setOrderShippingMethod } = await client.request(
-      setOrderShippingMethodMutation,
-      { id: [shippingMethod] },
-    );
-
-    if ("errorCode" in setOrderShippingMethod) {
-      throw new Error(setOrderShippingMethod.message);
-    }
-
-    // Transition to ArrangingPayment
-    const { transitionOrderToState } = await client.request(
-      transitionToStateMutation,
-      { state: "ArrangingPayment" },
-    );
-
-    console.log("transitionOrderToState", transitionOrderToState);
-
-    // Add payment
-    const { addPaymentToOrder } = await client.request(
-      addPaymentToOrderMutation,
-      {
-        input: {
-          method: paymentMethod,
-          metadata: {
-            shouldDecline: false,
-            shouldError: false,
-            shouldErrorOnSettle: false,
-          },
-        },
+  // Set customer details
+  if (!activeCustomer) {
+    const [firstName, ...lastNameParts] = shippingDetails.fullName.split(" ");
+    await client.request(setCustomerForOrderMutation, {
+      input: {
+        firstName,
+        lastName: lastNameParts.join(" "),
+        emailAddress: "guest@example.com", // TODO: Get from form
       },
-    );
-
-    return addPaymentToOrder;
-  } catch (error) {
-    console.error("Failed to place order:", error);
-    throw error;
+    });
   }
+
+  // Set shipping address
+  await client.request(setOrderShippingAddressMutation, {
+    input: shippingDetails,
+  });
+
+  // Set shipping method
+  await client.request(setOrderShippingMethodMutation, {
+    id: [shippingMethod],
+  });
+
+  // Transition to ArrangingPayment
+  await client.request(transitionToStateMutation, {
+    state: "ArrangingPayment",
+  });
+
+  // Add payment
+  await client.request(addPaymentToOrderMutation, {
+    input: {
+      method: paymentMethod,
+      metadata: {
+        shouldDecline: false,
+        shouldError: false,
+        shouldErrorOnSettle: false,
+      },
+    },
+  });
 }
 
 export const activeOrderAction = async () => {
