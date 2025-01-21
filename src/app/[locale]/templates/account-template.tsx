@@ -4,8 +4,6 @@ import { toast } from "sonner";
 import { formatDate } from "@/common/utils";
 import BoxWrap from "@/components/box-wrap";
 import Button from "@/components/button";
-import Container from "@/components/container";
-import Header from "@/components/header";
 import Heading from "@/components/heading";
 import Logout from "@/components/logout";
 import { GetActiveCustomerQuery } from "@/gql/graphql";
@@ -63,105 +61,101 @@ export default function AccountTemplate({ user }: AccountTemplateProps) {
   }
 
   return (
-    <Container>
-      <Header />
-      <div className="py-16">
-        <div className="mb-16 flex items-center justify-between">
-          <Heading size="xl" level="h1" className="mb-0">
-            {t("account.title")}
-          </Heading>
-          <Logout />
+    <div className="py-16">
+      <div className="mb-16 flex items-center justify-between">
+        <Heading size="xl" level="h1" className="mb-0">
+          {t("account.title")}
+        </Heading>
+        <Logout />
+      </div>
+
+      <div className="grid grid-cols-1 gap-16 md:grid-cols-2">
+        <div className="flex flex-col gap-16">
+          <section>
+            <h2 className="mb-4 text-xl font-semibold">
+              {t("account.shippingAddress")}
+            </h2>
+            <div className="space-y-4">
+              {user?.addresses?.map((address) => (
+                <BoxWrap key={address.id}>
+                  <form
+                    className="flex flex-col gap-2"
+                    onSubmit={(e) => handleSubmit(e, address.id)}
+                  >
+                    <AddressFields defaultAddress={address} />
+                    <div className="mt-4 flex gap-2">
+                      <Button size="small" style="secondary" type="submit">
+                        {t("account.saveChanges")}
+                      </Button>
+                      <Button
+                        size="small"
+                        style="text"
+                        type="button"
+                        onClick={() => {
+                          const form = document.forms[0];
+                          const inputs = form.querySelectorAll("input");
+                          inputs.forEach((input) => (input.value = ""));
+                        }}
+                      >
+                        {t("account.emptyFields")}
+                      </Button>
+                    </div>
+                  </form>
+                </BoxWrap>
+              ))}
+            </div>
+          </section>
         </div>
 
-        <div className="grid grid-cols-1 gap-16 md:grid-cols-2">
-          <div className="flex flex-col gap-16">
+        <div className="flex flex-col gap-16">
+          <section>
+            <h2 className="mb-4 text-xl font-semibold">
+              {t("account.creditBalance")}
+            </h2>
+            <BoxWrap>
+              <div>
+                <span className="text-2xl font-bold text-blue-400">
+                  {user?.customFields?.creditBalance ?? 0} {t("account.tokens")}
+                </span>
+              </div>
+            </BoxWrap>
+          </section>
+          {user?.orders?.items.length > 0 && (
             <section>
               <h2 className="mb-4 text-xl font-semibold">
-                {t("account.shippingAddress")}
+                {t("account.latestOrder")}
               </h2>
               <div className="space-y-4">
-                {user?.addresses?.map((address) => (
-                  <BoxWrap key={address.id}>
-                    <form
-                      className="flex flex-col gap-2"
-                      onSubmit={(e) => handleSubmit(e, address.id)}
-                    >
-                      <AddressFields defaultAddress={address} />
-                      <div className="mt-4 flex gap-2">
-                        <Button size="small" style="secondary" type="submit">
-                          {t("account.saveChanges")}
-                        </Button>
-                        <Button
-                          size="small"
-                          style="text"
-                          type="button"
-                          onClick={() => {
-                            const form = document.forms[0];
-                            const inputs = form.querySelectorAll("input");
-                            inputs.forEach((input) => (input.value = ""));
-                          }}
-                        >
-                          {t("account.emptyFields")}
-                        </Button>
+                {user?.orders?.items
+                  .filter((order) => order.state !== "AddingItems")
+                  .slice(-1)
+                  .map((order, index) => (
+                    <BoxWrap key={index}>
+                      <div className="text-sm text-slate-400">
+                        {formatDate(order.orderPlacedAt)}
                       </div>
-                    </form>
-                  </BoxWrap>
-                ))}
+                      <div className="flex items-start justify-between">
+                        <div className="space-y-2">
+                          {order.lines.map((line) => (
+                            <div
+                              key={line.productVariant.name}
+                              className="font-medium"
+                            >
+                              {line.quantity} x {line.productVariant.name}
+                            </div>
+                          ))}
+                        </div>
+                        <div className="rounded-full bg-slate-700 px-3 py-1 text-sm">
+                          {order.state}
+                        </div>
+                      </div>
+                    </BoxWrap>
+                  ))}
               </div>
             </section>
-          </div>
-
-          <div className="flex flex-col gap-16">
-            <section>
-              <h2 className="mb-4 text-xl font-semibold">
-                {t("account.creditBalance")}
-              </h2>
-              <BoxWrap>
-                <div>
-                  <span className="text-2xl font-bold text-blue-400">
-                    {user?.customFields?.creditBalance ?? 0}{" "}
-                    {t("account.tokens")}
-                  </span>
-                </div>
-              </BoxWrap>
-            </section>
-            {user?.orders?.items.length > 0 && (
-              <section>
-                <h2 className="mb-4 text-xl font-semibold">
-                  {t("account.latestOrder")}
-                </h2>
-                <div className="space-y-4">
-                  {user?.orders?.items
-                    .filter((order) => order.state !== "AddingItems")
-                    .slice(-1)
-                    .map((order, index) => (
-                      <BoxWrap key={index}>
-                        <div className="text-sm text-slate-400">
-                          {formatDate(order.orderPlacedAt)}
-                        </div>
-                        <div className="flex items-start justify-between">
-                          <div className="space-y-2">
-                            {order.lines.map((line) => (
-                              <div
-                                key={line.productVariant.name}
-                                className="font-medium"
-                              >
-                                {line.quantity} x {line.productVariant.name}
-                              </div>
-                            ))}
-                          </div>
-                          <div className="rounded-full bg-slate-700 px-3 py-1 text-sm">
-                            {order.state}
-                          </div>
-                        </div>
-                      </BoxWrap>
-                    ))}
-                </div>
-              </section>
-            )}
-          </div>
+          )}
         </div>
       </div>
-    </Container>
+    </div>
   );
 }
