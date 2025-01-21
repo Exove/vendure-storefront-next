@@ -18,6 +18,7 @@ interface MenuDialogProps {
   position?: "left" | "right";
   open?: boolean;
   title?: string;
+  buttonId?: string;
 }
 
 export default function SidePanel({
@@ -27,6 +28,7 @@ export default function SidePanel({
   position = "right",
   footer,
   title,
+  buttonId = "open-side-panel",
 }: MenuDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -35,6 +37,7 @@ export default function SidePanel({
       <button
         onClick={() => setIsOpen(true)}
         className={clsx(fullWidthButton && "w-full")}
+        id={buttonId}
       >
         {openLabel}
       </button>

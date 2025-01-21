@@ -1,0 +1,58 @@
+name: Build and publish NextJS image
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to build the image for"
+        type: environment
+        required: true
+
+jobs:
+  build-push-image:
+    environment: ${{ inputs.environment }}
+    name: Build Next.js container
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          platforms: linux/amd64
+      - name: Login to container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.REGISTRY_HOST }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ secrets.REGISTRY_HOST }}/rebl-webshop/${{ inputs.environment }}/nextjs
+          tags: |
+            # environment (staging or production)
+            type=raw,priority=2000,value=${{ inputs.environment }}
+            # branch name
+            type=ref,event=branch
+            # short commit sha
+            type=sha,prefix=sha-
+            # full commit sha
+            type=sha,prefix=sha-,format=long
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: ./
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          secrets: |
+            "nextjs_build_secrets=
+            NEXT_PUBLIC_VENDURE_API_URL=${{ vars.NEXT_PUBLIC_VENDURE_API_URL }}"
+          push: true
+

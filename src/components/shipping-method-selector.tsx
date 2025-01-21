@@ -1,5 +1,6 @@
 import { GetShippingMethodsQuery } from "@/gql/graphql";
 import RadioOption from "./radio-option";
+import { useTranslations } from "next-intl";
 
 interface ShippingMethodSelectorProps {
   shippingMethods: GetShippingMethodsQuery["eligibleShippingMethods"];
@@ -8,9 +9,11 @@ interface ShippingMethodSelectorProps {
 export default function ShippingMethodSelector({
   shippingMethods,
 }: ShippingMethodSelectorProps) {
+  const t = useTranslations("checkout");
+
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-semibold">Toimitustapa</h2>
+      <h2 className="text-xl font-semibold">{t("shippingMethod")}</h2>
       <div className="space-y-2">
         {shippingMethods.map((method) => (
           <RadioOption

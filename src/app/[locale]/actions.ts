@@ -1,23 +1,30 @@
 "use server";
 import { cookies } from "next/headers";
-import { GraphQLClient } from "graphql-request";
+import request, { GraphQLClient } from "graphql-request";
 import { API_URL } from "@/common/constants";
-import {
-  transitionToStateMutation,
-  setOrderShippingMethodMutation,
-  addPaymentToOrderMutation,
-  activeOrderFragment,
-  setOrderShippingAddressMutation,
-} from "@/common/queries";
+import { filteredProductsQuery } from "@/common/queries";
 import { getFragmentData } from "@/gql";
 import {
   adjustOrderLine,
   createCustomerAddress,
   getActiveOrder,
+  removeCreditBalance,
   removeItemFromOrder,
+  updateCustomer,
   updateCustomerAddress,
 } from "@/common/utils-server";
-import { CreateAddressInput, UpdateAddressInput } from "@/gql/graphql";
+import {
+  CreateAddressInput,
+  UpdateAddressInput,
+  UpdateCustomerInput,
+} from "@/gql/graphql";
+import {
+  addPaymentToOrderMutation,
+  setOrderShippingAddressMutation,
+  setOrderShippingMethodMutation,
+  transitionToStateMutation,
+} from "@/common/mutations";
+import { activeOrderFragment } from "@/common/fragments";
 
 export async function placeOrderAction(
   shippingDetails: {
@@ -31,11 +38,14 @@ export async function placeOrderAction(
   shippingMethod: string,
 ) {
   const cookieStore = await cookies();
-  const sessionCookie = cookieStore.get("session");
-  const sessionSigCookie = cookieStore.get("session.sig");
+  const bearerToken = cookieStore.get("vendure-bearer-token");
+
   const graphQLClient = new GraphQLClient(API_URL, {
     headers: {
-      Cookie: `session=${sessionCookie?.value}; session.sig=${sessionSigCookie?.value}`,
+      "Content-Type": "application/json",
+      ...(bearerToken?.value && {
+        Authorization: `Bearer ${bearerToken.value}`,
+      }),
     },
   });
 
@@ -82,7 +92,6 @@ export async function placeOrderAction(
       },
     );
 
-    console.log("addPaymentToOrder", addPaymentToOrder);
     return addPaymentToOrder;
   } catch (error) {
     console.error("Failed to place order:", error);
@@ -133,11 +142,13 @@ export const setOrderShippingAddressAction = async (
   input: CreateAddressInput,
 ) => {
   const cookieStore = await cookies();
-  const sessionCookie = cookieStore.get("session");
-  const sessionSigCookie = cookieStore.get("session.sig");
+  const bearerToken = cookieStore.get("vendure-bearer-token");
   const graphQLClient = new GraphQLClient(API_URL, {
     headers: {
-      Cookie: `session=${sessionCookie?.value}; session.sig=${sessionSigCookie?.value}`,
+      "Content-Type": "application/json",
+      ...(bearerToken?.value && {
+        Authorization: `Bearer ${bearerToken.value}`,
+      }),
     },
   });
 
@@ -157,3 +168,54 @@ export const setOrderShippingAddressAction = async (
     throw error;
   }
 };
+
+export const getFilteredProductsAction = async (
+  term: string,
+  skip: number,
+  take: number,
+  facetValueFilters: { and: string }[],
+  groupByProduct: boolean,
+) => {
+  const { search } = await request(API_URL, filteredProductsQuery, {
+    term,
+    skip,
+    take,
+    facetValueFilters,
+    groupByProduct,
+  });
+  return search;
+};
+
+export const removeCreditBalanceAction = async (id: string) => {
+  const result = await removeCreditBalance(id);
+  return result;
+};
+
+export const updateCustomerAction = async (input: UpdateCustomerInput) => {
+  const result = await updateCustomer(input);
+  return result;
+};
+
+export async function setBearerToken(token: string) {
+  const cookieStore = await cookies();
+
+  cookieStore.set({
+    name: "vendure-bearer-token",
+    value: token,
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    maxAge: 60 * 60 * 24, // 24 hours
+  });
+}
+
+export async function getBearerToken() {
+  const cookieStore = await cookies();
+  return cookieStore.get("vendure-bearer-token");
+}
+
+export async function deleteBearerToken() {
+  const cookieStore = await cookies();
+
+  cookieStore.delete("vendure-bearer-token");
+}

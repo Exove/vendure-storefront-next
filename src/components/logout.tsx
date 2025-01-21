@@ -1,26 +1,15 @@
 "use client";
 
-import { API_URL } from "@/common/constants";
-import { logoutMutation } from "@/common/queries";
-import { GraphQLClient } from "graphql-request";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
+import { deleteBearerToken } from "@/app/[locale]/actions";
 
 export default function Logout() {
   const router = useRouter();
 
   const handleLogout = async () => {
-    try {
-      const graphQLClient = new GraphQLClient(API_URL, {
-        credentials: "include",
-      });
-
-      await graphQLClient.request(logoutMutation);
-
-      router.push("/");
-      router.refresh();
-    } catch (error) {
-      console.error("Failed to logout:", error);
-    }
+    await deleteBearerToken();
+    router.push("/");
+    router.refresh();
   };
 
   return (

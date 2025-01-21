@@ -6,8 +6,9 @@ import Heading from "@/components/heading";
 import ImageGallery from "@/components/image-gallery";
 import { Product } from "@/gql/graphql";
 import { createContext, useState } from "react";
-import { formatCurrency } from "@/common/utils";
 import AddToCartOptions from "@/components/add-to-cart-options";
+import { formatCurrency } from "@/common/utils";
+import { useLocale } from "next-intl";
 
 export const CartContext = createContext<{
   cartQuantity: number;
@@ -20,6 +21,7 @@ interface ProductTemplateProps {
 
 export default function ProductTemplate({ product }: ProductTemplateProps) {
   const [cartQuantity, setCartQuantity] = useState(0);
+  const locale = useLocale();
 
   const allVariantsHaveSamePrice = product.variants.every(
     (variant) => variant.price === product.variants[0].price,
@@ -33,15 +35,16 @@ export default function ProductTemplate({ product }: ProductTemplateProps) {
           <ImageGallery images={product.assets} />
           <div className="flex flex-col gap-8">
             <div>
-              <Heading level="h1" size="xl">
+              <Heading level="h1" size="xl" className="mb-4">
                 {product.name}
               </Heading>
-              <p className="text-lg">{product.description}</p>
-              {(allVariantsHaveSamePrice || product.variants.length === 1) && (
-                <p className="mt-4 text-2xl font-semibold text-blue-400">
-                  {formatCurrency(product.variants[0].price)}
-                </p>
-              )}
+              <div className="mb-10 text-xl text-blue-400">
+                {formatCurrency(product.variants[0].price, locale)}
+              </div>
+              <div
+                className="prose prose-invert text-white"
+                dangerouslySetInnerHTML={{ __html: product.description }}
+              />
             </div>
             <AddToCartOptions
               variants={product.variants}

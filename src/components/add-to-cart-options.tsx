@@ -1,15 +1,17 @@
 "use client";
 
 import { API_URL } from "@/common/constants";
-import { addItemToOrderMutation } from "@/common/queries";
 import { GraphQLClient } from "graphql-request";
 import { useContext, useState } from "react";
 import clsx from "clsx";
 import QuantitySelector from "./quantity-selector";
 import { formatCurrency } from "@/common/utils";
-import { CartContext } from "@/app/templates/product-template";
+import { CartContext } from "@/app/[locale]/templates/product-template";
 import Button from "./button";
 import Heading from "./heading";
+import { useTranslations } from "next-intl";
+import { addItemToOrderMutation } from "@/common/mutations";
+import { getBearerToken } from "@/app/[locale]/actions";
 
 interface AddToCartOptionsProps {
   variants: {
@@ -26,15 +28,24 @@ export default function AddToCartOptions({
   quantity: initialQuantity = 1,
   displayPrice = true,
 }: AddToCartOptionsProps) {
+  const t = useTranslations();
   const [selectedVariant, setSelectedVariant] = useState(variants[0]);
   const [quantity, setQuantity] = useState(initialQuantity);
   const { setCartQuantity, cartQuantity } = useContext(CartContext);
 
   const addToCart = async () => {
     try {
+      const bearerToken = await getBearerToken();
+
       const graphQLClient = new GraphQLClient(API_URL, {
-        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          ...(bearerToken?.value && {
+            Authorization: `Bearer ${bearerToken.value}`,
+          }),
+        },
       });
+
       await graphQLClient.request(addItemToOrderMutation, {
         productVariantId: selectedVariant.id,
         quantity,
@@ -51,7 +62,7 @@ export default function AddToCartOptions({
         {variants.length > 1 && (
           <div>
             <Heading level="h2" size="xs">
-              Select Variant
+              {t("product.selectVariant")}
             </Heading>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {variants.map((variant) => (
@@ -88,13 +99,13 @@ export default function AddToCartOptions({
 
         <div>
           <Heading level="h2" size="xs">
-            Quantity
+            {t("product.quantity")}
           </Heading>
           <QuantitySelector initialQuantity={quantity} onChange={setQuantity} />
         </div>
       </div>
 
-      <div className="mt-4">
+      <div>
         <Button
           onClick={async () => {
             await addToCart();
@@ -102,8 +113,9 @@ export default function AddToCartOptions({
           }}
           fullWidth
           size="medium"
+          id="add-to-cart"
         >
-          Add to cart
+          {t("product.addToCart")}
         </Button>
       </div>
     </div>

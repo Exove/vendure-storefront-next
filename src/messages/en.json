@@ -1,0 +1,78 @@
+{
+  "common": {
+    "shop": "REBL Shop",
+    "description": "Get your favorite REBL products here!",
+    "login": "Login",
+    "logout": "Logout",
+    "cart": "Cart",
+    "search": "Search",
+    "menu": "Menu"
+  },
+  "order": {
+    "complete": "Order Complete",
+    "details": "Order Details",
+    "shipping": "Shipping",
+    "payment": "Payment",
+    "total": "Total"
+  },
+  "product": {
+    "addToCart": "Add to Cart",
+    "outOfStock": "Out of Stock",
+    "price": "Price",
+    "quantity": "Quantity",
+    "selectVariant": "Select Variant"
+  },
+  "account": {
+    "title": "Account",
+    "notLoggedIn": "You are not logged in.",
+    "creditBalance": "Credit Balance",
+    "tokens": "tokens",
+    "shippingAddress": "Shipping Address",
+    "saveChanges": "Save Changes",
+    "emptyFields": "Empty Fields",
+    "latestOrder": "Latest Order",
+    "addressUpdated": "Address updated."
+  },
+  "checkout": {
+    "title": "Checkout",
+    "shippingAddress": "Shipping Address",
+    "placeOrder": "Place Order",
+    "emptyCart": "Empty Cart",
+    "paymentMethod": "Payment Method",
+    "shippingMethod": "Shipping Method",
+    "notEnoughTokens": "Not enough tokens"
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "empty": "Your cart is empty",
+    "subtotal": "Subtotal",
+    "checkout": "Checkout",
+    "remove": "Remove from cart",
+    "itemsInCart": "items in cart"
+  },
+  "orderComplete": {
+    "thankYou": "Thank you for your order!",
+    "emailConfirmation": "We will send you a confirmation email shortly.",
+    "orderDetails": "Order Details",
+    "orderNumber": "Order Number",
+    "status": "Status",
+    "orderDate": "Order Date",
+    "shippingAddress": "Shipping Address",
+    "shippingMethod": "Shipping Method",
+    "orderSummary": "Order Summary",
+    "total": "Total",
+    "shipping": "Shipping",
+    "notFound": "Order not found"
+  },
+  "auth": {
+    "email": "Email",
+    "password": "Password",
+    "login": "Login",
+    "invalidCredentials": "Invalid email or password",
+    "loginFailed": "Failed to login"
+  },
+  "notFound": {
+    "title": "404 - Page Not Found",
+    "description": "Sorry, we couldn't find the page you were looking for."
+  }
+}

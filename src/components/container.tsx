@@ -11,7 +11,10 @@ export default function Container({
 }: ContainerProps) {
   return (
     <div
-      className={clsx("mx-auto max-w-screen-xl", verticalSpacing && "py-16")}
+      className={clsx(
+        "mx-auto max-w-screen-xl px-4",
+        verticalSpacing && "py-16",
+      )}
     >
       {children}
     </div>

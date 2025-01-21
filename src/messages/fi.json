@@ -1,0 +1,78 @@
+{
+  "common": {
+    "shop": "REBL Kauppa",
+    "description": "Hanki suosikki REBL-tuotteesi täältä!",
+    "login": "Kirjaudu",
+    "logout": "Kirjaudu ulos",
+    "cart": "Ostoskori",
+    "search": "Haku",
+    "menu": "Valikko"
+  },
+  "order": {
+    "complete": "Tilaus valmis",
+    "details": "Tilauksen tiedot",
+    "shipping": "Toimitus",
+    "payment": "Maksu",
+    "total": "Yhteensä"
+  },
+  "product": {
+    "addToCart": "Lisää koriin",
+    "outOfStock": "Loppu varastosta",
+    "price": "Hinta",
+    "quantity": "Määrä",
+    "selectVariant": "Valitse vaihtoehto"
+  },
+  "account": {
+    "title": "Tili",
+    "notLoggedIn": "Et ole kirjautunut sisään.",
+    "creditBalance": "Saldosi",
+    "tokens": "tokenia",
+    "shippingAddress": "Toimitusosoite",
+    "saveChanges": "Tallenna muutokset",
+    "emptyFields": "Tyhjennä kentät",
+    "latestOrder": "Viimeisin tilaus",
+    "addressUpdated": "Osoite päivitetty."
+  },
+  "checkout": {
+    "title": "Kassa",
+    "shippingAddress": "Toimitusosoite",
+    "placeOrder": "Tee tilaus",
+    "emptyCart": "Tyhjä ostoskori",
+    "paymentMethod": "Maksutapa",
+    "shippingMethod": "Toimitustapa",
+    "notEnoughTokens": "Ei tarpeeksi tokeneita"
+  },
+  "cart": {
+    "title": "Ostoskori",
+    "empty": "Ostoskorisi on tyhjä",
+    "subtotal": "Välisumma",
+    "checkout": "Kassalle",
+    "remove": "Poista ostoskorista",
+    "itemsInCart": "tuotetta ostoskorissa"
+  },
+  "orderComplete": {
+    "thankYou": "Kiitos tilauksestasi!",
+    "emailConfirmation": "Lähetämme sinulle vahvistusviestin pian.",
+    "orderDetails": "Tilauksen tiedot",
+    "orderNumber": "Tilausnumero",
+    "status": "Tila",
+    "orderDate": "Tilauspäivä",
+    "shippingAddress": "Toimitusosoite",
+    "shippingMethod": "Toimitustapa",
+    "orderSummary": "Tilauksen yhteenveto",
+    "total": "Yhteensä",
+    "shipping": "Toimitus",
+    "notFound": "Tilausta ei löytynyt"
+  },
+  "auth": {
+    "email": "Sähköposti",
+    "password": "Salasana",
+    "login": "Kirjaudu",
+    "invalidCredentials": "Virheellinen sähköposti tai salasana",
+    "loginFailed": "Kirjautuminen epäonnistui"
+  },
+  "notFound": {
+    "title": "404 - Sivua ei löytynyt",
+    "description": "Valitettavasti etsimääsi sivua ei löytynyt."
+  }
+}

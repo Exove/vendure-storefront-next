@@ -49,6 +49,7 @@ export default function QuantitySelector({
             onChange?.(newQuantity);
           }}
           className="w-8 bg-inherit text-center [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+          data-testid="quantity-input"
         />
 
         <button

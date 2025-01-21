@@ -8,16 +8,20 @@ import {
   GetShippingMethodsQuery,
 } from "@/gql/graphql";
 import useSWR, { mutate } from "swr";
-import { activeOrderAction, placeOrderAction } from "../actions";
+import {
+  activeOrderAction,
+  placeOrderAction,
+  updateCustomerAction,
+} from "../actions";
 import { createContext, useEffect, useState } from "react";
-import { createCustomerAddressAction } from "../actions";
-
+import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/routing";
 import ShippingMethodSelector from "@/components/shipping-method-selector";
 import PaymentMethodSelector from "@/components/payment-method-selector";
 import OrderSummary from "@/components/order-summary";
 import Button from "@/components/button";
 import AddressFields from "@/components/address-fields";
-import BoxWrap from "@/components/box-wrap";
+import { toast } from "sonner";
 
 export const CartContext = createContext<{
   cartQuantity: number;
@@ -36,35 +40,32 @@ export default function CheckoutTemplate({
   shippingMethods,
 }: CheckoutTemplateProps) {
   const [cartQuantity, setCartQuantity] = useState(0);
-
-  const { data: order, error } = useSWR("order/add", activeOrderAction, {
+  const t = useTranslations();
+  const router = useRouter();
+  const { data: order, error } = useSWR("shop-api", activeOrderAction, {
     revalidateOnFocus: false,
     revalidateOnMount: true,
   });
   if (error) throw error;
+  const creditBalance = activeUser?.customFields?.creditBalance ?? 0;
+  const subTotalInTokens = order?.subTotalWithTax / 100;
 
   useEffect(() => {
     if (cartQuantity) {
-      mutate("order/add");
+      mutate("shop-api");
     }
   }, [cartQuantity]);
 
-  const handleSubmitAddress = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitOrder = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
-    try {
-      if (formData.get("saveAddress")) {
-        await createCustomerAddressAction({
-          fullName: formData.get("fullName") as string,
-          streetLine1: formData.get("streetLine1") as string,
-          city: formData.get("city") as string,
-          postalCode: formData.get("postalCode") as string,
-          countryCode: "FI",
-          phoneNumber: "",
-        });
-      }
+    if (subTotalInTokens > creditBalance) {
+      toast(t("checkout.notEnoughTokens"));
+      return;
+    }
 
+    try {
       await placeOrderAction(
         {
           fullName: formData.get("fullName") as string,
@@ -77,10 +78,18 @@ export default function CheckoutTemplate({
         formData.get("shippingMethod") as string,
       );
     } catch (error) {
-      console.error("Failed to create address:", error);
-    } finally {
-      window.location.href = `/order-complete/${order?.code}`;
+      console.error("Failed to create order:", error);
+      throw error;
     }
+    if (subTotalInTokens && creditBalance) {
+      await updateCustomerAction({
+        customFields: {
+          creditBalance: creditBalance - subTotalInTokens,
+        },
+      });
+    }
+
+    router.push(`/order-complete/${order?.code}`);
   };
 
   return (
@@ -88,14 +97,14 @@ export default function CheckoutTemplate({
       <Container>
         <Header />
         <div className="mx-auto mb-32 max-w-screen-xl pt-16">
-          <h1 className="mb-8 text-3xl font-bold">Checkout</h1>
+          <h1 className="mb-8 text-3xl font-bold">{t("checkout.title")}</h1>
           {order && order.lines.length > 0 ? (
             <div className="grid grid-cols-1 gap-20 md:grid-cols-2">
               <div className="flex flex-col gap-12">
-                <form onSubmit={handleSubmitAddress} className="space-y-10">
+                <form onSubmit={handleSubmitOrder} className="space-y-10">
                   <div>
                     <h2 className="mb-6 text-xl font-medium">
-                      Shipping Address
+                      {t("checkout.shippingAddress")}
                     </h2>
                     <AddressFields
                       defaultAddress={activeUser?.addresses?.[0]}
@@ -103,15 +112,15 @@ export default function CheckoutTemplate({
                   </div>
                   <ShippingMethodSelector shippingMethods={shippingMethods} />
                   <PaymentMethodSelector paymentMethods={paymentMethods} />
-                  <Button type="submit" fullWidth>
-                    Place Order
+                  <Button type="submit" fullWidth id="submit-order">
+                    {t("checkout.placeOrder")}
                   </Button>
                 </form>
               </div>
               <OrderSummary order={order} />
             </div>
           ) : (
-            <div>Empty Cart</div>
+            <div>{t("checkout.emptyCart")}</div>
           )}
         </div>
       </Container>

@@ -1,14 +1,20 @@
 import { formatCurrency } from "@/common/utils";
 import { ActiveOrderFragment } from "@/gql/graphql";
+import { useLocale, useTranslations } from "next-intl";
 
 interface OrderSummaryProps {
   order: ActiveOrderFragment;
 }
 
 export default function OrderSummary({ order }: OrderSummaryProps) {
+  const t = useTranslations();
+  const locale = useLocale();
+
   return (
     <section className="sticky top-4">
-      <h2 className="mb-4 text-xl font-semibold">Order Summary</h2>
+      <h2 className="mb-4 text-xl font-semibold">
+        {t("orderComplete.orderSummary")}
+      </h2>
 
       <div className="space-y-4">
         {order?.lines.map((item) => (
@@ -22,7 +28,7 @@ export default function OrderSummary({ order }: OrderSummaryProps) {
               )}
             </div>
             <span className="font-medium text-slate-200">
-              {formatCurrency(item.linePriceWithTax)}
+              {formatCurrency(item.linePriceWithTax, locale)}
             </span>
           </div>
         ))}
@@ -30,17 +36,20 @@ export default function OrderSummary({ order }: OrderSummaryProps) {
           <hr className="border-slate-700" />
         </div>
         <div className="flex justify-between text-slate-400">
-          <span>Subtotal</span>
-          <span>{formatCurrency(order?.subTotalWithTax)}</span>
+          <span>{t("cart.subtotal")}</span>
+          <span>{formatCurrency(order?.subTotalWithTax, locale)}</span>
         </div>
         <div className="flex justify-between text-slate-400">
-          <span>Shipping</span>
-          <span>{formatCurrency(order?.shippingWithTax)}</span>
+          <span>{t("orderComplete.shipping")}</span>
+          <span>{formatCurrency(order?.shippingWithTax, locale)}</span>
         </div>
         <div className="flex justify-between border-t border-slate-700 pt-4 text-lg font-bold text-slate-200">
-          <span>Total</span>
+          <span>{t("orderComplete.total")}</span>
           <span>
-            {formatCurrency(order?.subTotalWithTax + order?.shippingWithTax)}
+            {formatCurrency(
+              order?.subTotalWithTax + order?.shippingWithTax,
+              locale,
+            )}
           </span>
         </div>
       </div>

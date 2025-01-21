@@ -1,19 +1,27 @@
+"use client";
+
 import Container from "@/components/container";
 import Header from "@/components/header";
-import { getOrderByCode } from "@/common/utils-server";
 import { formatCurrency } from "@/common/utils";
+import { Order } from "@/gql/graphql";
 
-type Params = Promise<{ slug: string }>;
+type Props = {
+  order: Order | null;
+};
 
-export default async function Page(props: { params: Params }) {
-  const order = await getOrderByCode((await props.params).slug);
+import { useTranslations } from "next-intl";
+
+export default function OrderCompleteTemplate({ order }: Props) {
+  const t = useTranslations();
 
   if (!order) {
     return (
       <Container>
         <Header />
         <div className="flex h-[50vh] items-center justify-center">
-          <p className="text-xl text-slate-400">Order not found</p>
+          <p className="text-xl text-slate-400">
+            {t("orderComplete.notFound")}
+          </p>
         </div>
       </Container>
     );
@@ -25,31 +33,42 @@ export default async function Page(props: { params: Params }) {
       <div className="mx-auto mb-32 max-w-screen-md pt-16">
         <div className="mb-12 text-center">
           <h1 className="mb-4 text-4xl font-bold text-blue-400">
-            Thank you for your order!
+            {t("orderComplete.thankYou")}
           </h1>
           <p className="text-lg text-slate-300">
-            We will send you a confirmation email shortly.
+            {t("orderComplete.emailConfirmation")}
           </p>
         </div>
 
         <div className="space-y-8">
           <div className="rounded-xl bg-slate-800/50 p-8 shadow-lg backdrop-blur">
             <h2 className="mb-6 text-2xl font-semibold text-slate-200">
-              Order Details
+              {t("orderComplete.orderDetails")}
             </h2>
             <div className="grid gap-4 text-lg">
               <div className="flex justify-between">
-                <span className="text-slate-400">Order Number</span>
-                <span className="font-medium text-slate-200">{order.code}</span>
+                <span className="text-slate-400">
+                  {t("orderComplete.orderNumber")}
+                </span>
+                <span
+                  className="font-medium text-slate-200"
+                  data-testid="order-number"
+                >
+                  {order.code}
+                </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400">Status</span>
+                <span className="text-slate-400">
+                  {t("orderComplete.status")}
+                </span>
                 <span className="font-medium capitalize text-blue-400">
                   {order.state.toLowerCase()}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400">Order Date</span>
+                <span className="text-slate-400">
+                  {t("orderComplete.orderDate")}
+                </span>
                 <span className="font-medium text-slate-200">
                   {new Date(order.orderPlacedAt!).toLocaleDateString("fi-FI")}
                 </span>
@@ -59,7 +78,7 @@ export default async function Page(props: { params: Params }) {
 
           <div className="rounded-xl bg-slate-800/50 p-8 shadow-lg backdrop-blur">
             <h2 className="mb-6 text-2xl font-semibold text-slate-200">
-              Shipping Address
+              {t("orderComplete.shippingAddress")}
             </h2>
             <div className="space-y-2 text-lg text-slate-300">
               <p className="font-medium">{order.shippingAddress?.fullName}</p>
@@ -73,7 +92,7 @@ export default async function Page(props: { params: Params }) {
 
           <div className="rounded-xl bg-slate-800/50 p-8 shadow-lg backdrop-blur">
             <h2 className="mb-6 text-2xl font-semibold text-slate-200">
-              Shipping Method
+              {t("orderComplete.shippingMethod")}
             </h2>
             <p className="text-lg text-slate-300">
               {order.shippingLines[0]?.shippingMethod.name}
@@ -82,7 +101,7 @@ export default async function Page(props: { params: Params }) {
 
           <div className="rounded-xl bg-slate-800/50 p-8 shadow-lg backdrop-blur">
             <h2 className="mb-6 text-2xl font-semibold text-slate-200">
-              Order Summary
+              {t("orderComplete.orderSummary")}
             </h2>
             <div className="space-y-6">
               {order.lines.map((line) => (
@@ -108,16 +127,18 @@ export default async function Page(props: { params: Params }) {
 
               <div className="space-y-4 rounded-lg bg-slate-900/50 p-6">
                 <div className="flex justify-between text-slate-400">
-                  <span>Subtotal</span>
+                  <span>{t("cart.subtotal")}</span>
                   <span>{formatCurrency(order.totalWithTax)}</span>
                 </div>
                 <div className="flex justify-between text-slate-400">
-                  <span>Shipping</span>
+                  <span>{t("orderComplete.shipping")}</span>
                   <span>{formatCurrency(0)}</span>
                 </div>
                 <div className="flex justify-between border-t border-slate-700 pt-4 text-xl font-bold">
-                  <span className="text-slate-200">Total</span>
-                  <span className="text-blue-400">
+                  <span className="text-slate-200">
+                    {t("orderComplete.total")}
+                  </span>
+                  <span className="text-blue-400" data-testid="order-total">
                     {formatCurrency(order.totalWithTax)}
                   </span>
                 </div>

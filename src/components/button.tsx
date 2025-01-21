@@ -2,7 +2,7 @@
 
 import clsx from "clsx";
 import { motion } from "motion/react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 
 interface ButtonProps {
   style?: "primary" | "secondary" | "text" | "disabled";
@@ -12,6 +12,7 @@ interface ButtonProps {
   size?: "small" | "medium";
   type?: "button" | "submit" | "reset";
   fullWidth?: boolean;
+  id?: string;
 }
 
 export default function Button({
@@ -22,8 +23,10 @@ export default function Button({
   onClick,
   size = "medium",
   fullWidth = false,
+  id,
 }: ButtonProps) {
-  const baseStyles = "rounded-lg px-8 py-4 text-center break-words text-white";
+  const baseStyles =
+    "rounded-lg px-8 py-4 text-center break-words text-white flex justify-center";
   const sizeStyles = size === "small" && "!px-3 !py-2 !text-sm leading-tight";
   const widthStyles = fullWidth ? "w-full" : "max-w-[270px]";
 
@@ -35,44 +38,38 @@ export default function Button({
     disabled: "cursor-not-allowed bg-gray-500",
   };
 
-  const innerContent = (
-    <div
-      className={clsx(
-        baseStyles,
-        styleVariants[style],
-        sizeStyles,
-        widthStyles,
-      )}
-    >
-      {children}
-    </div>
-  );
-
   if (href) {
     return (
-      <Link href={href}>
+      <Link href={href} data-testid={id}>
         <motion.div
           whileHover={{ scale: style !== "disabled" ? 1.02 : 1 }}
           whileTap={{ scale: style !== "disabled" ? 1.0 : 1 }}
-          className="flex justify-center"
+          className={clsx(
+            baseStyles,
+            styleVariants[style],
+            sizeStyles,
+            widthStyles,
+          )}
         >
-          {innerContent}
+          {children}
         </motion.div>
       </Link>
     );
   }
 
   return (
-    <motion.button
-      whileHover={{
-        scale: style === "primary" ? 1.01 : 1,
-      }}
-      whileTap={{ scale: style === "primary" ? 1.0 : 1 }}
+    <button
       onClick={onClick}
       type={type}
-      className={clsx(widthStyles, "flex justify-center")}
+      className={clsx(
+        baseStyles,
+        styleVariants[style],
+        sizeStyles,
+        widthStyles,
+      )}
+      id={id}
     >
-      {innerContent}
-    </motion.button>
+      {children}
+    </button>
   );
 }

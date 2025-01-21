@@ -13,13 +13,15 @@ import useSWR from "swr";
 import { updateCustomerAddressAction } from "../actions";
 import { FormEvent } from "react";
 import AddressFields from "@/components/address-fields";
+import { useTranslations } from "next-intl";
 
 interface AccountTemplateProps {
   user: GetActiveCustomerQuery["activeCustomer"];
 }
 
 export default function AccountTemplate({ user }: AccountTemplateProps) {
-  const { mutate } = useSWR("order/add", updateCustomerAddressAction, {
+  const t = useTranslations();
+  const { mutate } = useSWR("shop-api", updateCustomerAddressAction, {
     revalidateOnFocus: false,
     revalidateOnMount: true,
   });
@@ -47,18 +49,26 @@ export default function AccountTemplate({ user }: AccountTemplateProps) {
     } catch (error) {
       console.error("Failed to update address:", error);
     } finally {
-      console.log("Address updated.");
-      toast("Address updated.");
+      toast(t("account.addressUpdated"));
     }
   };
+
+  if (!user) {
+    return (
+      <div className="mx-auto max-w-screen-xl py-16">
+        <h1 className="mb-8 text-3xl font-bold">{t("account.title")}</h1>
+        <p>{t("account.notLoggedIn")}</p>
+      </div>
+    );
+  }
 
   return (
     <Container>
       <Header />
       <div className="py-16">
         <div className="mb-16 flex items-center justify-between">
-          <Heading size="xl" level="h1" zeroMargin>
-            Account
+          <Heading size="xl" level="h1" className="mb-0">
+            {t("account.title")}
           </Heading>
           <Logout />
         </div>
@@ -67,27 +77,8 @@ export default function AccountTemplate({ user }: AccountTemplateProps) {
           <div className="flex flex-col gap-16">
             <section>
               <h2 className="mb-4 text-xl font-semibold">
-                Personal Information
+                {t("account.shippingAddress")}
               </h2>
-              <BoxWrap>
-                <div className="space-y-2">
-                  <div>
-                    <span className="text-slate-400">Name:</span>{" "}
-                    <span className="font-medium text-slate-200">
-                      {user?.firstName} {user?.lastName}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-slate-400">Email:</span>{" "}
-                    <span className="font-medium text-slate-200">
-                      {user?.emailAddress}
-                    </span>
-                  </div>
-                </div>
-              </BoxWrap>
-            </section>
-            <section>
-              <h2 className="mb-4 text-xl font-semibold">Shipping Address</h2>
               <div className="space-y-4">
                 {user?.addresses?.map((address) => (
                   <BoxWrap key={address.id}>
@@ -98,7 +89,7 @@ export default function AccountTemplate({ user }: AccountTemplateProps) {
                       <AddressFields defaultAddress={address} />
                       <div className="mt-4 flex gap-2">
                         <Button size="small" style="secondary" type="submit">
-                          Save Changes
+                          {t("account.saveChanges")}
                         </Button>
                         <Button
                           size="small"
@@ -110,7 +101,7 @@ export default function AccountTemplate({ user }: AccountTemplateProps) {
                             inputs.forEach((input) => (input.value = ""));
                           }}
                         >
-                          Empty Fields
+                          {t("account.emptyFields")}
                         </Button>
                       </div>
                     </form>
@@ -119,37 +110,55 @@ export default function AccountTemplate({ user }: AccountTemplateProps) {
               </div>
             </section>
           </div>
+
           <div className="flex flex-col gap-16">
             <section>
-              <h2 className="mb-4 text-xl font-semibold">Latest Order</h2>
-              <div className="space-y-4">
-                {user?.orders?.items
-                  .filter((order) => order.state !== "AddingItems")
-                  .slice(-1)
-                  .map((order, index) => (
-                    <BoxWrap key={index}>
-                      <div className="text-sm text-slate-400">
-                        {formatDate(order.orderPlacedAt)}
-                      </div>
-                      <div className="flex items-start justify-between">
-                        <div className="space-y-2">
-                          {order.lines.map((line) => (
-                            <div
-                              key={line.productVariant.name}
-                              className="font-medium"
-                            >
-                              {line.quantity} x {line.productVariant.name}
-                            </div>
-                          ))}
-                        </div>
-                        <div className="rounded-full bg-slate-700 px-3 py-1 text-sm">
-                          {order.state}
-                        </div>
-                      </div>
-                    </BoxWrap>
-                  ))}
-              </div>
+              <h2 className="mb-4 text-xl font-semibold">
+                {t("account.creditBalance")}
+              </h2>
+              <BoxWrap>
+                <div>
+                  <span className="text-2xl font-bold text-blue-400">
+                    {user?.customFields?.creditBalance ?? 0}{" "}
+                    {t("account.tokens")}
+                  </span>
+                </div>
+              </BoxWrap>
             </section>
+            {user?.orders?.items.length > 0 && (
+              <section>
+                <h2 className="mb-4 text-xl font-semibold">
+                  {t("account.latestOrder")}
+                </h2>
+                <div className="space-y-4">
+                  {user?.orders?.items
+                    .filter((order) => order.state !== "AddingItems")
+                    .slice(-1)
+                    .map((order, index) => (
+                      <BoxWrap key={index}>
+                        <div className="text-sm text-slate-400">
+                          {formatDate(order.orderPlacedAt)}
+                        </div>
+                        <div className="flex items-start justify-between">
+                          <div className="space-y-2">
+                            {order.lines.map((line) => (
+                              <div
+                                key={line.productVariant.name}
+                                className="font-medium"
+                              >
+                                {line.quantity} x {line.productVariant.name}
+                              </div>
+                            ))}
+                          </div>
+                          <div className="rounded-full bg-slate-700 px-3 py-1 text-sm">
+                            {order.state}
+                          </div>
+                        </div>
+                      </BoxWrap>
+                    ))}
+                </div>
+              </section>
+            )}
           </div>
         </div>
       </div>

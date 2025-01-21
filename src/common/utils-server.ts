@@ -4,30 +4,40 @@ import { cookies } from "next/headers";
 import { getFragmentData } from "../gql/fragment-masking";
 import {
   activeCustomerQuery,
-  activeOrderFragment,
   activeOrderQuery,
-  adjustOrderLineMutation,
-  createCustomerAddressMutation,
   getPaymentMethodsQuery,
   getShippingMethodsQuery,
   orderByCodeQuery,
-  orderFragment,
+} from "./queries";
+import {
+  CreateAddressInput,
+  UpdateAddressInput,
+  UpdateCustomerInput,
+} from "../gql/graphql";
+import {
+  adjustOrderLineMutation,
+  createCustomerAddressMutation,
+  removeCreditBalanceMutation,
   removeItemFromOrderMutation,
   updateCustomerAddressMutation,
-} from "./queries";
-import { CreateAddressInput, UpdateAddressInput } from "../gql/graphql";
+  updateCustomerMutation,
+} from "./mutations";
+import { activeOrderFragment, orderFragment } from "./fragments";
 
 // Create reusable function to get GraphQL client with auth cookies
-async function getAuthenticatedClient() {
+export async function getAuthenticatedClient(apiUrl: string = API_URL) {
   const cookieStore = await cookies();
-  const sessionCookie = cookieStore.get("session");
-  const sessionSigCookie = cookieStore.get("session.sig");
+  const bearerToken = cookieStore.get("vendure-bearer-token");
 
-  return new GraphQLClient(API_URL, {
-    headers: {
-      Cookie: `session=${sessionCookie?.value}; session.sig=${sessionSigCookie?.value}`,
-    },
-  });
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+
+  if (bearerToken?.value) {
+    headers["Authorization"] = `Bearer ${bearerToken.value}`;
+  }
+
+  return new GraphQLClient(apiUrl, { headers });
 }
 
 export async function getActiveOrder() {
@@ -98,8 +108,26 @@ export async function getShippingMethods() {
   );
   return eligibleShippingMethods;
 }
+
 export async function getOrderByCode(id: string) {
   const client = await getAuthenticatedClient();
   const { orderByCode } = await client.request(orderByCodeQuery, { code: id });
   return getFragmentData(orderFragment, orderByCode);
+}
+
+export async function removeCreditBalance(id: string) {
+  const client = await getAuthenticatedClient();
+  const { removeCreditBalance } = await client.request(
+    removeCreditBalanceMutation,
+    { id },
+  );
+  return removeCreditBalance;
+}
+
+export async function updateCustomer(input: UpdateCustomerInput) {
+  const client = await getAuthenticatedClient();
+  const { updateCustomer } = await client.request(updateCustomerMutation, {
+    input,
+  });
+  return updateCustomer;
 }
