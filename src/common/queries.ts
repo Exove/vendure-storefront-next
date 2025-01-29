@@ -7,9 +7,6 @@ export const productsQuery = graphql(`
         id
         name
         slug
-        customFields {
-          creditPrice
-        }
         collections {
           name
         }
@@ -43,9 +40,6 @@ export const productBySlugQuery = graphql(`
         name
         price
         id
-      }
-      customFields {
-        creditPrice
       }
       collections {
         name
@@ -130,9 +124,6 @@ export const activeCustomerQuery = graphql(`
       firstName
       lastName
       emailAddress
-      customFields {
-        creditBalance
-      }
       orders {
         items {
           state

@@ -160,14 +160,6 @@ export const createCustomerAddressMutation = graphql(`
   }
 `);
 
-export const removeCreditBalanceMutation = graphql(`
-  mutation RemoveCreditBalance($id: ID!) {
-    removeCreditBalance(id: $id) {
-      id
-    }
-  }
-`);
-
 export const updateCustomerMutation = graphql(`
   mutation UpdateCustomer($input: UpdateCustomerInput!) {
     updateCustomer(input: $input) {

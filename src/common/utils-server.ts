@@ -17,7 +17,6 @@ import {
 import {
   adjustOrderLineMutation,
   createCustomerAddressMutation,
-  removeCreditBalanceMutation,
   removeItemFromOrderMutation,
   updateCustomerAddressMutation,
   updateCustomerMutation,
@@ -113,15 +112,6 @@ export async function getOrderByCode(id: string) {
   const client = await getAuthenticatedClient();
   const { orderByCode } = await client.request(orderByCodeQuery, { code: id });
   return getFragmentData(orderFragment, orderByCode);
-}
-
-export async function removeCreditBalance(id: string) {
-  const client = await getAuthenticatedClient();
-  const { removeCreditBalance } = await client.request(
-    removeCreditBalanceMutation,
-    { id },
-  );
-  return removeCreditBalance;
 }
 
 export async function updateCustomer(input: UpdateCustomerInput) {

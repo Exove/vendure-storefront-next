@@ -9,7 +9,6 @@ import {
   createCustomerAddress,
   getActiveOrder,
   getAuthenticatedClient,
-  removeCreditBalance,
   removeItemFromOrder,
   updateCustomer,
   updateCustomerAddress,
@@ -170,11 +169,6 @@ export const getFilteredProductsAction = async (
     groupByProduct,
   });
   return search;
-};
-
-export const removeCreditBalanceAction = async (id: string) => {
-  const result = await removeCreditBalance(id);
-  return result;
 };
 
 export const updateCustomerAction = async (input: UpdateCustomerInput) => {
