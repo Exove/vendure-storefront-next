@@ -1,8 +1,8 @@
 "use client";
 
 import { FacetValue, SearchResult } from "@/gql/graphql";
-import { useState } from "react";
-// import { getFilteredProductsAction } from "../actions";
+import { useState, useEffect } from "react";
+import { getFilteredProductsAction } from "../actions";
 
 interface ListingTemplateProps {
   products: SearchResult[];
@@ -13,10 +13,27 @@ interface ListingTemplateProps {
 }
 
 export default function ListingTemplate({
-  products,
+  products: initialProducts,
   facets,
 }: ListingTemplateProps) {
   const [selectedFacets, setSelectedFacets] = useState<string[]>([]);
+  const [products, setProducts] = useState(initialProducts);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const facetFilters = selectedFacets.map((id) => ({ and: id }));
+      const results = await getFilteredProductsAction(
+        "",
+        0,
+        100,
+        facetFilters,
+        true,
+      );
+      setProducts(results.items as SearchResult[]);
+    };
+
+    fetchProducts();
+  }, [selectedFacets]);
 
   const handleFacetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const facetId = e.target.value;
