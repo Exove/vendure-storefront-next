@@ -1,8 +1,7 @@
 "use server";
 import { cookies } from "next/headers";
-import request, { GraphQLClient } from "graphql-request";
-import { API_URL } from "@/common/constants";
-import { filteredProductsQuery } from "@/common/queries";
+import { GraphQLClient } from "graphql-request";
+import { VENDURE_API_URL } from "@/common/constants";
 import { getFragmentData } from "@/gql";
 import {
   adjustOrderLine,
@@ -128,7 +127,7 @@ export const setOrderShippingAddressAction = async (
 ) => {
   const cookieStore = await cookies();
   const bearerToken = cookieStore.get("vendure-bearer-token");
-  const graphQLClient = new GraphQLClient(API_URL, {
+  const graphQLClient = new GraphQLClient(VENDURE_API_URL, {
     headers: {
       "Content-Type": "application/json",
       ...(bearerToken?.value && {
@@ -152,23 +151,6 @@ export const setOrderShippingAddressAction = async (
     console.error("Failed to set shipping address:", error);
     throw error;
   }
-};
-
-export const getFilteredProductsAction = async (
-  term: string,
-  skip: number,
-  take: number,
-  facetValueFilters: { and: string }[],
-  groupByProduct: boolean,
-) => {
-  const { search } = await request(API_URL, filteredProductsQuery, {
-    term,
-    skip,
-    take,
-    facetValueFilters,
-    groupByProduct,
-  });
-  return search;
 };
 
 export const updateCustomerAction = async (input: UpdateCustomerInput) => {

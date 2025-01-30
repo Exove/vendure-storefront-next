@@ -6,8 +6,22 @@ const apiConfig = {
     host: process.env.NEXT_PUBLIC_ELASTICSEARCH_HOST || "http://localhost:9200",
   },
   search_settings: {
-    search_attributes: ["productName"],
-    result_attributes: ["slug"],
+    search_attributes: ["productName", "description"],
+    result_attributes: [
+      "productName",
+      "slug",
+      "productPreview",
+      "priceWithTax",
+      "collectionSlugs",
+    ],
+    facets: [
+      {
+        identifier: "collectionSlugs",
+        type: "term",
+        field: "collectionSlugs",
+        size: 10,
+      },
+    ],
   },
 };
 
