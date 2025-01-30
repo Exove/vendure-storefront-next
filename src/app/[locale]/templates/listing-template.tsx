@@ -35,6 +35,9 @@ export default function ListingTemplate({
     fetchProducts();
   }, [selectedFacets]);
 
+  console.log("facets", facets);
+  console.log("products", products);
+
   const handleFacetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const facetId = e.target.value;
 
@@ -52,19 +55,37 @@ export default function ListingTemplate({
       <div>
         <h1>Facets</h1>
         <form>
-          {facets.map((facet, index) => (
-            <div key={index}>
-              <input
-                type="checkbox"
-                id={facet.facetValue.id}
-                value={facet.facetValue.id}
-                name={facet.facetValue.name}
-                onChange={handleFacetChange}
-                checked={selectedFacets.includes(facet.facetValue.id)}
-              />
-              <label htmlFor={facet.facetValue.id}>
-                {facet.facetValue.name} ({facet.count})
-              </label>
+          {Object.entries(
+            facets.reduce(
+              (acc, { facetValue }) => {
+                const group = facetValue.facet.name;
+                acc[group] = acc[group] || [];
+                acc[group].push(facetValue);
+                return acc;
+              },
+              {} as Record<string, FacetValue[]>,
+            ),
+          ).map(([groupName, groupFacets]) => (
+            <div key={groupName} className="mb-4">
+              <h3 className="mb-2 font-semibold">{groupName}</h3>
+              {groupFacets.map((facetValue) => (
+                <div key={facetValue.id}>
+                  <input
+                    type="checkbox"
+                    id={facetValue.id}
+                    value={facetValue.id}
+                    name={facetValue.name}
+                    onChange={handleFacetChange}
+                    checked={selectedFacets.includes(facetValue.id)}
+                  />
+                  <label htmlFor={facetValue.id}>
+                    {facetValue.name} (
+                    {facets.find((f) => f.facetValue.id === facetValue.id)
+                      ?.count || 0}
+                    )
+                  </label>
+                </div>
+              ))}
             </div>
           ))}
         </form>
