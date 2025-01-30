@@ -18,9 +18,9 @@ export default async function Home(props: { params: Params }) {
   const filteredProducts = await getFilteredProductsAction(
     "",
     0,
-    100,
+    10,
     [],
-    true,
+    false,
   );
 
   console.log("filteredProducts", filteredProducts);

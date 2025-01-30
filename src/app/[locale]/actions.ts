@@ -113,7 +113,7 @@ export const getFilteredProductsAction = async (
   term: string,
   skip: number,
   take: number,
-  facetValueFilters: { or: string[] }[],
+  facetValueFilters: { and: string }[],
   groupByProduct: boolean,
 ) => {
   const result = await getFilteredProducts(

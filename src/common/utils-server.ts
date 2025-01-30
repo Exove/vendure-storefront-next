@@ -127,7 +127,7 @@ export async function getFilteredProducts(
   term: string,
   skip: number,
   take: number,
-  facetValueFilters: { or: string[] }[],
+  facetValueFilters: { and: string }[],
   groupByProduct: boolean,
 ) {
   const client = await getAuthenticatedClient();
