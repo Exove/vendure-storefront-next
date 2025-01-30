@@ -108,18 +108,6 @@ export default function AccountTemplate({ user }: AccountTemplateProps) {
         </div>
 
         <div className="flex flex-col gap-16">
-          <section>
-            <h2 className="mb-4 text-xl font-semibold">
-              {t("account.creditBalance")}
-            </h2>
-            <BoxWrap>
-              <div>
-                <span className="text-2xl font-bold text-blue-400">
-                  {user?.customFields?.creditBalance ?? 0} {t("account.tokens")}
-                </span>
-              </div>
-            </BoxWrap>
-          </section>
           {user?.orders?.items.length > 0 && (
             <section>
               <h2 className="mb-4 text-xl font-semibold">

@@ -1,6 +1,6 @@
 "use client";
 
-import { API_URL } from "@/common/constants";
+import { VENDURE_API_URL } from "@/common/constants";
 import { GraphQLClient } from "graphql-request";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
@@ -22,7 +22,7 @@ export default function Login() {
     setError("");
 
     try {
-      const graphQLClient = new GraphQLClient(API_URL);
+      const graphQLClient = new GraphQLClient(VENDURE_API_URL);
 
       // Use rawRequest to get the bearer token from the response headers
       const response = await graphQLClient.rawRequest<LoginMutation>(

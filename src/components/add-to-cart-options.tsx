@@ -1,6 +1,6 @@
 "use client";
 
-import { API_URL } from "@/common/constants";
+import { VENDURE_API_URL } from "@/common/constants";
 import { GraphQLClient } from "graphql-request";
 import { useContext, useState } from "react";
 import clsx from "clsx";
@@ -45,7 +45,7 @@ export default function AddToCartOptions({
         authHeaders.Authorization = `Bearer ${bearerToken.value}`;
       }
 
-      const graphQLClient = new GraphQLClient(API_URL, {
+      const graphQLClient = new GraphQLClient(VENDURE_API_URL, {
         headers: authHeaders,
       });
 

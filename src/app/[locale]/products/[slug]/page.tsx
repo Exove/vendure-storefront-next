@@ -1,5 +1,5 @@
 import ProductTemplate from "@/app/[locale]/templates/product-template";
-import { API_URL, SHOP_NAME } from "@/common/constants";
+import { VENDURE_API_URL, SHOP_NAME } from "@/common/constants";
 import { productBySlugQuery } from "@/common/queries";
 import { Product } from "@/gql/graphql";
 import { request } from "graphql-request";
@@ -15,7 +15,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug, locale: languageCode } = await params;
   const { product } = await request(
-    `${API_URL}?languageCode=${languageCode}`,
+    `${VENDURE_API_URL}?languageCode=${languageCode}`,
     productBySlugQuery,
     {
       slug: slug,
@@ -35,7 +35,7 @@ export async function generateMetadata({
 export default async function ProductPage(props: { params: Params }) {
   const { slug, locale: languageCode } = await props.params;
   const { product } = await request(
-    `${API_URL}?languageCode=${languageCode}`,
+    `${VENDURE_API_URL}?languageCode=${languageCode}`,
     productBySlugQuery,
     {
       slug: slug,
