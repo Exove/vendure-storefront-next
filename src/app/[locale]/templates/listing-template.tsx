@@ -21,9 +21,14 @@ export default function ListingTemplate({
   >({});
   const [products, setProducts] = useState(initialProducts);
   const [currentFacets, setCurrentFacets] = useState(facets);
+  const [firstSelectedGroup, setFirstSelectedGroup] = useState<string | null>(
+    null,
+  );
 
   useEffect(() => {
     const fetchProducts = async () => {
+      // Convert selected facets into the API's filter format
+      // Each group's selections are combined with OR, different groups with AND
       const facetFilters = Object.entries(selectedFacets)
         .filter(([, group]) => group.length > 0)
         .reduce<{ or: string[] }[]>((acc, [, group]) => {
@@ -33,6 +38,7 @@ export default function ListingTemplate({
           return acc;
         }, []);
 
+      // Fetch filtered products and update available facets
       const results = await getFilteredProductsAction(
         "",
         0,
@@ -47,6 +53,7 @@ export default function ListingTemplate({
     fetchProducts();
   }, [selectedFacets]);
 
+  // Handle facet checkbox changes
   const handleFacetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const facetId = e.target.value;
     const groupName =
@@ -55,27 +62,43 @@ export default function ListingTemplate({
 
     setSelectedFacets((prev) => {
       const groupFacets = prev[groupName] || [];
-      if (e.target.checked) {
-        return {
-          ...prev,
-          [groupName]: [...groupFacets, facetId],
-        };
-      } else {
-        return {
-          ...prev,
-          [groupName]: groupFacets.filter((id) => id !== facetId),
-        };
+      const newSelectedFacets = e.target.checked
+        ? {
+            ...prev,
+            [groupName]: [...groupFacets, facetId],
+          }
+        : {
+            ...prev,
+            [groupName]: groupFacets.filter((id) => id !== facetId),
+          };
+
+      // If this is the first selection in any group, set it as the firstSelectedGroup
+      if (
+        Object.values(prev).every((group) => group.length === 0) &&
+        e.target.checked
+      ) {
+        setFirstSelectedGroup(groupName);
       }
+      // If removing the last selection from firstSelectedGroup, reset it
+      else if (
+        groupName === firstSelectedGroup &&
+        newSelectedFacets[groupName].length === 0
+      ) {
+        setFirstSelectedGroup(null);
+      }
+
+      return newSelectedFacets;
     });
   };
 
+  // Determine whether a facet should be displayed based on current filters
   const shouldShowFacet = (groupName: string, facetValue: FacetValue) => {
-    // Jos ryhmässä on valittu facet, näytä kaikki ryhmän facetit
-    if (selectedFacets[groupName]?.length > 0) {
+    // For the first group where user made a selection, show all options
+    if (groupName === firstSelectedGroup) {
       return true;
     }
 
-    // Muuten näytä vain ne facetit joilla on tuloksia
+    // For other groups, only show facets that would yield results
     return currentFacets.some(
       (f) => f.facetValue.id === facetValue.id && f.count > 0,
     );
@@ -86,6 +109,7 @@ export default function ListingTemplate({
       <div>
         <h1 className="sr-only">Facets</h1>
         <form>
+          {/* Group facets by their facet type (e.g., Color, Size) */}
           {Object.entries(
             facets.reduce(
               (acc, { facetValue }) => {
@@ -99,6 +123,7 @@ export default function ListingTemplate({
           ).map(([groupName, groupFacets]) => (
             <div key={groupName} className="mb-4">
               <h3 className="mb-2 font-semibold">{groupName}</h3>
+              {/* Render checkboxes for each facet value if it should be shown */}
               {groupFacets.map(
                 (facetValue) =>
                   shouldShowFacet(groupName, facetValue) && (
@@ -114,13 +139,7 @@ export default function ListingTemplate({
                           false
                         }
                       />
-                      <label htmlFor={facetValue.id}>
-                        {facetValue.name} (
-                        {currentFacets.find(
-                          (f) => f.facetValue.id === facetValue.id,
-                        )?.count || 0}
-                        )
-                      </label>
+                      <label htmlFor={facetValue.id}>{facetValue.name}</label>
                     </div>
                   ),
               )}
@@ -128,6 +147,7 @@ export default function ListingTemplate({
           ))}
         </form>
       </div>
+      {/* Product listing */}
       <div>
         <h1 className="sr-only">Products</h1>
         <ul>
