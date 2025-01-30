@@ -16,12 +16,23 @@ export default function ListingTemplate({
   products: initialProducts,
   facets,
 }: ListingTemplateProps) {
-  const [selectedFacets, setSelectedFacets] = useState<string[]>([]);
+  const [selectedFacets, setSelectedFacets] = useState<
+    Record<string, string[]>
+  >({});
   const [products, setProducts] = useState(initialProducts);
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const facetFilters = selectedFacets.map((id) => ({ and: id }));
+      // Combine all selected values from each group into a single OR filter
+      const facetFilters = Object.entries(selectedFacets)
+        .filter(([, group]) => group.length > 0)
+        .reduce<{ or: string[] }[]>((acc, [, group]) => {
+          if (group.length > 0) {
+            acc.push({ or: group });
+          }
+          return acc;
+        }, []);
+
       const results = await getFilteredProductsAction(
         "",
         0,
@@ -35,17 +46,24 @@ export default function ListingTemplate({
     fetchProducts();
   }, [selectedFacets]);
 
-  console.log("facets", facets);
-  console.log("products", products);
-
   const handleFacetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const facetId = e.target.value;
+    const groupName =
+      facets.find((f) => f.facetValue.id === facetId)?.facetValue.facet.name ||
+      "";
 
     setSelectedFacets((prev) => {
+      const groupFacets = prev[groupName] || [];
       if (e.target.checked) {
-        return [...prev, facetId];
+        return {
+          ...prev,
+          [groupName]: [...groupFacets, facetId],
+        };
       } else {
-        return prev.filter((id) => id !== facetId);
+        return {
+          ...prev,
+          [groupName]: groupFacets.filter((id) => id !== facetId),
+        };
       }
     });
   };
@@ -53,7 +71,7 @@ export default function ListingTemplate({
   return (
     <div className="flex gap-4">
       <div>
-        <h1>Facets</h1>
+        <h1 className="sr-only">Facets</h1>
         <form>
           {Object.entries(
             facets.reduce(
@@ -76,7 +94,10 @@ export default function ListingTemplate({
                     value={facetValue.id}
                     name={facetValue.name}
                     onChange={handleFacetChange}
-                    checked={selectedFacets.includes(facetValue.id)}
+                    checked={
+                      selectedFacets[groupName]?.includes(facetValue.id) ||
+                      false
+                    }
                   />
                   <label htmlFor={facetValue.id}>
                     {facetValue.name} (
@@ -91,7 +112,7 @@ export default function ListingTemplate({
         </form>
       </div>
       <div>
-        <h1>Products</h1>
+        <h1 className="sr-only">Products</h1>
         <ul>
           {products.map((product, index) => (
             <li key={index}>{product.productName}</li>
