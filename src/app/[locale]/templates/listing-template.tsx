@@ -3,6 +3,7 @@
 import { FacetValue, SearchResult } from "@/gql/graphql";
 import { useState, useEffect } from "react";
 import { getFilteredProductsAction } from "../actions";
+import ProductCard from "@/components/product-card";
 
 interface ListingTemplateProps {
   products: SearchResult[];
@@ -105,8 +106,8 @@ export default function ListingTemplate({
   };
 
   return (
-    <div className="flex gap-4">
-      <div>
+    <div className="flex gap-10">
+      <div className="w-[200px]">
         <h1 className="sr-only">Facets</h1>
         <form>
           {/* Group facets by their facet type (e.g., Color, Size) */}
@@ -122,24 +123,37 @@ export default function ListingTemplate({
             ),
           ).map(([groupName, groupFacets]) => (
             <div key={groupName} className="mb-4">
-              <h3 className="mb-2 font-semibold">{groupName}</h3>
+              <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide">
+                {groupName}
+              </h3>
               {/* Render checkboxes for each facet value if it should be shown */}
               {groupFacets.map(
                 (facetValue) =>
                   shouldShowFacet(groupName, facetValue) && (
-                    <div key={facetValue.id}>
-                      <input
-                        type="checkbox"
-                        id={facetValue.id}
-                        value={facetValue.id}
-                        name={facetValue.name}
-                        onChange={handleFacetChange}
-                        checked={
-                          selectedFacets[groupName]?.includes(facetValue.id) ||
-                          false
-                        }
-                      />
-                      <label htmlFor={facetValue.id}>{facetValue.name}</label>
+                    <div
+                      key={facetValue.id}
+                      className="flex items-center justify-between gap-2"
+                    >
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          id={facetValue.id}
+                          value={facetValue.id}
+                          name={facetValue.name}
+                          onChange={handleFacetChange}
+                          checked={
+                            selectedFacets[groupName]?.includes(
+                              facetValue.id,
+                            ) || false
+                          }
+                        />
+                        <label htmlFor={facetValue.id}>{facetValue.name}</label>
+                      </div>
+                      <span className="text-slate-400">
+                        {currentFacets.find(
+                          (f) => f.facetValue.id === facetValue.id,
+                        )?.count || "0"}
+                      </span>
                     </div>
                   ),
               )}
@@ -148,11 +162,24 @@ export default function ListingTemplate({
         </form>
       </div>
       {/* Product listing */}
-      <div>
+      <div className="flex-1">
         <h1 className="sr-only">Products</h1>
-        <ul>
+        <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {products.map((product, index) => (
-            <li key={index}>{product.productName}</li>
+            <li key={index}>
+              {product.slug && (
+                <ProductCard
+                  slug={product.slug}
+                  name={product.productName}
+                  imageSource={product.productAsset?.preview ?? ""}
+                  priceWithTax={
+                    "min" in product.priceWithTax
+                      ? product.priceWithTax.min
+                      : product.priceWithTax.value
+                  }
+                />
+              )}
+            </li>
           ))}
         </ul>
       </div>
