@@ -1,5 +1,5 @@
 import request from "graphql-request";
-import { API_URL } from "@/common/constants";
+import { VENDURE_API_URL } from "@/common/constants";
 import { productsQuery } from "@/common/queries";
 import Container from "@/components/container";
 import Header from "@/components/header";
@@ -10,7 +10,7 @@ type Params = Promise<{ locale: string }>;
 export default async function Home(props: { params: Params }) {
   const { locale: languageCode } = await props.params;
   const data = await request(
-    `${API_URL}?languageCode=${languageCode}`,
+    `${VENDURE_API_URL}?languageCode=${languageCode}`,
     productsQuery,
   );
 
