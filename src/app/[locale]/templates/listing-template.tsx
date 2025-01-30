@@ -1,79 +1,65 @@
 "use client";
 
-import {
-  InstantSearch,
-  SearchBox,
-  Hits,
-  RefinementList,
-} from "react-instantsearch";
-import ProductCard from "@/components/product-card";
-import createClient from "@searchkit/instantsearch-client";
-import { VENDURE_ROOT_URL } from "@/common/constants";
+import { FacetValue, SearchResult } from "@/gql/graphql";
+import { useState } from "react";
+// import { getFilteredProductsAction } from "../actions";
 
-interface SearchHit {
-  slug: string;
-  productName: string;
-  productPreview: string;
-  priceWithTax: number;
-  collectionSlugs: string[];
+interface ListingTemplateProps {
+  products: SearchResult[];
+  facets: {
+    count: number;
+    facetValue: FacetValue;
+  }[];
 }
 
-const searchClient = createClient({
-  url: "/api/search",
-});
+export default function ListingTemplate({
+  products,
+  facets,
+}: ListingTemplateProps) {
+  const [selectedFacets, setSelectedFacets] = useState<string[]>([]);
 
-function ProductHit({ hit }: { hit: SearchHit }) {
-  return (
-    <ProductCard
-      slug={hit.slug}
-      name={hit.productName}
-      imageSource={`${VENDURE_ROOT_URL}/assets/${hit.productPreview}`}
-      priceWithTax={hit.priceWithTax}
-      collection={hit.collectionSlugs?.[0]}
-    />
-  );
-}
+  const handleFacetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const facetId = e.target.value;
 
-export default function ListingTemplate() {
+    setSelectedFacets((prev) => {
+      if (e.target.checked) {
+        return [...prev, facetId];
+      } else {
+        return prev.filter((id) => id !== facetId);
+      }
+    });
+  };
+
   return (
-    <InstantSearch searchClient={searchClient} indexName="vendure-variants">
-      <div className="grid grid-cols-4 gap-8">
-        <div className="col-span-1">
-          <div className="space-y-6">
-            <div>
-              <h3 className="mb-3 text-lg font-semibold">Kategoriat</h3>
-              <RefinementList
-                attribute="collectionSlugs"
-                limit={10}
-                operator="or"
-                classNames={{
-                  list: "space-y-2",
-                  label: "flex items-center space-x-2 text-sm text-white",
-                  checkbox: "h-4 w-4 rounded border-gray-300",
-                  count: "ml-1 text-sm text-gray-400",
-                }}
+    <div className="flex gap-4">
+      <div>
+        <h1>Facets</h1>
+        <form>
+          {facets.map((facet, index) => (
+            <div key={index}>
+              <input
+                type="checkbox"
+                id={facet.facetValue.id}
+                value={facet.facetValue.id}
+                name={facet.facetValue.name}
+                onChange={handleFacetChange}
+                checked={selectedFacets.includes(facet.facetValue.id)}
               />
+              <label htmlFor={facet.facetValue.id}>
+                {facet.facetValue.name} ({facet.count})
+              </label>
             </div>
-          </div>
-        </div>
-
-        <div className="col-span-3">
-          <SearchBox
-            placeholder="Etsi tuotteita..."
-            classNames={{
-              root: "mb-6",
-              input:
-                "w-full rounded-lg border-gray-700 bg-slate-800 px-4 py-2 text-white",
-            }}
-          />
-          <Hits
-            hitComponent={ProductHit}
-            classNames={{
-              list: "grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3",
-            }}
-          />
-        </div>
+          ))}
+        </form>
       </div>
-    </InstantSearch>
+      <div>
+        <h1>Products</h1>
+        <ul>
+          {products.map((product, index) => (
+            <li key={index}>{product.productName}</li>
+          ))}
+        </ul>
+      </div>
+    </div>
   );
 }

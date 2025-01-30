@@ -1,35 +1,42 @@
-import request from "graphql-request";
-import { VENDURE_API_URL } from "@/common/constants";
-import { productsQuery } from "@/common/queries";
 import Container from "@/components/container";
 import Header from "@/components/header";
-import ProductCard from "@/components/product-card";
+import ListingTemplate from "./templates/listing-template";
+import { getFilteredProductsAction } from "./actions";
+import { SearchResult } from "@/gql/graphql";
+import { FacetValue } from "@/gql/graphql";
 
 type Params = Promise<{ locale: string }>;
 
 export default async function Home(props: { params: Params }) {
   const { locale: languageCode } = await props.params;
-  const data = await request(
-    `${VENDURE_API_URL}?languageCode=${languageCode}`,
-    productsQuery,
+  console.log("languageCode", languageCode);
+  // const data = await request(
+  //   `${VENDURE_API_URL}?languageCode=${languageCode}`,
+  //   productsQuery,
+  // );
+
+  const filteredProducts = await getFilteredProductsAction(
+    "",
+    0,
+    10,
+    [],
+    false,
   );
+
+  console.log("filteredProducts", filteredProducts);
 
   return (
     <Container>
       <Header />
-      <div className="mx-auto max-w-screen-2xl py-20">
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {data.products.items.map((product) => (
-            <ProductCard
-              key={product.id}
-              slug={product.slug}
-              name={product.name}
-              imageSource={product.assets[0]?.source ?? ""}
-              priceWithTax={product.variantList.items[0].priceWithTax}
-            />
-          ))}
-        </div>
-      </div>
+      <ListingTemplate
+        facets={
+          filteredProducts.facetValues as {
+            count: number;
+            facetValue: FacetValue;
+          }[]
+        }
+        products={filteredProducts.items as SearchResult[]}
+      />
     </Container>
   );
 }

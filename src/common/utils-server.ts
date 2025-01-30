@@ -8,6 +8,7 @@ import {
   getPaymentMethodsQuery,
   getShippingMethodsQuery,
   orderByCodeQuery,
+  filteredProductsQuery,
 } from "./queries";
 import {
   CreateAddressInput,
@@ -120,4 +121,22 @@ export async function updateCustomer(input: UpdateCustomerInput) {
     input,
   });
   return updateCustomer;
+}
+
+export async function getFilteredProducts(
+  term: string,
+  skip: number,
+  take: number,
+  facetValueFilters: { and: string }[],
+  groupByProduct: boolean,
+) {
+  const client = await getAuthenticatedClient();
+  const { search } = await client.request(filteredProductsQuery, {
+    term,
+    skip,
+    take,
+    facetValueFilters,
+    groupByProduct,
+  });
+  return search;
 }

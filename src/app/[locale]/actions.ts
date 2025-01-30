@@ -12,6 +12,7 @@ import {
   updateCustomer,
   updateCustomerAddress,
   getLoggedInUser,
+  getFilteredProducts,
 } from "@/common/utils-server";
 import {
   CreateAddressInput,
@@ -106,6 +107,23 @@ export const adjustOrderLineAction = async (
     throw new Error(result.message);
   }
   return getFragmentData(activeOrderFragment, result);
+};
+
+export const getFilteredProductsAction = async (
+  term: string,
+  skip: number,
+  take: number,
+  facetValueFilters: { and: string }[],
+  groupByProduct: boolean,
+) => {
+  const result = await getFilteredProducts(
+    term,
+    skip,
+    take,
+    facetValueFilters,
+    groupByProduct,
+  );
+  return result;
 };
 
 export const createCustomerAddressAction = async (
