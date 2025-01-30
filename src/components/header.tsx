@@ -6,7 +6,7 @@ import { SHOP_NAME } from "@/common/constants";
 
 export default function Header() {
   return (
-    <header className="mx-auto flex min-h-20 max-w-screen-xl items-center justify-between py-6">
+    <header className="mx-auto flex min-h-20 max-w-screen-2xl items-center justify-between py-6">
       <Link href="/" className="text-xl font-black">
         {SHOP_NAME}
       </Link>

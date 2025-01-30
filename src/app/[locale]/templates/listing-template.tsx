@@ -106,7 +106,7 @@ export default function ListingTemplate({
   };
 
   return (
-    <div className="flex gap-10">
+    <div className="mt-10 flex gap-10">
       <div className="w-[200px]">
         <h1 className="sr-only">Facets</h1>
         <form>
@@ -123,40 +123,44 @@ export default function ListingTemplate({
             ),
           ).map(([groupName, groupFacets]) => (
             <div key={groupName} className="mb-4">
-              <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide">
+              <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-blue-400">
                 {groupName}
               </h3>
               {/* Render checkboxes for each facet value if it should be shown */}
-              {groupFacets.map(
-                (facetValue) =>
-                  shouldShowFacet(groupName, facetValue) && (
-                    <div
-                      key={facetValue.id}
-                      className="flex items-center justify-between gap-2"
-                    >
-                      <div className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          id={facetValue.id}
-                          value={facetValue.id}
-                          name={facetValue.name}
-                          onChange={handleFacetChange}
-                          checked={
-                            selectedFacets[groupName]?.includes(
-                              facetValue.id,
-                            ) || false
-                          }
-                        />
-                        <label htmlFor={facetValue.id}>{facetValue.name}</label>
+              <div className="flex flex-col gap-2">
+                {groupFacets.map(
+                  (facetValue) =>
+                    shouldShowFacet(groupName, facetValue) && (
+                      <div
+                        key={facetValue.id}
+                        className="flex items-center justify-between gap-2 text-sm"
+                      >
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            id={facetValue.id}
+                            value={facetValue.id}
+                            name={facetValue.name}
+                            onChange={handleFacetChange}
+                            checked={
+                              selectedFacets[groupName]?.includes(
+                                facetValue.id,
+                              ) || false
+                            }
+                          />
+                          <label htmlFor={facetValue.id}>
+                            {facetValue.name}
+                          </label>
+                        </div>
+                        <span className="text-slate-400">
+                          {currentFacets.find(
+                            (f) => f.facetValue.id === facetValue.id,
+                          )?.count || "0"}
+                        </span>
                       </div>
-                      <span className="text-slate-400">
-                        {currentFacets.find(
-                          (f) => f.facetValue.id === facetValue.id,
-                        )?.count || "0"}
-                      </span>
-                    </div>
-                  ),
-              )}
+                    ),
+                )}
+              </div>
             </div>
           ))}
         </form>

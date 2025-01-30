@@ -12,7 +12,7 @@ export default function Container({
   return (
     <div
       className={clsx(
-        "mx-auto max-w-screen-xl px-4",
+        "mx-auto max-w-screen-2xl px-4",
         verticalSpacing && "py-16",
       )}
     >
