@@ -221,45 +221,51 @@ export default function ListingTemplate({
               },
               {} as Record<string, FacetValue[]>,
             ),
-          ).map(([groupName, groupFacets]) => (
-            <AccordionItem key={groupName} open>
-              <AccordionTrigger>{groupName}</AccordionTrigger>
-              <AccordionContent>
-                <div className="flex flex-col gap-2">
-                  {groupFacets.map(
-                    (facetValue) =>
-                      shouldShowFacet(groupName, facetValue) && (
-                        <div
-                          key={facetValue.id}
-                          className="flex items-center justify-between gap-2"
-                        >
-                          <div className="flex items-center gap-2">
-                            <input
-                              type="checkbox"
-                              id={facetValue.id}
-                              value={facetValue.id}
-                              name={facetValue.name}
-                              onChange={handleFacetChange}
-                              checked={
-                                selectedFacets[groupName]?.includes(
-                                  facetValue.id,
-                                ) || false
-                              }
-                            />
-                            <label htmlFor={facetValue.id}>
-                              {facetValue.name}
-                            </label>
+          ).map(([groupName, groupFacets]) => {
+            const hasVisibleFacets = groupFacets.some((facetValue) =>
+              shouldShowFacet(groupName, facetValue),
+            );
+
+            return hasVisibleFacets ? (
+              <AccordionItem key={groupName} open>
+                <AccordionTrigger>{groupName}</AccordionTrigger>
+                <AccordionContent>
+                  <div className="flex flex-col gap-2">
+                    {groupFacets.map(
+                      (facetValue) =>
+                        shouldShowFacet(groupName, facetValue) && (
+                          <div
+                            key={facetValue.id}
+                            className="flex items-center justify-between gap-2"
+                          >
+                            <div className="flex items-center gap-2">
+                              <input
+                                type="checkbox"
+                                id={facetValue.id}
+                                value={facetValue.id}
+                                name={facetValue.name}
+                                onChange={handleFacetChange}
+                                checked={
+                                  selectedFacets[groupName]?.includes(
+                                    facetValue.id,
+                                  ) || false
+                                }
+                              />
+                              <label htmlFor={facetValue.id}>
+                                {facetValue.name}
+                              </label>
+                            </div>
+                            <span className="text-slate-400">
+                              {getFacetCount(facetValue.id, groupName)}
+                            </span>
                           </div>
-                          <span className="text-slate-400">
-                            {getFacetCount(facetValue.id, groupName)}
-                          </span>
-                        </div>
-                      ),
-                  )}
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-          ))}
+                        ),
+                    )}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            ) : null;
+          })}
         </form>
       </div>
 
