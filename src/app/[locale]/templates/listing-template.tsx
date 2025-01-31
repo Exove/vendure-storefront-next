@@ -4,6 +4,7 @@ import { FacetValue, SearchResult } from "@/gql/graphql";
 import { useState, useEffect } from "react";
 import { getFilteredProductsAction } from "../actions";
 import ProductCard from "@/components/product-card";
+import { XMarkIcon } from "@heroicons/react/20/solid";
 
 interface ListingTemplateProps {
   products: SearchResult[];
@@ -123,10 +124,34 @@ export default function ListingTemplate({
     return currentFacets.find((f) => f.facetValue.id === facetId)?.count || "";
   };
 
+  const handleClearFilters = () => {
+    setSelectedFacets({});
+    setFirstSelectedGroup(null);
+    setProducts(initialProducts);
+    setCurrentFacets(facets);
+  };
+
+  const hasActiveFilters = Object.values(selectedFacets).some(
+    (group) => group.length > 0,
+  );
+
   return (
     <div className="mt-10 flex gap-10">
       <div className="w-[200px]">
-        <h2 className="sr-only">Facets</h2>
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="sr-only">Facets</h2>
+          <div className="h-[20px]">
+            {hasActiveFilters && (
+              <button
+                onClick={handleClearFilters}
+                className="flex items-end gap-1 text-sm text-blue-300 hover:text-blue-100"
+              >
+                <XMarkIcon className="h-4 w-4" />
+                Tyhjennä suodattimet
+              </button>
+            )}
+          </div>
+        </div>
         <form>
           {/* Group facets by their facet type (e.g., Color, Size) */}
           {Object.entries(
