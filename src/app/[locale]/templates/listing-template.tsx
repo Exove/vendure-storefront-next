@@ -7,6 +7,11 @@ import ProductCard from "@/components/product-card";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import { useTranslations } from "next-intl";
 import PriceRangeFilter from "@/components/price-range-filter";
+import {
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/facet-accordion";
 
 interface ListingTemplateProps {
   products: SearchResult[];
@@ -187,7 +192,7 @@ export default function ListingTemplate({
             )}
           </div>
         </div>
-        <form>
+        <form className="flex flex-col gap-2">
           <PriceRangeFilter
             priceRange={priceRange}
             onPriceRangeChange={setPriceRange}
@@ -205,44 +210,47 @@ export default function ListingTemplate({
               {} as Record<string, FacetValue[]>,
             ),
           ).map(([groupName, groupFacets]) => (
-            <div key={groupName} className="mb-4">
-              <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-blue-400">
-                {groupName}
-              </h3>
-              {/* Render checkboxes for each facet value if it should be shown */}
-              <div className="flex flex-col gap-2">
-                {groupFacets.map(
-                  (facetValue) =>
-                    shouldShowFacet(groupName, facetValue) && (
-                      <div
-                        key={facetValue.id}
-                        className="flex items-center justify-between gap-2"
-                      >
-                        <div className="flex items-center gap-2">
-                          <input
-                            type="checkbox"
-                            id={facetValue.id}
-                            value={facetValue.id}
-                            name={facetValue.name}
-                            onChange={handleFacetChange}
-                            checked={
-                              selectedFacets[groupName]?.includes(
-                                facetValue.id,
-                              ) || false
-                            }
-                          />
-                          <label htmlFor={facetValue.id}>
-                            {facetValue.name}
-                          </label>
+            <AccordionItem key={groupName} open>
+              <AccordionTrigger>
+                <h3 className="text-sm font-semibold uppercase tracking-wide text-blue-400">
+                  {groupName}
+                </h3>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="flex flex-col gap-2">
+                  {groupFacets.map(
+                    (facetValue) =>
+                      shouldShowFacet(groupName, facetValue) && (
+                        <div
+                          key={facetValue.id}
+                          className="flex items-center justify-between gap-2"
+                        >
+                          <div className="flex items-center gap-2">
+                            <input
+                              type="checkbox"
+                              id={facetValue.id}
+                              value={facetValue.id}
+                              name={facetValue.name}
+                              onChange={handleFacetChange}
+                              checked={
+                                selectedFacets[groupName]?.includes(
+                                  facetValue.id,
+                                ) || false
+                              }
+                            />
+                            <label htmlFor={facetValue.id}>
+                              {facetValue.name}
+                            </label>
+                          </div>
+                          <span className="text-slate-400">
+                            {getFacetCount(facetValue.id, groupName)}
+                          </span>
                         </div>
-                        <span className="text-slate-400">
-                          {getFacetCount(facetValue.id, groupName)}
-                        </span>
-                      </div>
-                    ),
-                )}
-              </div>
-            </div>
+                      ),
+                  )}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
           ))}
         </form>
       </div>
