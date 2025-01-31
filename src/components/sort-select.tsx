@@ -17,7 +17,7 @@ export default function SortSelect({
 
   return (
     <div className="flex items-center gap-4">
-      <label htmlFor="sort" className="text-sm text-blue-400">
+      <label htmlFor="sort" className="text-sm text-blue-300">
         {t("sortBy")}:
       </label>
       <div className="relative">

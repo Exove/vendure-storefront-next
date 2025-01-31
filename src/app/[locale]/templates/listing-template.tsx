@@ -57,6 +57,9 @@ export default function ListingTemplate({
   useEffect(() => {
     const fetchProducts = async () => {
       setIsLoading(true);
+
+      // Convert selectedFacets into API format where each facet group's values are combined with OR,
+      // and different groups are implicitly combined with AND
       const facetFilters = Object.entries(selectedFacets)
         .filter(([, group]) => group.length > 0)
         .reduce<{ or: string[] }[]>((acc, [, group]) => {
