@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { getFilteredProductsAction } from "../actions";
 import ProductCard from "@/components/product-card";
 import { XMarkIcon } from "@heroicons/react/20/solid";
+import { useTranslations } from "next-intl";
 
 interface ListingTemplateProps {
   products: SearchResult[];
@@ -18,6 +19,7 @@ export default function ListingTemplate({
   products: initialProducts,
   facets,
 }: ListingTemplateProps) {
+  const t = useTranslations("Listing");
   const [selectedFacets, setSelectedFacets] = useState<
     Record<string, string[]>
   >({});
@@ -147,7 +149,7 @@ export default function ListingTemplate({
                 className="flex items-end gap-1 text-sm text-blue-300 hover:text-blue-100"
               >
                 <XMarkIcon className="h-4 w-4" />
-                Tyhjennä suodattimet
+                {t("clearFilters")}
               </button>
             )}
           </div>

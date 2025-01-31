@@ -72,5 +72,8 @@
   "notFound": {
     "title": "404 - Sivua ei löytynyt",
     "description": "Valitettavasti etsimääsi sivua ei löytynyt."
+  },
+  "Listing": {
+    "clearFilters": "Tyhjennä suodattimet"
   }
 }
