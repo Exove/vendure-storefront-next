@@ -22,6 +22,7 @@ export default function ListingTemplate({
   >({});
   const [products, setProducts] = useState(initialProducts);
   const [currentFacets, setCurrentFacets] = useState(facets);
+  const [originalFacets] = useState(facets);
   const [firstSelectedGroup, setFirstSelectedGroup] = useState<string | null>(
     null,
   );
@@ -106,7 +107,14 @@ export default function ListingTemplate({
     );
   };
 
-  const getFacetCount = (facetId: string) => {
+  const getFacetCount = (facetId: string, groupName: string) => {
+    // For the first selected group, always show original counts
+    if (groupName === firstSelectedGroup) {
+      return (
+        originalFacets.find((f) => f.facetValue.id === facetId)?.count || ""
+      );
+    }
+
     if (isLoading) {
       return (
         currentFacets.find((f) => f.facetValue.id === facetId)?.count || ""
@@ -163,7 +171,7 @@ export default function ListingTemplate({
                           </label>
                         </div>
                         <span className="text-slate-400">
-                          {getFacetCount(facetValue.id)}
+                          {getFacetCount(facetValue.id, groupName)}
                         </span>
                       </div>
                     ),
