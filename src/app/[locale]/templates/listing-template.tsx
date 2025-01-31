@@ -18,6 +18,8 @@ import {
 } from "@/components/facet-accordion";
 import SortSelect from "@/components/sort-select";
 import { PRODUCTS_PER_LOAD } from "@/common/constants";
+import { AnimatePresence } from "motion/react";
+import * as motion from "motion/react-client";
 
 interface ListingTemplateProps {
   products: SearchResult[];
@@ -294,22 +296,30 @@ export default function ListingTemplate({
           <SortSelect sortOrder={sortOrder} onSortChange={setSortOrder} />
         </div>
         <ul className="grid grid-cols-1 gap-x-4 gap-y-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {products.map((product, index) => (
-            <li key={index}>
-              {product.slug && (
-                <ProductCard
-                  slug={product.slug}
-                  name={product.productName}
-                  imageSource={product.productAsset?.preview ?? ""}
-                  priceWithTax={
-                    "min" in product.priceWithTax
-                      ? product.priceWithTax.min
-                      : product.priceWithTax.value
-                  }
-                />
-              )}
-            </li>
-          ))}
+          <AnimatePresence initial={false}>
+            {products.map((product) => (
+              <motion.li
+                key={product.slug}
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                {product.slug && (
+                  <ProductCard
+                    slug={product.slug}
+                    name={product.productName}
+                    imageSource={product.productAsset?.preview ?? ""}
+                    priceWithTax={
+                      "min" in product.priceWithTax
+                        ? product.priceWithTax.min
+                        : product.priceWithTax.value
+                    }
+                  />
+                )}
+              </motion.li>
+            ))}
+          </AnimatePresence>
         </ul>
         {hasMore && (
           <div className="mt-8 flex justify-center">
