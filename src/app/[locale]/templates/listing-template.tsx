@@ -17,6 +17,10 @@ import {
   AccordionContent,
 } from "@/components/facet-accordion";
 import SortSelect from "@/components/sort-select";
+import {
+  INITIAL_PRODUCTS_TO_SHOW,
+  PRODUCTS_PER_LOAD,
+} from "@/common/constants";
 
 interface ListingTemplateProps {
   products: SearchResult[];
@@ -49,6 +53,8 @@ export default function ListingTemplate({
   );
   const [isLoading, setIsLoading] = useState(false);
   const [sortOrder, setSortOrder] = useState<SearchResultSortParameter>({});
+  const [currentOffset, setCurrentOffset] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -62,10 +68,17 @@ export default function ListingTemplate({
           return acc;
         }, []);
 
+      // If this is a filter/sort change, reset pagination
+      const isFilterOrSortChange = currentOffset === 0;
+
+      const limit = isFilterOrSortChange
+        ? INITIAL_PRODUCTS_TO_SHOW
+        : PRODUCTS_PER_LOAD;
+
       const results = await getFilteredProductsAction(
         "",
-        0,
-        100,
+        currentOffset,
+        limit,
         facetFilters,
         true,
         // Convert euros to cents for the API
@@ -103,13 +116,28 @@ export default function ListingTemplate({
             : firstSelectedGroup;
 
       setFirstSelectedGroup(newFirstSelectedGroup);
-      setProducts(results.items as SearchResult[]);
+
+      // If this is a filter/sort change, replace products
+      // Otherwise append new products to existing ones
+      setProducts((prevProducts) =>
+        isFilterOrSortChange
+          ? (results.items as SearchResult[])
+          : [...prevProducts, ...(results.items as SearchResult[])],
+      );
+
+      setHasMore(currentOffset + limit < results.totalItems);
       setCurrentFacets(results.facetValues as typeof facets);
       setIsLoading(false);
     };
 
     fetchProducts();
-  }, [selectedFacets, firstSelectedGroup, priceRange, sortOrder]);
+  }, [
+    selectedFacets,
+    firstSelectedGroup,
+    priceRange,
+    sortOrder,
+    currentOffset,
+  ]);
 
   // Handle facet checkbox changes
   const handleFacetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -127,6 +155,8 @@ export default function ListingTemplate({
           : groupFacets.filter((id) => id !== facetId),
       };
     });
+    // Reset pagination when filters change
+    setCurrentOffset(0);
   };
 
   // Determine whether a facet should be displayed based on current filters
@@ -163,12 +193,17 @@ export default function ListingTemplate({
     return currentFacets.find((f) => f.facetValue.id === facetId)?.count || "";
   };
 
+  const handleShowMore = () => {
+    setCurrentOffset((prev) => prev + PRODUCTS_PER_LOAD);
+  };
+
   const handleClearFilters = () => {
     setSelectedFacets({});
     setFirstSelectedGroup(null);
     setProducts(initialProducts);
     setCurrentFacets(facets);
     setPriceRange({ min: null, max: null });
+    setCurrentOffset(0);
   };
 
   const hasActiveFilters = Object.values(selectedFacets).some(
@@ -293,6 +328,21 @@ export default function ListingTemplate({
             </li>
           ))}
         </ul>
+        {hasMore && !isLoading && (
+          <div className="mt-8 flex justify-center">
+            <button
+              onClick={handleShowMore}
+              className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
+            >
+              {t("showMore")}
+            </button>
+          </div>
+        )}
+        {isLoading && (
+          <div className="mt-8 flex justify-center">
+            <div className="h-6 w-6 animate-spin rounded-full border-2 border-blue-600 border-t-transparent"></div>
+          </div>
+        )}
       </div>
     </div>
   );

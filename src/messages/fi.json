@@ -83,6 +83,7 @@
     "priceAsc": "Halvin ensin",
     "priceDesc": "Kallein ensin",
     "minPrice": "Minimi €",
-    "maxPrice": "Maksimi €"
+    "maxPrice": "Maksimi €",
+    "showMore": "Näytä lisää"
   }
 }
