@@ -53,6 +53,22 @@ export default function ListingTemplate({
         true,
       );
 
+      // If results are empty and we have more than one facet group selected,
+      // keep only the first selected group
+      if (
+        results.items.length === 0 &&
+        Object.keys(selectedFacets).length > 1
+      ) {
+        const firstGroup = Object.entries(selectedFacets).find(
+          ([, values]) => values.length > 0,
+        );
+        if (firstGroup) {
+          const [groupName, groupValues] = firstGroup;
+          setSelectedFacets({ [groupName]: groupValues });
+          return; // Early return to trigger useEffect again with updated selectedFacets
+        }
+      }
+
       // Update firstSelectedGroup based on the current state of selectedFacets
       const selectedGroups = Object.entries(selectedFacets).filter(
         ([, values]) => values.length > 0,
