@@ -80,7 +80,6 @@
     "nameAsc": "Name A-Z",
     "nameDesc": "Name Z-A",
     "priceAsc": "Price Low-High",
-    "priceDesc": "Price High-Low",
-    "showMore": "Show more"
+    "priceDesc": "Price High-Low"
   }
 }
