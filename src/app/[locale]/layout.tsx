@@ -23,9 +23,9 @@ export default async function RootLayout({
     <html lang="en">
       <NextIntlClientProvider messages={messages}>
         <body
-          className={`${inter.variable} bg-slate-900 font-sans text-slate-100`}
+          className={`${inter.variable} flex min-h-screen flex-col bg-slate-900 font-sans text-slate-100`}
         >
-          {children}
+          <div className="flex-grow">{children}</div>
           <Footer />
           <Toaster />
         </body>
