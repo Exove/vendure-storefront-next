@@ -74,6 +74,9 @@
     "description": "Valitettavasti etsimääsi sivua ei löytynyt."
   },
   "Listing": {
-    "clearFilters": "Tyhjennä suodattimet"
+    "clearFilters": "Tyhjennä suodattimet",
+    "priceRange": "Hinta",
+    "minPrice": "Minimi",
+    "maxPrice": "Maksimi"
   }
 }

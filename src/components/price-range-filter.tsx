@@ -32,9 +32,9 @@ export default function PriceRangeFilter({
       <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-blue-400">
         {t("priceRange")}
       </h3>
-      <div className="flex flex-col gap-2">
-        <div>
-          <label htmlFor="min-price" className="text-sm">
+      <div className="flex gap-4">
+        <div className="flex-1">
+          <label htmlFor="min-price" className="text-xs">
             {t("minPrice")}
           </label>
           <input
@@ -46,8 +46,8 @@ export default function PriceRangeFilter({
             min="0"
           />
         </div>
-        <div>
-          <label htmlFor="max-price" className="text-sm">
+        <div className="flex-1">
+          <label htmlFor="max-price" className="text-xs">
             {t("maxPrice")}
           </label>
           <input

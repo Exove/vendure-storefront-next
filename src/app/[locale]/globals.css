@@ -66,5 +66,5 @@
 }
 
 *:focus-visible {
-  @apply rounded-sm outline-none ring-2 ring-primary ring-offset-2 ring-offset-background transition-shadow duration-200;
+  @apply rounded-sm outline-none ring-2 ring-primary ring-slate-400 ring-offset-2 ring-offset-black transition-shadow duration-200;
 }
