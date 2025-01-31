@@ -25,11 +25,11 @@ export default function ListingTemplate({
   const [firstSelectedGroup, setFirstSelectedGroup] = useState<string | null>(
     null,
   );
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
-      // Convert selected facets into the API's filter format
-      // Each group's selections are combined with OR, different groups with AND
+      setIsLoading(true);
       const facetFilters = Object.entries(selectedFacets)
         .filter(([, group]) => group.length > 0)
         .reduce<{ or: string[] }[]>((acc, [, group]) => {
@@ -39,7 +39,6 @@ export default function ListingTemplate({
           return acc;
         }, []);
 
-      // Fetch filtered products and update available facets
       const results = await getFilteredProductsAction(
         "",
         0,
@@ -47,12 +46,27 @@ export default function ListingTemplate({
         facetFilters,
         true,
       );
+
+      // Update firstSelectedGroup based on the current state of selectedFacets
+      const selectedGroups = Object.entries(selectedFacets).filter(
+        ([, values]) => values.length > 0,
+      );
+
+      const newFirstSelectedGroup =
+        selectedGroups.length === 1
+          ? selectedGroups[0][0]
+          : selectedGroups.length === 0
+            ? null
+            : firstSelectedGroup;
+
+      setFirstSelectedGroup(newFirstSelectedGroup);
       setProducts(results.items as SearchResult[]);
       setCurrentFacets(results.facetValues as typeof facets);
+      setIsLoading(false);
     };
 
     fetchProducts();
-  }, [selectedFacets]);
+  }, [selectedFacets, firstSelectedGroup]);
 
   // Handle facet checkbox changes
   const handleFacetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,39 +77,24 @@ export default function ListingTemplate({
 
     setSelectedFacets((prev) => {
       const groupFacets = prev[groupName] || [];
-      const newSelectedFacets = e.target.checked
-        ? {
-            ...prev,
-            [groupName]: [...groupFacets, facetId],
-          }
-        : {
-            ...prev,
-            [groupName]: groupFacets.filter((id) => id !== facetId),
-          };
-
-      // If this is the first selection in any group, set it as the firstSelectedGroup
-      if (
-        Object.values(prev).every((group) => group.length === 0) &&
-        e.target.checked
-      ) {
-        setFirstSelectedGroup(groupName);
-      }
-      // If removing the last selection from firstSelectedGroup, reset it
-      else if (
-        groupName === firstSelectedGroup &&
-        newSelectedFacets[groupName].length === 0
-      ) {
-        setFirstSelectedGroup(null);
-      }
-
-      return newSelectedFacets;
+      return {
+        ...prev,
+        [groupName]: e.target.checked
+          ? [...groupFacets, facetId]
+          : groupFacets.filter((id) => id !== facetId),
+      };
     });
   };
 
   // Determine whether a facet should be displayed based on current filters
   const shouldShowFacet = (groupName: string, facetValue: FacetValue) => {
-    // For the first group where user made a selection, show all options
+    // Always show all facets in the first selected group
     if (groupName === firstSelectedGroup) {
+      return true;
+    }
+
+    // During loading, keep showing what was visible before
+    if (isLoading && selectedFacets[groupName]?.includes(facetValue.id)) {
       return true;
     }
 
@@ -103,6 +102,15 @@ export default function ListingTemplate({
     return currentFacets.some(
       (f) => f.facetValue.id === facetValue.id && f.count > 0,
     );
+  };
+
+  const getFacetCount = (facetId: string) => {
+    if (isLoading) {
+      return (
+        currentFacets.find((f) => f.facetValue.id === facetId)?.count || ""
+      );
+    }
+    return currentFacets.find((f) => f.facetValue.id === facetId)?.count || "";
   };
 
   return (
@@ -153,9 +161,7 @@ export default function ListingTemplate({
                           </label>
                         </div>
                         <span className="text-slate-400">
-                          {currentFacets.find(
-                            (f) => f.facetValue.id === facetValue.id,
-                          )?.count || "0"}
+                          {getFacetCount(facetValue.id)}
                         </span>
                       </div>
                     ),
