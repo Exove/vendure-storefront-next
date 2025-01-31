@@ -146,9 +146,11 @@ export default function ListingTemplate({
             {hasActiveFilters && (
               <button
                 onClick={handleClearFilters}
-                className="flex items-end gap-1 text-sm text-blue-300 hover:text-blue-100"
+                className="flex items-center gap-2 text-sm text-blue-300 hover:text-blue-100"
               >
-                <XMarkIcon className="h-4 w-4" />
+                <div className="rounded-full border border-blue-300">
+                  <XMarkIcon className="h-4 w-4" />
+                </div>
                 {t("clearFilters")}
               </button>
             )}
