@@ -31,9 +31,9 @@ export default function ListingTemplate({
   useEffect(() => {
     const fetchProducts = async () => {
       setIsLoading(true);
-
-      // For product filtering, use all selected facets
-      const productFacetFilters = Object.entries(selectedFacets)
+      // Convert selectedFacets into API format where each facet group's values are combined with OR,
+      // and different groups are implicitly combined with AND
+      const facetFilters = Object.entries(selectedFacets)
         .filter(([, group]) => group.length > 0)
         .reduce<{ or: string[] }[]>((acc, [, group]) => {
           if (group.length > 0) {
@@ -42,27 +42,11 @@ export default function ListingTemplate({
           return acc;
         }, []);
 
-      // For facet visibility, use only first selected group
-      const facetVisibilityFilters =
-        firstSelectedGroup && selectedFacets[firstSelectedGroup]?.length > 0
-          ? [{ or: selectedFacets[firstSelectedGroup] }]
-          : [];
-
-      // Fetch products with all filters
-      const productResults = await getFilteredProductsAction(
+      const results = await getFilteredProductsAction(
         "",
         0,
         100,
-        productFacetFilters,
-        true,
-      );
-
-      // Fetch facets with only first group filters
-      const facetResults = await getFilteredProductsAction(
-        "",
-        0,
-        100,
-        facetVisibilityFilters,
+        facetFilters,
         true,
       );
 
@@ -79,8 +63,8 @@ export default function ListingTemplate({
             : firstSelectedGroup;
 
       setFirstSelectedGroup(newFirstSelectedGroup);
-      setProducts(productResults.items as SearchResult[]);
-      setCurrentFacets(facetResults.facetValues as typeof facets);
+      setProducts(results.items as SearchResult[]);
+      setCurrentFacets(results.facetValues as typeof facets);
       setIsLoading(false);
     };
 
@@ -117,7 +101,7 @@ export default function ListingTemplate({
       return true;
     }
 
-    // For other groups, only show facets that would yield results based on first selected group
+    // For other groups, only show facets that would yield results
     return currentFacets.some(
       (f) => f.facetValue.id === facetValue.id && f.count > 0,
     );
