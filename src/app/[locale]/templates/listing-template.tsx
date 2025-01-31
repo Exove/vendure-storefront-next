@@ -108,7 +108,7 @@ export default function ListingTemplate({
   return (
     <div className="mt-10 flex gap-10">
       <div className="w-[200px]">
-        <h1 className="sr-only">Facets</h1>
+        <h2 className="sr-only">Facets</h2>
         <form>
           {/* Group facets by their facet type (e.g., Color, Size) */}
           {Object.entries(
@@ -133,7 +133,7 @@ export default function ListingTemplate({
                     shouldShowFacet(groupName, facetValue) && (
                       <div
                         key={facetValue.id}
-                        className="flex items-center justify-between gap-2 text-sm"
+                        className="flex items-center justify-between gap-2"
                       >
                         <div className="flex items-center gap-2">
                           <input
@@ -165,10 +165,11 @@ export default function ListingTemplate({
           ))}
         </form>
       </div>
+
       {/* Product listing */}
       <div className="flex-1">
         <h1 className="sr-only">Products</h1>
-        <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <ul className="grid grid-cols-1 gap-x-4 gap-y-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {products.map((product, index) => (
             <li key={index}>
               {product.slug && (
