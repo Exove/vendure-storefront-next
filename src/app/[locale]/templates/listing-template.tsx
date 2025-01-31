@@ -23,6 +23,13 @@ export default function ListingTemplate({
   const [selectedFacets, setSelectedFacets] = useState<
     Record<string, string[]>
   >({});
+  const [priceRange, setPriceRange] = useState<{
+    min: number | null;
+    max: number | null;
+  }>({
+    min: null,
+    max: null,
+  });
   const [products, setProducts] = useState(initialProducts);
   const [currentFacets, setCurrentFacets] = useState(facets);
   const [originalFacets] = useState(facets);
@@ -34,8 +41,6 @@ export default function ListingTemplate({
   useEffect(() => {
     const fetchProducts = async () => {
       setIsLoading(true);
-      // Convert selectedFacets into API format where each facet group's values are combined with OR,
-      // and different groups are implicitly combined with AND
       const facetFilters = Object.entries(selectedFacets)
         .filter(([, group]) => group.length > 0)
         .reduce<{ or: string[] }[]>((acc, [, group]) => {
@@ -51,6 +56,9 @@ export default function ListingTemplate({
         100,
         facetFilters,
         true,
+        // Convert euros to cents for the API
+        priceRange.min !== null ? priceRange.min * 100 : null,
+        priceRange.max !== null ? priceRange.max * 100 : null,
       );
 
       // If results are empty and we have more than one facet group selected,
@@ -88,7 +96,7 @@ export default function ListingTemplate({
     };
 
     fetchProducts();
-  }, [selectedFacets, firstSelectedGroup]);
+  }, [selectedFacets, firstSelectedGroup, priceRange]);
 
   // Handle facet checkbox changes
   const handleFacetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -147,11 +155,23 @@ export default function ListingTemplate({
     setFirstSelectedGroup(null);
     setProducts(initialProducts);
     setCurrentFacets(facets);
+    setPriceRange({ min: null, max: null });
   };
 
   const hasActiveFilters = Object.values(selectedFacets).some(
     (group) => group.length > 0,
   );
+
+  // Add price range handlers
+  const handleMinPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value ? Number(e.target.value) : null;
+    setPriceRange((prev) => ({ ...prev, min: value }));
+  };
+
+  const handleMaxPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value ? Number(e.target.value) : null;
+    setPriceRange((prev) => ({ ...prev, max: value }));
+  };
 
   return (
     <div className="mt-10 flex gap-10">
@@ -159,9 +179,14 @@ export default function ListingTemplate({
         <div className="mb-4 flex items-center justify-between">
           <h2 className="sr-only">Facets</h2>
           <div className="h-[20px]">
-            {hasActiveFilters && (
+            {(hasActiveFilters ||
+              priceRange.min !== null ||
+              priceRange.max !== null) && (
               <button
-                onClick={handleClearFilters}
+                onClick={() => {
+                  handleClearFilters();
+                  setPriceRange({ min: null, max: null });
+                }}
                 className="flex items-center gap-2 text-sm text-blue-300 hover:text-blue-100"
               >
                 <div className="rounded-full border border-blue-300">
@@ -173,6 +198,41 @@ export default function ListingTemplate({
           </div>
         </div>
         <form>
+          {/* Price Range Filter */}
+          <div className="mb-6">
+            <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-blue-400">
+              {t("priceRange")}
+            </h3>
+            <div className="flex flex-col gap-2">
+              <div>
+                <label htmlFor="min-price" className="text-sm">
+                  {t("minPrice")}
+                </label>
+                <input
+                  type="number"
+                  id="min-price"
+                  value={priceRange.min ?? ""}
+                  onChange={handleMinPriceChange}
+                  className="mt-1 w-full rounded-md border border-gray-300 px-2 py-1 text-sm text-black"
+                  min="0"
+                />
+              </div>
+              <div>
+                <label htmlFor="max-price" className="text-sm">
+                  {t("maxPrice")}
+                </label>
+                <input
+                  type="number"
+                  id="max-price"
+                  value={priceRange.max ?? ""}
+                  onChange={handleMaxPriceChange}
+                  className="mt-1 w-full rounded-md border border-gray-300 px-2 py-1 text-sm text-black"
+                  min="0"
+                />
+              </div>
+            </div>
+          </div>
+
           {/* Group facets by their facet type (e.g., Color, Size) */}
           {Object.entries(
             facets.reduce(

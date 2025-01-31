@@ -115,6 +115,8 @@ export const getFilteredProductsAction = async (
   take: number,
   facetValueFilters: { or: string[] }[],
   groupByProduct: boolean,
+  priceMin?: number | null,
+  priceMax?: number | null,
 ) => {
   const result = await getFilteredProducts(
     term,
@@ -122,6 +124,8 @@ export const getFilteredProductsAction = async (
     take,
     facetValueFilters,
     groupByProduct,
+    priceMin,
+    priceMax,
   );
   return result;
 };

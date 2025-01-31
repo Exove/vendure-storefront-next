@@ -14,6 +14,7 @@ import {
   CreateAddressInput,
   UpdateAddressInput,
   UpdateCustomerInput,
+  GetFilteredProductsQuery,
 } from "../gql/graphql";
 import {
   adjustOrderLineMutation,
@@ -129,14 +130,21 @@ export async function getFilteredProducts(
   take: number,
   facetValueFilters: { or: string[] }[],
   groupByProduct: boolean,
+  priceMin?: number | null,
+  priceMax?: number | null,
 ) {
   const client = await getAuthenticatedClient();
-  const { search } = await client.request(filteredProductsQuery, {
-    term,
-    skip,
-    take,
-    facetValueFilters,
-    groupByProduct,
-  });
+  const { search } = await client.request<GetFilteredProductsQuery>(
+    filteredProductsQuery,
+    {
+      term,
+      skip,
+      take,
+      facetValueFilters,
+      groupByProduct,
+      priceMin: priceMin ?? 0,
+      priceMax: priceMax ?? 1000000000,
+    },
+  );
   return search;
 }

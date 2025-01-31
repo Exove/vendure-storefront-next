@@ -63,6 +63,8 @@ export const filteredProductsQuery = graphql(`
     $take: Int
     $facetValueFilters: [FacetValueFilterInput!]!
     $groupByProduct: Boolean!
+    $priceMin: Int!
+    $priceMax: Int!
   ) {
     search(
       input: {
@@ -71,6 +73,7 @@ export const filteredProductsQuery = graphql(`
         take: $take
         facetValueFilters: $facetValueFilters
         groupByProduct: $groupByProduct
+        priceRange: { min: $priceMin, max: $priceMax }
       }
     ) {
       totalItems
