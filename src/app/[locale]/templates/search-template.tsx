@@ -68,6 +68,15 @@ export default function ListingTemplate() {
           />
           <Hits
             hitComponent={ProductHit}
+            transformItems={(items) => {
+              const uniqueItems = new Map();
+              items.forEach((item) => {
+                if (!uniqueItems.has(item.slug)) {
+                  uniqueItems.set(item.slug, item);
+                }
+              });
+              return Array.from(uniqueItems.values());
+            }}
             classNames={{
               list: "grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3",
             }}
