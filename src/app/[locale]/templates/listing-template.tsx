@@ -17,6 +17,7 @@ import {
   AccordionContent,
 } from "@/components/facet-accordion";
 import SortSelect from "@/components/sort-select";
+import { PRODUCTS_PER_LOAD } from "@/common/constants";
 
 interface ListingTemplateProps {
   products: SearchResult[];
@@ -49,6 +50,9 @@ export default function ListingTemplate({
   );
   const [isLoading, setIsLoading] = useState(false);
   const [sortOrder, setSortOrder] = useState<SearchResultSortParameter>({});
+  const [skip, setSkip] = useState(0);
+  const [take] = useState(PRODUCTS_PER_LOAD);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -64,8 +68,8 @@ export default function ListingTemplate({
 
       const results = await getFilteredProductsAction(
         "",
-        0,
-        100,
+        skip,
+        take,
         facetFilters,
         true,
         // Convert euros to cents for the API
@@ -73,6 +77,16 @@ export default function ListingTemplate({
         priceRange.max !== null ? priceRange.max * 100 : null,
         sortOrder,
       );
+
+      // If results are less than take, there's nothing more to load
+      setHasMore(results.items.length === take);
+
+      // If skip is 0, replace products, otherwise append new products to the list
+      if (skip === 0) {
+        setProducts(results.items as SearchResult[]);
+      } else {
+        setProducts((prev) => [...prev, ...(results.items as SearchResult[])]);
+      }
 
       // If results are empty and we have more than one facet group selected,
       // keep only the first selected group
@@ -103,13 +117,12 @@ export default function ListingTemplate({
             : firstSelectedGroup;
 
       setFirstSelectedGroup(newFirstSelectedGroup);
-      setProducts(results.items as SearchResult[]);
       setCurrentFacets(results.facetValues as typeof facets);
       setIsLoading(false);
     };
 
     fetchProducts();
-  }, [selectedFacets, firstSelectedGroup, priceRange, sortOrder]);
+  }, [selectedFacets, firstSelectedGroup, priceRange, sortOrder, skip, take]);
 
   // Handle facet checkbox changes
   const handleFacetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -118,6 +131,7 @@ export default function ListingTemplate({
       facets.find((f) => f.facetValue.id === facetId)?.facetValue.facet.name ||
       "";
 
+    setSkip(0); // Reset skip when filters are changed
     setSelectedFacets((prev) => {
       const groupFacets = prev[groupName] || [];
       return {
@@ -169,6 +183,7 @@ export default function ListingTemplate({
     setProducts(initialProducts);
     setCurrentFacets(facets);
     setPriceRange({ min: null, max: null });
+    setSkip(0); // Reset skip when filters are cleared
   };
 
   const hasActiveFilters = Object.values(selectedFacets).some(
@@ -293,6 +308,17 @@ export default function ListingTemplate({
             </li>
           ))}
         </ul>
+        {hasMore && (
+          <div className="mt-8 flex justify-center">
+            <button
+              onClick={() => setSkip((prev) => prev + take)}
+              className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 disabled:opacity-50"
+              disabled={isLoading}
+            >
+              {isLoading ? t("loading") : t("showMore")}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
