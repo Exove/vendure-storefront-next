@@ -3,13 +3,16 @@ import CartMenu from "./cart-menu";
 import { UserIcon } from "@heroicons/react/24/outline";
 import LanguageSwitcher from "./language-switcher";
 import { SHOP_NAME } from "@/common/constants";
-
+import SearchBox from "@/components/searchbox";
 export default function Header() {
   return (
     <header className="mx-auto flex min-h-20 max-w-screen-2xl items-center justify-between py-6">
       <Link href="/" className="text-xl font-black">
         {SHOP_NAME}
       </Link>
+      <div className="h-[50px] flex-1">
+        <SearchBox />
+      </div>
       <div className="flex items-center gap-10">
         <LanguageSwitcher />
         <Link href="/account">

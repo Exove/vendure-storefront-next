@@ -4,7 +4,9 @@
     "logout": "Logout",
     "cart": "Cart",
     "search": "Search",
-    "menu": "Menu"
+    "menu": "Menu",
+    "searchPlaceholder": "Search products...",
+    "noResults": "No results found"
   },
   "order": {
     "complete": "Order Complete",

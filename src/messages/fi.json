@@ -4,7 +4,9 @@
     "logout": "Kirjaudu ulos",
     "cart": "Ostoskori",
     "search": "Haku",
-    "menu": "Valikko"
+    "menu": "Valikko",
+    "searchPlaceholder": "Etsi tuotteita...",
+    "noResults": "Ei hakutuloksia"
   },
   "order": {
     "complete": "Tilaus valmis",
