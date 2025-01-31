@@ -6,6 +6,7 @@ import { getFilteredProductsAction } from "../actions";
 import ProductCard from "@/components/product-card";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import { useTranslations } from "next-intl";
+import PriceRangeFilter from "@/components/price-range-filter";
 
 interface ListingTemplateProps {
   products: SearchResult[];
@@ -162,17 +163,6 @@ export default function ListingTemplate({
     (group) => group.length > 0,
   );
 
-  // Add price range handlers
-  const handleMinPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value ? Number(e.target.value) : null;
-    setPriceRange((prev) => ({ ...prev, min: value }));
-  };
-
-  const handleMaxPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value ? Number(e.target.value) : null;
-    setPriceRange((prev) => ({ ...prev, max: value }));
-  };
-
   return (
     <div className="mt-10 flex gap-10">
       <div className="w-[200px]">
@@ -198,40 +188,10 @@ export default function ListingTemplate({
           </div>
         </div>
         <form>
-          {/* Price Range Filter */}
-          <div className="mb-6">
-            <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-blue-400">
-              {t("priceRange")}
-            </h3>
-            <div className="flex flex-col gap-2">
-              <div>
-                <label htmlFor="min-price" className="text-sm">
-                  {t("minPrice")}
-                </label>
-                <input
-                  type="number"
-                  id="min-price"
-                  value={priceRange.min ?? ""}
-                  onChange={handleMinPriceChange}
-                  className="mt-1 w-full rounded-md border border-gray-300 px-2 py-1 text-sm text-black"
-                  min="0"
-                />
-              </div>
-              <div>
-                <label htmlFor="max-price" className="text-sm">
-                  {t("maxPrice")}
-                </label>
-                <input
-                  type="number"
-                  id="max-price"
-                  value={priceRange.max ?? ""}
-                  onChange={handleMaxPriceChange}
-                  className="mt-1 w-full rounded-md border border-gray-300 px-2 py-1 text-sm text-black"
-                  min="0"
-                />
-              </div>
-            </div>
-          </div>
+          <PriceRangeFilter
+            priceRange={priceRange}
+            onPriceRangeChange={setPriceRange}
+          />
 
           {/* Group facets by their facet type (e.g., Color, Size) */}
           {Object.entries(
