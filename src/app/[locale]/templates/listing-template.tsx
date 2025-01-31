@@ -1,6 +1,11 @@
 "use client";
 
-import { FacetValue, SearchResult } from "@/gql/graphql";
+import {
+  FacetValue,
+  SearchResult,
+  SortOrder,
+  SearchResultSortParameter,
+} from "@/gql/graphql";
 import { useState, useEffect } from "react";
 import { getFilteredProductsAction } from "../actions";
 import ProductCard from "@/components/product-card";
@@ -25,7 +30,7 @@ export default function ListingTemplate({
   products: initialProducts,
   facets,
 }: ListingTemplateProps) {
-  const t = useTranslations("Listing");
+  const t = useTranslations("listing");
   const [selectedFacets, setSelectedFacets] = useState<
     Record<string, string[]>
   >({});
@@ -43,6 +48,7 @@ export default function ListingTemplate({
     null,
   );
   const [isLoading, setIsLoading] = useState(false);
+  const [sortOrder, setSortOrder] = useState<SearchResultSortParameter>({});
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -65,6 +71,7 @@ export default function ListingTemplate({
         // Convert euros to cents for the API
         priceRange.min !== null ? priceRange.min * 100 : null,
         priceRange.max !== null ? priceRange.max * 100 : null,
+        sortOrder,
       );
 
       // If results are empty and we have more than one facet group selected,
@@ -102,7 +109,7 @@ export default function ListingTemplate({
     };
 
     fetchProducts();
-  }, [selectedFacets, firstSelectedGroup, priceRange]);
+  }, [selectedFacets, firstSelectedGroup, priceRange, sortOrder]);
 
   // Handle facet checkbox changes
   const handleFacetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -258,7 +265,40 @@ export default function ListingTemplate({
 
       {/* Product listing */}
       <div className="flex-1">
-        <h1 className="sr-only">Products</h1>
+        <div className="mb-6 flex items-center justify-between">
+          <h1 className="sr-only">Products</h1>
+          <div className="flex items-center gap-4">
+            <label htmlFor="sort" className="text-sm text-gray-600">
+              {t("sortBy")}:
+            </label>
+            <select
+              id="sort"
+              className="rounded-md border border-gray-300 px-3 py-1.5 text-sm text-black"
+              onChange={(e) => {
+                const [field, order] = e.target.value.split("-") as [
+                  "name" | "price",
+                  SortOrder,
+                ];
+                setSortOrder({ [field]: order });
+              }}
+              value={
+                sortOrder.name
+                  ? `name-${sortOrder.name}`
+                  : sortOrder.price
+                    ? `price-${sortOrder.price}`
+                    : ""
+              }
+            >
+              <option value="">{t("relevance")}</option>
+              <option value={`name-${SortOrder.Asc}`}>{t("nameAsc")}</option>
+              <option value={`name-${SortOrder.Desc}`}>{t("nameDesc")}</option>
+              <option value={`price-${SortOrder.Asc}`}>{t("priceAsc")}</option>
+              <option value={`price-${SortOrder.Desc}`}>
+                {t("priceDesc")}
+              </option>
+            </select>
+          </div>
+        </div>
         <ul className="grid grid-cols-1 gap-x-4 gap-y-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {products.map((product, index) => (
             <li key={index}>

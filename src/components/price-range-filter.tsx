@@ -15,7 +15,7 @@ export default function PriceRangeFilter({
   priceRange,
   onPriceRangeChange,
 }: PriceRangeFilterProps) {
-  const t = useTranslations("Listing");
+  const t = useTranslations("listing");
 
   const handleMinPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value ? Number(e.target.value) : null;

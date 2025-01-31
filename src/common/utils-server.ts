@@ -15,6 +15,7 @@ import {
   UpdateAddressInput,
   UpdateCustomerInput,
   GetFilteredProductsQuery,
+  SearchResultSortParameter,
 } from "../gql/graphql";
 import {
   adjustOrderLineMutation,
@@ -132,6 +133,7 @@ export async function getFilteredProducts(
   groupByProduct: boolean,
   priceMin?: number | null,
   priceMax?: number | null,
+  sort?: SearchResultSortParameter,
 ) {
   const client = await getAuthenticatedClient();
   const { search } = await client.request<GetFilteredProductsQuery>(
@@ -144,6 +146,7 @@ export async function getFilteredProducts(
       groupByProduct,
       priceMin: priceMin ?? 0,
       priceMax: priceMax ?? 1000000000,
+      sort,
     },
   );
   return search;

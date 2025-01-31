@@ -18,6 +18,7 @@ import {
   CreateAddressInput,
   UpdateAddressInput,
   UpdateCustomerInput,
+  SearchResultSortParameter,
 } from "@/gql/graphql";
 import {
   addPaymentToOrderMutation,
@@ -117,6 +118,7 @@ export const getFilteredProductsAction = async (
   groupByProduct: boolean,
   priceMin?: number | null,
   priceMax?: number | null,
+  sort?: SearchResultSortParameter,
 ) => {
   const result = await getFilteredProducts(
     term,
@@ -126,6 +128,7 @@ export const getFilteredProductsAction = async (
     groupByProduct,
     priceMin,
     priceMax,
+    sort,
   );
   return result;
 };

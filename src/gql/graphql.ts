@@ -4047,6 +4047,7 @@ export type GetFilteredProductsQueryVariables = Exact<{
   groupByProduct: Scalars["Boolean"]["input"];
   priceMin: Scalars["Int"]["input"];
   priceMax: Scalars["Int"]["input"];
+  sort?: InputMaybe<SearchResultSortParameter>;
 }>;
 
 export type GetFilteredProductsQuery = {
@@ -6584,6 +6585,14 @@ export const GetFilteredProductsDocument = {
             type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
           },
         },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "sort" } },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "SearchResultSortParameter" },
+          },
+        },
       ],
       selectionSet: {
         kind: "SelectionSet",
@@ -6661,6 +6670,14 @@ export const GetFilteredProductsDocument = {
                             },
                           },
                         ],
+                      },
+                    },
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "sort" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "sort" },
                       },
                     },
                   ],

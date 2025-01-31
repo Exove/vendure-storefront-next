@@ -73,9 +73,15 @@
     "title": "404 - Sivua ei löytynyt",
     "description": "Valitettavasti etsimääsi sivua ei löytynyt."
   },
-  "Listing": {
+  "listing": {
     "clearFilters": "Tyhjennä suodattimet",
-    "priceRange": "Hintahaitari",
+    "priceRange": "Hintaväli",
+    "sortBy": "Järjestä",
+    "relevance": "Osuvuus",
+    "nameAsc": "Nimi A-Ö",
+    "nameDesc": "Nimi Ö-A",
+    "priceAsc": "Halvin ensin",
+    "priceDesc": "Kallein ensin",
     "minPrice": "Minimi €",
     "maxPrice": "Maksimi €"
   }
