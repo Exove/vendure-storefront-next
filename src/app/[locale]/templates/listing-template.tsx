@@ -182,7 +182,7 @@ export default function ListingTemplate({
                   handleClearFilters();
                   setPriceRange({ min: null, max: null });
                 }}
-                className="flex items-center gap-2 text-sm text-blue-300 hover:text-blue-100"
+                className="flex items-center gap-2 text-xs text-blue-300 hover:text-blue-100"
               >
                 <div className="rounded-full border border-blue-300">
                   <XMarkIcon className="h-4 w-4" />
@@ -192,11 +192,16 @@ export default function ListingTemplate({
             )}
           </div>
         </div>
-        <form className="flex flex-col gap-2">
-          <PriceRangeFilter
-            priceRange={priceRange}
-            onPriceRangeChange={setPriceRange}
-          />
+        <form className="flex flex-col gap-8">
+          <AccordionItem open>
+            <AccordionTrigger>{t("priceRange")}</AccordionTrigger>
+            <AccordionContent>
+              <PriceRangeFilter
+                priceRange={priceRange}
+                onPriceRangeChange={setPriceRange}
+              />
+            </AccordionContent>
+          </AccordionItem>
 
           {/* Group facets by their facet type (e.g., Color, Size) */}
           {Object.entries(
@@ -211,11 +216,7 @@ export default function ListingTemplate({
             ),
           ).map(([groupName, groupFacets]) => (
             <AccordionItem key={groupName} open>
-              <AccordionTrigger>
-                <h3 className="text-sm font-semibold uppercase tracking-wide text-blue-400">
-                  {groupName}
-                </h3>
-              </AccordionTrigger>
+              <AccordionTrigger>{groupName}</AccordionTrigger>
               <AccordionContent>
                 <div className="flex flex-col gap-2">
                   {groupFacets.map(

@@ -18,14 +18,16 @@ export function AccordionTrigger({ children }: { children: React.ReactNode }) {
   return (
     <summary
       role="button"
-      className="mt-6 flex w-full items-center justify-between gap-3"
+      className="flex w-full items-center justify-between gap-3"
     >
-      <div>{children}</div>
+      <div className="text-sm font-semibold uppercase tracking-wide text-blue-400">
+        {children}
+      </div>
       <ChevronDownIcon className="size-4 shrink-0 stroke-2 text-blue-400 group-open:rotate-180" />
     </summary>
   );
 }
 
 export function AccordionContent({ children }: { children: React.ReactNode }) {
-  return <div className="mt-4 overflow-hidden">{children}</div>;
+  return <div className="mt-4 text-sm">{children}</div>;
 }

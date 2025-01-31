@@ -28,37 +28,32 @@ export default function PriceRangeFilter({
   };
 
   return (
-    <div className="mb-6">
-      <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-blue-400">
-        {t("priceRange")}
-      </h3>
-      <div className="flex gap-4">
-        <div className="flex-1">
-          <label htmlFor="min-price" className="text-xs">
-            {t("minPrice")}
-          </label>
-          <input
-            type="number"
-            id="min-price"
-            value={priceRange.min ?? ""}
-            onChange={handleMinPriceChange}
-            className="mt-1 w-full rounded-md border border-gray-300 px-2 py-1 text-sm text-black"
-            min="0"
-          />
-        </div>
-        <div className="flex-1">
-          <label htmlFor="max-price" className="text-xs">
-            {t("maxPrice")}
-          </label>
-          <input
-            type="number"
-            id="max-price"
-            value={priceRange.max ?? ""}
-            onChange={handleMaxPriceChange}
-            className="mt-1 w-full rounded-md border border-gray-300 px-2 py-1 text-sm text-black"
-            min="0"
-          />
-        </div>
+    <div className="flex gap-4">
+      <div className="flex-1">
+        <label htmlFor="min-price" className="text-xs">
+          {t("minPrice")}
+        </label>
+        <input
+          type="number"
+          id="min-price"
+          value={priceRange.min ?? ""}
+          onChange={handleMinPriceChange}
+          className="mt-1 w-full rounded-md border border-gray-300 px-2 py-1 text-sm text-black"
+          min="0"
+        />
+      </div>
+      <div className="flex-1">
+        <label htmlFor="max-price" className="text-xs">
+          {t("maxPrice")}
+        </label>
+        <input
+          type="number"
+          id="max-price"
+          value={priceRange.max ?? ""}
+          onChange={handleMaxPriceChange}
+          className="mt-1 w-full rounded-md border border-gray-300 px-2 py-1 text-sm text-black"
+          min="0"
+        />
       </div>
     </div>
   );

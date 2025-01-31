@@ -75,8 +75,8 @@
   },
   "Listing": {
     "clearFilters": "Tyhjennä suodattimet",
-    "priceRange": "Hinta",
-    "minPrice": "Minimi",
-    "maxPrice": "Maksimi"
+    "priceRange": "Hintahaitari",
+    "minPrice": "Minimi €",
+    "maxPrice": "Maksimi €"
   }
 }
