@@ -3,7 +3,6 @@
 import {
   FacetValue,
   SearchResult,
-  SortOrder,
   SearchResultSortParameter,
 } from "@/gql/graphql";
 import { useState, useEffect } from "react";
@@ -17,6 +16,7 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@/components/facet-accordion";
+import SortSelect from "@/components/sort-select";
 
 interface ListingTemplateProps {
   products: SearchResult[];
@@ -180,7 +180,7 @@ export default function ListingTemplate({
       <div className="w-[200px]">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="sr-only">Facets</h2>
-          <div className="h-[20px]">
+          <div className="h-[35px]">
             {(hasActiveFilters ||
               priceRange.min !== null ||
               priceRange.max !== null) && (
@@ -265,39 +265,9 @@ export default function ListingTemplate({
 
       {/* Product listing */}
       <div className="flex-1">
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-6 flex items-center justify-end">
           <h1 className="sr-only">Products</h1>
-          <div className="flex items-center gap-4">
-            <label htmlFor="sort" className="text-sm text-gray-600">
-              {t("sortBy")}:
-            </label>
-            <select
-              id="sort"
-              className="rounded-md border border-gray-300 px-3 py-1.5 text-sm text-black"
-              onChange={(e) => {
-                const [field, order] = e.target.value.split("-") as [
-                  "name" | "price",
-                  SortOrder,
-                ];
-                setSortOrder({ [field]: order });
-              }}
-              value={
-                sortOrder.name
-                  ? `name-${sortOrder.name}`
-                  : sortOrder.price
-                    ? `price-${sortOrder.price}`
-                    : ""
-              }
-            >
-              <option value="">{t("relevance")}</option>
-              <option value={`name-${SortOrder.Asc}`}>{t("nameAsc")}</option>
-              <option value={`name-${SortOrder.Desc}`}>{t("nameDesc")}</option>
-              <option value={`price-${SortOrder.Asc}`}>{t("priceAsc")}</option>
-              <option value={`price-${SortOrder.Desc}`}>
-                {t("priceDesc")}
-              </option>
-            </select>
-          </div>
+          <SortSelect sortOrder={sortOrder} onSortChange={setSortOrder} />
         </div>
         <ul className="grid grid-cols-1 gap-x-4 gap-y-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {products.map((product, index) => (
