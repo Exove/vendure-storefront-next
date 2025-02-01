@@ -4,6 +4,7 @@ import ListingTemplate from "./templates/listing-template";
 import { getFilteredProductsAction } from "./actions";
 import { SearchResult } from "@/gql/graphql";
 import { FacetValue } from "@/gql/graphql";
+import { PRODUCTS_PER_LOAD } from "@/common/constants";
 
 type Params = Promise<{ locale: string }>;
 
@@ -15,7 +16,13 @@ export default async function Home(props: { params: Params }) {
   //   productsQuery,
   // );
 
-  const filteredProducts = await getFilteredProductsAction("", 0, 1, [], true);
+  const filteredProducts = await getFilteredProductsAction(
+    "",
+    0,
+    PRODUCTS_PER_LOAD,
+    [],
+    true,
+  );
 
   console.log("filteredProducts", filteredProducts);
 

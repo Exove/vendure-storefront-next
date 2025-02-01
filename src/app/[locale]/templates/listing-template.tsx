@@ -137,10 +137,13 @@ export default function ListingTemplate({
           return acc;
         }, []);
 
+      // On initial load with skip > 0, fetch all products up to current skip
+      const isInitialLoadWithSkip =
+        skip > 0 && products.length === initialProducts.length;
       const results = await getFilteredProductsAction(
         "",
-        skip,
-        take,
+        isInitialLoadWithSkip ? 0 : skip,
+        isInitialLoadWithSkip ? skip + take : take,
         facetFilters,
         true,
         // Convert euros to cents for the API
@@ -150,10 +153,13 @@ export default function ListingTemplate({
       );
 
       // If results are less than take, there's nothing more to load
-      setHasMore(results.items.length === take);
+      setHasMore(
+        results.items.length === (isInitialLoadWithSkip ? skip + take : take),
+      );
 
-      // If skip is 0, replace products, otherwise append new products to the list
-      if (skip === 0) {
+      // If skip is 0 or it's initial load with skip, replace products
+      // otherwise append new products to the list
+      if (skip === 0 || isInitialLoadWithSkip) {
         setProducts(results.items as SearchResult[]);
       } else {
         setProducts((prev) => [...prev, ...(results.items as SearchResult[])]);
