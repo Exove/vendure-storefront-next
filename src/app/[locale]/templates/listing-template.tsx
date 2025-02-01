@@ -175,7 +175,28 @@ export default function ListingTemplate({
       if (skip === 0) {
         setProducts(results.items as SearchResult[]);
       } else {
-        setProducts((prev) => [...prev, ...(results.items as SearchResult[])]);
+        // When reloading with skip in URL, we need to fetch all previous items too
+        const shouldFetchAll =
+          skip > 0 && products.length === initialProducts.length;
+        if (shouldFetchAll) {
+          // Fetch all products from beginning to current skip + take
+          const allResults = await getFilteredProductsAction(
+            "",
+            0,
+            skip + take,
+            facetFilters,
+            true,
+            priceRange.min !== null ? priceRange.min * 100 : null,
+            priceRange.max !== null ? priceRange.max * 100 : null,
+            sortOrder,
+          );
+          setProducts(allResults.items as SearchResult[]);
+        } else {
+          setProducts((prev) => [
+            ...prev,
+            ...(results.items as SearchResult[]),
+          ]);
+        }
       }
 
       // If results are empty and we have more than one facet group selected,
@@ -212,7 +233,16 @@ export default function ListingTemplate({
     };
 
     fetchProducts();
-  }, [selectedFacets, firstSelectedGroup, priceRange, sortOrder, skip, take]);
+  }, [
+    selectedFacets,
+    firstSelectedGroup,
+    priceRange,
+    sortOrder,
+    skip,
+    take,
+    products.length,
+    initialProducts.length,
+  ]);
 
   // Handle facet checkbox changes
   const handleFacetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
