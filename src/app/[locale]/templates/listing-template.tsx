@@ -74,10 +74,6 @@ export default function ListingTemplate({
     return {};
   };
 
-  const getInitialSkip = () => {
-    return searchParams.get("skip") ? Number(searchParams.get("skip")) : 0;
-  };
-
   const getInitialFirstSelectedGroup = () => {
     return searchParams.get("first_group");
   };
@@ -98,9 +94,6 @@ export default function ListingTemplate({
   const [sortOrder, setSortOrder] = useState<SearchResultSortParameter>(
     getInitialSortOrder(),
   );
-  const [skip, setSkip] = useState(getInitialSkip());
-  const [take] = useState(PRODUCTS_PER_LOAD);
-  const [hasMore, setHasMore] = useState(true);
 
   // Update URL when state changes
   useEffect(() => {
@@ -128,9 +121,6 @@ export default function ListingTemplate({
       }
     }
 
-    // Add skip to URL
-    if (skip > 0) params.set("skip", skip.toString());
-
     // Add first selected group to URL
     if (firstSelectedGroup) {
       params.set("first_group", firstSelectedGroup);
@@ -139,7 +129,7 @@ export default function ListingTemplate({
     // Update URL without triggering a page reload
     const newUrl = `${window.location.pathname}${params.toString() ? "?" + params.toString() : ""}`;
     window.history.replaceState({}, "", newUrl);
-  }, [selectedFacets, priceRange, sortOrder, skip, firstSelectedGroup]);
+  }, [selectedFacets, priceRange, sortOrder, firstSelectedGroup]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -158,8 +148,8 @@ export default function ListingTemplate({
 
       const results = await getFilteredProductsAction(
         "",
-        skip,
-        take,
+        0,
+        PRODUCTS_PER_LOAD,
         facetFilters,
         true,
         // Convert euros to cents for the API
@@ -168,36 +158,7 @@ export default function ListingTemplate({
         sortOrder,
       );
 
-      // If results are less than take, there's nothing more to load
-      setHasMore(results.items.length === take);
-
-      // If skip is 0, replace products, otherwise append new products to the list
-      if (skip === 0) {
-        setProducts(results.items as SearchResult[]);
-      } else {
-        // When reloading with skip in URL, we need to fetch all previous items too
-        const shouldFetchAll =
-          skip > 0 && products.length === initialProducts.length;
-        if (shouldFetchAll) {
-          // Fetch all products from beginning to current skip + take
-          const allResults = await getFilteredProductsAction(
-            "",
-            0,
-            skip + take,
-            facetFilters,
-            true,
-            priceRange.min !== null ? priceRange.min * 100 : null,
-            priceRange.max !== null ? priceRange.max * 100 : null,
-            sortOrder,
-          );
-          setProducts(allResults.items as SearchResult[]);
-        } else {
-          setProducts((prev) => [
-            ...prev,
-            ...(results.items as SearchResult[]),
-          ]);
-        }
-      }
+      setProducts(results.items as SearchResult[]);
 
       // If results are empty and we have more than one facet group selected,
       // keep only the first selected group
@@ -235,7 +196,7 @@ export default function ListingTemplate({
     fetchProducts();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedFacets, firstSelectedGroup, priceRange, sortOrder, skip, take]);
+  }, [selectedFacets, firstSelectedGroup, priceRange, sortOrder]);
 
   // Handle facet checkbox changes
   const handleFacetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -244,7 +205,6 @@ export default function ListingTemplate({
       facets.find((f) => f.facetValue.id === facetId)?.facetValue.facet.name ||
       "";
 
-    setSkip(0); // Reset skip when filters are changed
     setSelectedFacets((prev) => {
       const groupFacets = prev[groupName] || [];
       return {
@@ -296,7 +256,6 @@ export default function ListingTemplate({
     setProducts(initialProducts);
     setCurrentFacets(facets);
     setPriceRange({ min: null, max: null });
-    setSkip(0); // Reset skip when filters are cleared
   };
 
   const hasActiveFilters = Object.values(selectedFacets).some(
@@ -427,17 +386,6 @@ export default function ListingTemplate({
               </li>
             ))}
           </ul>
-          {hasMore && (
-            <div className="mt-8 flex justify-center">
-              <button
-                onClick={() => setSkip((prev) => prev + take)}
-                className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 disabled:opacity-50"
-                disabled={isLoading}
-              >
-                {isLoading ? t("loading") : t("showMore")}
-              </button>
-            </div>
-          )}
         </div>
       </div>
     </div>
