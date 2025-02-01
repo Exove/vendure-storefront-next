@@ -25,7 +25,7 @@ export default async function RootLayout({
         <body
           className={`${inter.variable} flex min-h-screen flex-col bg-slate-900 font-sans text-slate-100`}
         >
-          <div className="flex-grow">{children}</div>
+          <div className="mt-2 flex-grow">{children}</div>
           <Footer />
           <Toaster />
         </body>

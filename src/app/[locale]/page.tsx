@@ -36,6 +36,7 @@ export default async function Home(props: { params: Params }) {
           }[]
         }
         products={filteredProducts.items as SearchResult[]}
+        title="Elektronikka ja kodinkoneet"
       />
     </Container>
   );

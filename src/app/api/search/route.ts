@@ -6,10 +6,19 @@ const apiConfig = {
     host: process.env.NEXT_PUBLIC_ELASTICSEARCH_HOST || "http://localhost:9200",
   },
   search_settings: {
+    analysis: {
+      analyzer: {
+        finnish_analyzer: {
+          type: "custom",
+          tokenizer: "standard",
+          filter: ["lowercase", "finnish_stop", "finnish_stemmer"],
+        },
+      },
+    },
     search_attributes: [
-      { field: "productName", weight: 5 },
+      { field: "productName", weight: 5, analyzer: "finnish_analyzer" },
       { field: "productName.keyword", weight: 10 },
-      { field: "description", weight: 1 },
+      { field: "description", weight: 1, analyzer: "finnish_analyzer" },
     ],
     result_attributes: [
       "productName",

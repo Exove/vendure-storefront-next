@@ -25,11 +25,13 @@ interface ListingTemplateProps {
     count: number;
     facetValue: FacetValue;
   }[];
+  title?: string;
 }
 
 export default function ListingTemplate({
   products: initialProducts,
   facets,
+  title,
 }: ListingTemplateProps) {
   const t = useTranslations("listing");
   const [selectedFacets, setSelectedFacets] = useState<
@@ -194,134 +196,141 @@ export default function ListingTemplate({
   );
 
   return (
-    <div className="mt-10 flex gap-10">
-      <div className="w-[200px]">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="sr-only">Facets</h2>
-          <div className="h-[35px]">
-            {(hasActiveFilters ||
-              priceRange.min !== null ||
-              priceRange.max !== null) && (
-              <button
-                onClick={() => {
-                  handleClearFilters();
-                  setPriceRange({ min: null, max: null });
-                }}
-                className="flex items-center gap-2 text-xs text-blue-300 hover:text-blue-100"
-              >
-                <div className="rounded-full border border-blue-300">
-                  <XMarkIcon className="h-4 w-4" />
-                </div>
-                {t("clearFilters")}
-              </button>
-            )}
-          </div>
+    <div>
+      {title && (
+        <div className="mb-16 mt-6 rounded-xl bg-slate-800 px-10 py-24 text-center">
+          <h1 className="text-4xl font-black">{title}</h1>
         </div>
-        <form className="flex flex-col gap-8">
-          <AccordionItem open>
-            <AccordionTrigger>{t("priceRange")}</AccordionTrigger>
-            <AccordionContent>
-              <PriceRangeFilter
-                priceRange={priceRange}
-                onPriceRangeChange={setPriceRange}
-              />
-            </AccordionContent>
-          </AccordionItem>
-
-          {/* Group facets by their facet type (e.g., Color, Size) */}
-          {Object.entries(
-            facets.reduce(
-              (acc, { facetValue }) => {
-                const group = facetValue.facet.name;
-                acc[group] = acc[group] || [];
-                acc[group].push(facetValue);
-                return acc;
-              },
-              {} as Record<string, FacetValue[]>,
-            ),
-          ).map(([groupName, groupFacets]) => {
-            const hasVisibleFacets = groupFacets.some((facetValue) =>
-              shouldShowFacet(groupName, facetValue),
-            );
-
-            return hasVisibleFacets ? (
-              <AccordionItem key={groupName} open>
-                <AccordionTrigger>{groupName}</AccordionTrigger>
-                <AccordionContent>
-                  <div className="flex flex-col gap-2">
-                    {groupFacets.map(
-                      (facetValue) =>
-                        shouldShowFacet(groupName, facetValue) && (
-                          <div
-                            key={facetValue.id}
-                            className="flex items-center justify-between gap-2"
-                          >
-                            <div className="flex items-center gap-2">
-                              <input
-                                type="checkbox"
-                                id={facetValue.id}
-                                value={facetValue.id}
-                                name={facetValue.name}
-                                onChange={handleFacetChange}
-                                checked={
-                                  selectedFacets[groupName]?.includes(
-                                    facetValue.id,
-                                  ) || false
-                                }
-                              />
-                              <label htmlFor={facetValue.id}>
-                                {facetValue.name}
-                              </label>
-                            </div>
-                            <span className="text-slate-400">
-                              {getFacetCount(facetValue.id, groupName)}
-                            </span>
-                          </div>
-                        ),
-                    )}
+      )}
+      <div className="mt-10 flex gap-16">
+        <div className="w-[200px]">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="sr-only">Facets</h2>
+            <div className="h-[35px]">
+              {(hasActiveFilters ||
+                priceRange.min !== null ||
+                priceRange.max !== null) && (
+                <button
+                  onClick={() => {
+                    handleClearFilters();
+                    setPriceRange({ min: null, max: null });
+                  }}
+                  className="flex items-center gap-2 text-xs text-blue-300 hover:text-blue-100"
+                >
+                  <div className="rounded-full border border-blue-300">
+                    <XMarkIcon className="h-4 w-4" />
                   </div>
-                </AccordionContent>
-              </AccordionItem>
-            ) : null;
-          })}
-        </form>
-      </div>
-
-      {/* Product listing */}
-      <div className="flex-1">
-        <div className="mb-6 flex items-center justify-end">
-          <h1 className="sr-only">Products</h1>
-          <SortSelect sortOrder={sortOrder} onSortChange={setSortOrder} />
-        </div>
-        <ul className="grid grid-cols-1 gap-x-4 gap-y-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {products.map((product, index) => (
-            <li key={index}>
-              {product.slug && (
-                <ProductCard
-                  slug={product.slug}
-                  name={product.productName}
-                  imageSource={product.productAsset?.preview ?? ""}
-                  priceWithTax={
-                    "min" in product.priceWithTax
-                      ? product.priceWithTax.min
-                      : product.priceWithTax.value
-                  }
-                />
+                  {t("clearFilters")}
+                </button>
               )}
-            </li>
-          ))}
-        </ul>
-        {hasMore && (
-          <div className="mt-8 flex justify-center">
-            <button
-              onClick={() => setSkip((prev) => prev + take)}
-              className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 disabled:opacity-50"
-              disabled={isLoading}
-            >
-              {isLoading ? t("loading") : t("showMore")}
-            </button>
+            </div>
           </div>
-        )}
+          <form className="flex flex-col gap-8">
+            <AccordionItem open>
+              <AccordionTrigger>{t("priceRange")}</AccordionTrigger>
+              <AccordionContent>
+                <PriceRangeFilter
+                  priceRange={priceRange}
+                  onPriceRangeChange={setPriceRange}
+                />
+              </AccordionContent>
+            </AccordionItem>
+
+            {/* Group facets by their facet type (e.g., Color, Size) */}
+            {Object.entries(
+              facets.reduce(
+                (acc, { facetValue }) => {
+                  const group = facetValue.facet.name;
+                  acc[group] = acc[group] || [];
+                  acc[group].push(facetValue);
+                  return acc;
+                },
+                {} as Record<string, FacetValue[]>,
+              ),
+            ).map(([groupName, groupFacets]) => {
+              const hasVisibleFacets = groupFacets.some((facetValue) =>
+                shouldShowFacet(groupName, facetValue),
+              );
+
+              return hasVisibleFacets ? (
+                <AccordionItem key={groupName} open>
+                  <AccordionTrigger>{groupName}</AccordionTrigger>
+                  <AccordionContent>
+                    <div className="flex flex-col gap-2">
+                      {groupFacets.map(
+                        (facetValue) =>
+                          shouldShowFacet(groupName, facetValue) && (
+                            <div
+                              key={facetValue.id}
+                              className="flex items-center justify-between gap-2"
+                            >
+                              <div className="flex items-center gap-2">
+                                <input
+                                  type="checkbox"
+                                  id={facetValue.id}
+                                  value={facetValue.id}
+                                  name={facetValue.name}
+                                  onChange={handleFacetChange}
+                                  checked={
+                                    selectedFacets[groupName]?.includes(
+                                      facetValue.id,
+                                    ) || false
+                                  }
+                                />
+                                <label htmlFor={facetValue.id}>
+                                  {facetValue.name}
+                                </label>
+                              </div>
+                              <span className="text-slate-400">
+                                {getFacetCount(facetValue.id, groupName)}
+                              </span>
+                            </div>
+                          ),
+                      )}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              ) : null;
+            })}
+          </form>
+        </div>
+
+        {/* Product listing */}
+        <div className="flex-1">
+          <div className="mb-6 flex items-center justify-end">
+            <h1 className="sr-only">Products</h1>
+            <SortSelect sortOrder={sortOrder} onSortChange={setSortOrder} />
+          </div>
+          <ul className="grid grid-cols-1 gap-x-4 gap-y-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {products.map((product, index) => (
+              <li key={index}>
+                {product.slug && (
+                  <ProductCard
+                    slug={product.slug}
+                    name={product.productName}
+                    imageSource={product.productAsset?.preview ?? ""}
+                    priceWithTax={
+                      "min" in product.priceWithTax
+                        ? product.priceWithTax.min
+                        : product.priceWithTax.value
+                    }
+                  />
+                )}
+              </li>
+            ))}
+          </ul>
+          {hasMore && (
+            <div className="mt-8 flex justify-center">
+              <button
+                onClick={() => setSkip((prev) => prev + take)}
+                className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 disabled:opacity-50"
+                disabled={isLoading}
+              >
+                {isLoading ? t("loading") : t("showMore")}
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

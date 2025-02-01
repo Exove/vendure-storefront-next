@@ -121,7 +121,7 @@ function SearchComponent() {
           {isOpen && query.trim().length > 0 && (
             <ComboboxOptions
               static
-              className="absolute z-50 mt-1 max-h-96 w-full overflow-auto rounded-md bg-slate-800 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+              className="absolute z-50 mt-1 max-h-96 w-full overflow-auto rounded-md bg-slate-800 py-1 shadow-xl shadow-slate-900/50 ring-1 ring-black ring-opacity-5 focus:outline-none"
             >
               {uniqueHits.length === 0 ? (
                 <div className="px-4 py-2 text-sm text-gray-400">
