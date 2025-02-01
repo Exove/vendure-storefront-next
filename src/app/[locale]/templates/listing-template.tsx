@@ -5,7 +5,7 @@ import {
   SearchResult,
   SearchResultSortParameter,
 } from "@/gql/graphql";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { getFilteredProductsAction } from "../actions";
 import ProductCard from "@/components/product-card";
 import { XMarkIcon } from "@heroicons/react/20/solid";
@@ -18,7 +18,6 @@ import {
 } from "@/components/facet-accordion";
 import SortSelect from "@/components/sort-select";
 import { PRODUCTS_PER_LOAD } from "@/common/constants";
-import { useSearchParams } from "next/navigation";
 
 interface ListingTemplateProps {
   products: SearchResult[];
@@ -35,36 +34,16 @@ export default function ListingTemplate({
   title,
 }: ListingTemplateProps) {
   const t = useTranslations("listing");
-  const searchParams = useSearchParams();
-
-  // Parse initial facets from URL
-  const getInitialFacets = () => {
-    const params = new URLSearchParams(searchParams.toString());
-    const facetParams: Record<string, string[]> = {};
-
-    for (const [key, value] of params.entries()) {
-      if (key.startsWith("facet_")) {
-        const groupName = key.replace("facet_", "");
-        facetParams[groupName] = value.split(",");
-      }
-    }
-
-    return facetParams;
-  };
-
-  // Parse initial price range from URL
-  const getInitialPriceRange = () => {
-    const min = searchParams.get("price_min");
-    const max = searchParams.get("price_max");
-    return {
-      min: min ? Number(min) : null,
-      max: max ? Number(max) : null,
-    };
-  };
-
-  const [selectedFacets, setSelectedFacets] =
-    useState<Record<string, string[]>>(getInitialFacets());
-  const [priceRange, setPriceRange] = useState(getInitialPriceRange());
+  const [selectedFacets, setSelectedFacets] = useState<
+    Record<string, string[]>
+  >({});
+  const [priceRange, setPriceRange] = useState<{
+    min: number | null;
+    max: number | null;
+  }>({
+    min: null,
+    max: null,
+  });
   const [products, setProducts] = useState(initialProducts);
   const [currentFacets, setCurrentFacets] = useState(facets);
   const [originalFacets] = useState(facets);
@@ -215,31 +194,6 @@ export default function ListingTemplate({
   const hasActiveFilters = Object.values(selectedFacets).some(
     (group) => group.length > 0,
   );
-
-  // Update URL when filters change
-  const updateUrl = useCallback(() => {
-    const params = new URLSearchParams();
-
-    Object.entries(selectedFacets).forEach(([groupName, values]) => {
-      if (values.length > 0) {
-        params.set(`facet_${groupName}`, values.join(","));
-      }
-    });
-
-    if (priceRange.min !== null) {
-      params.set("price_min", priceRange.min.toString());
-    }
-    if (priceRange.max !== null) {
-      params.set("price_max", priceRange.max.toString());
-    }
-
-    const newUrl = `${window.location.pathname}${params.toString() ? "?" + params.toString() : ""}`;
-    window.history.pushState({}, "", newUrl);
-  }, [selectedFacets, priceRange]);
-
-  useEffect(() => {
-    updateUrl();
-  }, [updateUrl]);
 
   return (
     <div>
