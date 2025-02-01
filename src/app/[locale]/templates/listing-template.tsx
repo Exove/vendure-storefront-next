@@ -5,7 +5,7 @@ import {
   SearchResult,
   SearchResultSortParameter,
 } from "@/gql/graphql";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { getFilteredProductsAction } from "../actions";
 import ProductCard from "@/components/product-card";
 import { XMarkIcon } from "@heroicons/react/20/solid";
@@ -18,7 +18,6 @@ import {
 } from "@/components/facet-accordion";
 import SortSelect from "@/components/sort-select";
 import { PRODUCTS_PER_LOAD } from "@/common/constants";
-import { useSearchParams, usePathname, useRouter } from "next/navigation";
 
 interface ListingTemplateProps {
   products: SearchResult[];
@@ -35,9 +34,6 @@ export default function ListingTemplate({
   title,
 }: ListingTemplateProps) {
   const t = useTranslations("listing");
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const router = useRouter();
   const [selectedFacets, setSelectedFacets] = useState<
     Record<string, string[]>
   >({});
@@ -59,34 +55,6 @@ export default function ListingTemplate({
   const [skip, setSkip] = useState(0);
   const [take] = useState(PRODUCTS_PER_LOAD);
   const [hasMore, setHasMore] = useState(true);
-
-  // Add helper function to update URL params
-  const updateUrlParams = useCallback(
-    (
-      newFacets: Record<string, string[]>,
-      newPriceRange: { min: number | null; max: number | null },
-    ) => {
-      const params = new URLSearchParams();
-
-      // Add facet params
-      Object.entries(newFacets).forEach(([groupName, values]) => {
-        if (values.length > 0) {
-          params.set(groupName.toLowerCase(), values.join(","));
-        }
-      });
-
-      // Add price range params
-      if (newPriceRange.min !== null) {
-        params.set("minPrice", newPriceRange.min.toString());
-      }
-      if (newPriceRange.max !== null) {
-        params.set("maxPrice", newPriceRange.max.toString());
-      }
-
-      router.push(`${pathname}?${params.toString()}`);
-    },
-    [pathname, router],
-  );
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -161,23 +129,23 @@ export default function ListingTemplate({
     fetchProducts();
   }, [selectedFacets, firstSelectedGroup, priceRange, sortOrder, skip, take]);
 
-  // Update handleFacetChange to include URL param updates
+  // Handle facet checkbox changes
   const handleFacetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const facetId = e.target.value;
     const groupName =
       facets.find((f) => f.facetValue.id === facetId)?.facetValue.facet.name ||
       "";
 
-    setSkip(0);
-    const newFacets = {
-      ...selectedFacets,
-      [groupName]: e.target.checked
-        ? [...(selectedFacets[groupName] || []), facetId]
-        : (selectedFacets[groupName] || []).filter((id) => id !== facetId),
-    };
-
-    setSelectedFacets(newFacets);
-    updateUrlParams(newFacets, priceRange);
+    setSkip(0); // Reset skip when filters are changed
+    setSelectedFacets((prev) => {
+      const groupFacets = prev[groupName] || [];
+      return {
+        ...prev,
+        [groupName]: e.target.checked
+          ? [...groupFacets, facetId]
+          : groupFacets.filter((id) => id !== facetId),
+      };
+    });
   };
 
   // Determine whether a facet should be displayed based on current filters
@@ -214,53 +182,14 @@ export default function ListingTemplate({
     return currentFacets.find((f) => f.facetValue.id === facetId)?.count || "";
   };
 
-  // Update handleClearFilters to clear URL params
   const handleClearFilters = () => {
     setSelectedFacets({});
     setFirstSelectedGroup(null);
     setProducts(initialProducts);
     setCurrentFacets(facets);
     setPriceRange({ min: null, max: null });
-    setSkip(0);
-    router.push(pathname);
+    setSkip(0); // Reset skip when filters are cleared
   };
-
-  // Add effect to initialize filters from URL params on mount
-  useEffect(() => {
-    const initializeFromUrl = () => {
-      const newFacets: Record<string, string[]> = {};
-      const newPriceRange = {
-        min: null as number | null,
-        max: null as number | null,
-      };
-
-      // Parse facets from URL
-      for (const [key, value] of searchParams.entries()) {
-        if (key === "minPrice") {
-          newPriceRange.min = parseFloat(value);
-        } else if (key === "maxPrice") {
-          newPriceRange.max = parseFloat(value);
-        } else {
-          // Find the matching facet group (case insensitive)
-          const groupName = Object.keys(selectedFacets).find(
-            (name) => name.toLowerCase() === key.toLowerCase(),
-          );
-          if (groupName) {
-            newFacets[groupName] = value.split(",");
-          }
-        }
-      }
-
-      if (Object.keys(newFacets).length > 0) {
-        setSelectedFacets(newFacets);
-      }
-      if (newPriceRange.min !== null || newPriceRange.max !== null) {
-        setPriceRange(newPriceRange);
-      }
-    };
-
-    initializeFromUrl();
-  }, [searchParams, selectedFacets]);
 
   const hasActiveFilters = Object.values(selectedFacets).some(
     (group) => group.length > 0,
