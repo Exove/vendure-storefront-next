@@ -18,7 +18,6 @@ import {
 } from "@/components/facet-accordion";
 import SortSelect from "@/components/sort-select";
 import { PRODUCTS_PER_LOAD } from "@/common/constants";
-import { useSearchParams, usePathname } from "next/navigation";
 
 interface ListingTemplateProps {
   products: SearchResult[];
@@ -35,35 +34,16 @@ export default function ListingTemplate({
   title,
 }: ListingTemplateProps) {
   const t = useTranslations("listing");
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  // Initialize state from URL params
   const [selectedFacets, setSelectedFacets] = useState<
     Record<string, string[]>
-  >(() => {
-    const facetsFromUrl: Record<string, string[]> = {};
-    for (const [key, value] of searchParams.entries()) {
-      if (key.startsWith("facet_")) {
-        const groupName = key.replace("facet_", "");
-        facetsFromUrl[groupName] = value.split(",");
-      }
-    }
-    return facetsFromUrl;
-  });
-
+  >({});
   const [priceRange, setPriceRange] = useState<{
     min: number | null;
     max: number | null;
-  }>(() => ({
-    min: searchParams.get("min_price")
-      ? Number(searchParams.get("min_price"))
-      : null,
-    max: searchParams.get("max_price")
-      ? Number(searchParams.get("max_price"))
-      : null,
-  }));
-
+  }>({
+    min: null,
+    max: null,
+  });
   const [products, setProducts] = useState(initialProducts);
   const [currentFacets, setCurrentFacets] = useState(facets);
   const [originalFacets] = useState(facets);
@@ -71,59 +51,10 @@ export default function ListingTemplate({
     null,
   );
   const [isLoading, setIsLoading] = useState(false);
-  const [sortOrder, setSortOrder] = useState<SearchResultSortParameter>(() => {
-    const sortParam = searchParams.get("sort");
-    if (!sortParam) return {};
-    const [field, order] = sortParam.split("_");
-    return { [field]: order };
-  });
-
-  const [skip, setSkip] = useState(() => {
-    return searchParams.get("page")
-      ? (Number(searchParams.get("page")) - 1) * PRODUCTS_PER_LOAD
-      : 0;
-  });
+  const [sortOrder, setSortOrder] = useState<SearchResultSortParameter>({});
+  const [skip, setSkip] = useState(0);
   const [take] = useState(PRODUCTS_PER_LOAD);
   const [hasMore, setHasMore] = useState(true);
-
-  // Update URL when filters change
-  useEffect(() => {
-    const params = new URLSearchParams();
-
-    // Add facets to URL
-    Object.entries(selectedFacets).forEach(([groupName, values]) => {
-      if (values.length > 0) {
-        params.set(`facet_${groupName}`, values.join(","));
-      }
-    });
-
-    // Add price range to URL
-    if (priceRange.min !== null)
-      params.set("min_price", priceRange.min.toString());
-    if (priceRange.max !== null)
-      params.set("max_price", priceRange.max.toString());
-
-    // Add sort to URL
-    if (Object.keys(sortOrder).length > 0) {
-      const [field, order] = Object.entries(sortOrder)[0];
-      params.set("sort", `${field}_${order}`);
-    }
-
-    // Add pagination to URL
-    const page = Math.floor(skip / take) + 1;
-    if (page > 1) params.set("page", page.toString());
-
-    // Update URL without triggering navigation
-    const newUrl = `${pathname}${params.toString() ? "?" + params.toString() : ""}`;
-    window.history.replaceState({}, "", newUrl);
-  }, [selectedFacets, priceRange, sortOrder, skip, take, pathname]);
-
-  // Restore scroll position when navigating back
-  useEffect(() => {
-    if ("scrollRestoration" in window.history) {
-      window.history.scrollRestoration = "auto";
-    }
-  }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -257,9 +188,7 @@ export default function ListingTemplate({
     setProducts(initialProducts);
     setCurrentFacets(facets);
     setPriceRange({ min: null, max: null });
-    setSkip(0);
-    // Clear URL params
-    window.history.replaceState({}, "", pathname);
+    setSkip(0); // Reset skip when filters are cleared
   };
 
   const hasActiveFilters = Object.values(selectedFacets).some(
