@@ -233,16 +233,9 @@ export default function ListingTemplate({
     };
 
     fetchProducts();
-  }, [
-    selectedFacets,
-    firstSelectedGroup,
-    priceRange,
-    sortOrder,
-    skip,
-    take,
-    products.length,
-    initialProducts.length,
-  ]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedFacets, firstSelectedGroup, priceRange, sortOrder, skip, take]);
 
   // Handle facet checkbox changes
   const handleFacetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
