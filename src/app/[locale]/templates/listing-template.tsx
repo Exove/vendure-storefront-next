@@ -88,12 +88,8 @@ export default function ListingTemplate({
     min: number | null;
     max: number | null;
   }>(getInitialPriceRange());
-  const [products, setProducts] = useState(
-    Object.keys(selectedFacets).length > 0 ? [] : initialProducts,
-  );
-  const [currentFacets, setCurrentFacets] = useState(
-    Object.keys(selectedFacets).length > 0 ? [] : facets,
-  );
+  const [products, setProducts] = useState(initialProducts);
+  const [currentFacets, setCurrentFacets] = useState(facets);
   const [originalFacets] = useState(facets);
   const [firstSelectedGroup, setFirstSelectedGroup] = useState<string | null>(
     getInitialFirstSelectedGroup(),
