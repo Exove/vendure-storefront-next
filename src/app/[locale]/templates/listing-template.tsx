@@ -4,6 +4,7 @@ import {
   FacetValue,
   SearchResult,
   SearchResultSortParameter,
+  SortOrder,
 } from "@/gql/graphql";
 import { useState, useEffect } from "react";
 import { getFilteredProductsAction } from "../actions";
@@ -18,6 +19,7 @@ import {
 } from "@/components/facet-accordion";
 import SortSelect from "@/components/sort-select";
 import { PRODUCTS_PER_LOAD } from "@/common/constants";
+import { useSearchParams } from "next/navigation";
 
 interface ListingTemplateProps {
   products: SearchResult[];
@@ -34,27 +36,110 @@ export default function ListingTemplate({
   title,
 }: ListingTemplateProps) {
   const t = useTranslations("listing");
-  const [selectedFacets, setSelectedFacets] = useState<
-    Record<string, string[]>
-  >({});
+  const searchParams = useSearchParams();
+
+  // Parse URL parameters
+  const getInitialFacets = () => {
+    const facetsFromUrl: Record<string, string[]> = {};
+    searchParams.forEach((value, key) => {
+      if (key.startsWith("facet_")) {
+        const groupName = key.replace("facet_", "");
+        facetsFromUrl[groupName] = value.split(",");
+      }
+    });
+    return facetsFromUrl;
+  };
+
+  const getInitialPriceRange = () => {
+    return {
+      min: searchParams.get("min_price")
+        ? Number(searchParams.get("min_price"))
+        : null,
+      max: searchParams.get("max_price")
+        ? Number(searchParams.get("max_price"))
+        : null,
+    };
+  };
+
+  const getInitialSortOrder = () => {
+    const sort = searchParams.get("sort");
+    const order = searchParams.get("order");
+    if (
+      sort &&
+      order &&
+      (order === SortOrder.Asc || order === SortOrder.Desc)
+    ) {
+      return { [sort]: order };
+    }
+    return {};
+  };
+
+  const getInitialSkip = () => {
+    return searchParams.get("skip") ? Number(searchParams.get("skip")) : 0;
+  };
+
+  const getInitialFirstSelectedGroup = () => {
+    return searchParams.get("first_group");
+  };
+
+  const [selectedFacets, setSelectedFacets] =
+    useState<Record<string, string[]>>(getInitialFacets());
   const [priceRange, setPriceRange] = useState<{
     min: number | null;
     max: number | null;
-  }>({
-    min: null,
-    max: null,
-  });
+  }>(getInitialPriceRange());
   const [products, setProducts] = useState(initialProducts);
   const [currentFacets, setCurrentFacets] = useState(facets);
   const [originalFacets] = useState(facets);
   const [firstSelectedGroup, setFirstSelectedGroup] = useState<string | null>(
-    null,
+    getInitialFirstSelectedGroup(),
   );
   const [isLoading, setIsLoading] = useState(false);
-  const [sortOrder, setSortOrder] = useState<SearchResultSortParameter>({});
-  const [skip, setSkip] = useState(0);
+  const [sortOrder, setSortOrder] = useState<SearchResultSortParameter>(
+    getInitialSortOrder(),
+  );
+  const [skip, setSkip] = useState(getInitialSkip());
   const [take] = useState(PRODUCTS_PER_LOAD);
   const [hasMore, setHasMore] = useState(true);
+
+  // Update URL when state changes
+  useEffect(() => {
+    const params = new URLSearchParams();
+
+    // Add facets to URL
+    Object.entries(selectedFacets).forEach(([groupName, values]) => {
+      if (values.length > 0) {
+        params.set(`facet_${groupName}`, values.join(","));
+      }
+    });
+
+    // Add price range to URL
+    if (priceRange.min !== null)
+      params.set("min_price", priceRange.min.toString());
+    if (priceRange.max !== null)
+      params.set("max_price", priceRange.max.toString());
+
+    // Add sort order to URL
+    if (Object.keys(sortOrder).length > 0) {
+      const [sort, order] = Object.entries(sortOrder)[0];
+      if (order) {
+        params.set("sort", sort);
+        params.set("order", order.toString());
+      }
+    }
+
+    // Add skip to URL
+    if (skip > 0) params.set("skip", skip.toString());
+
+    // Add first selected group to URL
+    if (firstSelectedGroup) {
+      params.set("first_group", firstSelectedGroup);
+    }
+
+    // Update URL without triggering a page reload
+    const newUrl = `${window.location.pathname}${params.toString() ? "?" + params.toString() : ""}`;
+    window.history.replaceState({}, "", newUrl);
+  }, [selectedFacets, priceRange, sortOrder, skip, firstSelectedGroup]);
 
   useEffect(() => {
     const fetchProducts = async () => {
