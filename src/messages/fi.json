@@ -87,6 +87,9 @@
     "minPrice": "Minimi €",
     "maxPrice": "Maksimi €",
     "showMore": "Näytä lisää",
-    "loading": "Ladataan..."
+    "loading": "Ladataan...",
+    "previousPage": "Edellinen sivu",
+    "nextPage": "Seuraava sivu",
+    "page": "Sivu"
   }
 }

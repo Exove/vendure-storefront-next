@@ -18,7 +18,7 @@ import {
   AccordionContent,
 } from "@/components/facet-accordion";
 import SortSelect from "@/components/sort-select";
-import { PRODUCTS_PER_LOAD } from "@/common/constants";
+import { PRODUCTS_PER_PAGE } from "@/common/constants";
 import { useSearchParams } from "next/navigation";
 
 interface ListingTemplateProps {
@@ -78,12 +78,18 @@ export default function ListingTemplate({
     return searchParams.get("first_group");
   };
 
+  const getInitialPage = () => {
+    const page = searchParams.get("page");
+    return page ? parseInt(page) : 1;
+  };
+
   const [selectedFacets, setSelectedFacets] =
     useState<Record<string, string[]>>(getInitialFacets());
   const [priceRange, setPriceRange] = useState<{
     min: number | null;
     max: number | null;
   }>(getInitialPriceRange());
+  const [currentPage, setCurrentPage] = useState(getInitialPage());
   const [products, setProducts] = useState(initialProducts);
   const [currentFacets, setCurrentFacets] = useState(facets);
   const [originalFacets] = useState(facets);
@@ -126,10 +132,13 @@ export default function ListingTemplate({
       params.set("first_group", firstSelectedGroup);
     }
 
+    // Add page to URL
+    params.set("page", currentPage.toString());
+
     // Update URL without triggering a page reload
     const newUrl = `${window.location.pathname}${params.toString() ? "?" + params.toString() : ""}`;
     window.history.replaceState({}, "", newUrl);
-  }, [selectedFacets, priceRange, sortOrder, firstSelectedGroup]);
+  }, [selectedFacets, priceRange, sortOrder, firstSelectedGroup, currentPage]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -148,8 +157,8 @@ export default function ListingTemplate({
 
       const results = await getFilteredProductsAction(
         "",
-        0,
-        PRODUCTS_PER_LOAD,
+        (currentPage - 1) * PRODUCTS_PER_PAGE,
+        PRODUCTS_PER_PAGE,
         facetFilters,
         true,
         // Convert euros to cents for the API
@@ -194,9 +203,7 @@ export default function ListingTemplate({
     };
 
     fetchProducts();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedFacets, firstSelectedGroup, priceRange, sortOrder]);
+  }, [selectedFacets, firstSelectedGroup, priceRange, sortOrder, currentPage]);
 
   // Handle facet checkbox changes
   const handleFacetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -256,6 +263,7 @@ export default function ListingTemplate({
     setProducts(initialProducts);
     setCurrentFacets(facets);
     setPriceRange({ min: null, max: null });
+    setCurrentPage(1);
   };
 
   const hasActiveFilters = Object.values(selectedFacets).some(
@@ -386,6 +394,27 @@ export default function ListingTemplate({
               </li>
             ))}
           </ul>
+          <div className="mt-8 flex justify-center gap-2">
+            {currentPage > 1 && (
+              <button
+                onClick={() => setCurrentPage(currentPage - 1)}
+                className="rounded-md border border-slate-600 px-4 py-2 text-sm hover:bg-slate-800"
+              >
+                {t("previousPage")}
+              </button>
+            )}
+            <span className="flex items-center px-4 text-sm">
+              {t("page")} {currentPage}
+            </span>
+            {products.length === PRODUCTS_PER_PAGE && (
+              <button
+                onClick={() => setCurrentPage(currentPage + 1)}
+                className="rounded-md border border-slate-600 px-4 py-2 text-sm hover:bg-slate-800"
+              >
+                {t("nextPage")}
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>

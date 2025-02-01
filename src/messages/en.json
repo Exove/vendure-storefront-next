@@ -84,6 +84,9 @@
     "priceAsc": "Price Low-High",
     "priceDesc": "Price High-Low",
     "showMore": "Show more",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "page": "Page"
   }
 }

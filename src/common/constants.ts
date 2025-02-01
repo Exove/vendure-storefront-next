@@ -6,5 +6,4 @@ export const VENDURE_ROOT_URL =
 
 export const SHOP_NAME = "Vendure Next.js Starter";
 
-export const INITIAL_PRODUCTS_TO_SHOW = 10; // Not used at the moment
-export const PRODUCTS_PER_LOAD = 4;
+export const PRODUCTS_PER_PAGE = 48;

@@ -4,26 +4,26 @@ import ListingTemplate from "./templates/listing-template";
 import { getFilteredProductsAction } from "./actions";
 import { SearchResult } from "@/gql/graphql";
 import { FacetValue } from "@/gql/graphql";
-import { PRODUCTS_PER_LOAD } from "@/common/constants";
+import { PRODUCTS_PER_PAGE } from "@/common/constants";
 type Params = Promise<{ locale: string }>;
 
-export default async function Home(props: { params: Params }) {
+export default async function Home(props: {
+  params: Params;
+  searchParams: { page?: string };
+}) {
   const { locale: languageCode } = await props.params;
+  const page = props.searchParams.page
+    ? parseInt(props.searchParams.page) - 1
+    : 0;
   console.log("languageCode", languageCode);
-  // const data = await request(
-  //   `${VENDURE_API_URL}?languageCode=${languageCode}`,
-  //   productsQuery,
-  // );
 
   const filteredProducts = await getFilteredProductsAction(
     "",
-    0,
-    PRODUCTS_PER_LOAD,
+    page * PRODUCTS_PER_PAGE,
+    PRODUCTS_PER_PAGE,
     [],
     true,
   );
-
-  console.log("filteredProducts", filteredProducts);
 
   return (
     <Container>
