@@ -8,6 +8,10 @@
     "searchPlaceholder": "Etsi tuotteita...",
     "noResults": "Ei hakutuloksia"
   },
+  "home": {
+    "categories": "Kategoriat",
+    "browseProducts": "Selaa tuotteita"
+  },
   "order": {
     "complete": "Tilaus valmis",
     "details": "Tilauksen tiedot",

@@ -1,4 +1,8 @@
 {
+  "home": {
+    "categories": "Categories",
+    "browseProducts": "Browse Products"
+  },
   "common": {
     "login": "Login",
     "logout": "Logout",
