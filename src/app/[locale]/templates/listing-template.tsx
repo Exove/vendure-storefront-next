@@ -277,7 +277,7 @@ export default function ListingTemplate({
           <h1 className="text-4xl font-black">{title}</h1>
         </div>
       )}
-      <div className="mt-10 flex gap-16">
+      <div className="mt-10 flex gap-16" id="listing-view">
         <div className="w-[200px]">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="sr-only">Facets</h2>
@@ -394,27 +394,30 @@ export default function ListingTemplate({
               </li>
             ))}
           </ul>
-          <div className="mt-8 flex justify-center gap-2">
-            {currentPage > 1 && (
-              <button
-                onClick={() => setCurrentPage(currentPage - 1)}
-                className="rounded-md border border-slate-600 px-4 py-2 text-sm hover:bg-slate-800"
-              >
-                {t("previousPage")}
-              </button>
-            )}
-            <span className="flex items-center px-4 text-sm">
-              {t("page")} {currentPage}
-            </span>
-            {products.length === PRODUCTS_PER_PAGE && (
-              <button
-                onClick={() => setCurrentPage(currentPage + 1)}
-                className="rounded-md border border-slate-600 px-4 py-2 text-sm hover:bg-slate-800"
-              >
-                {t("nextPage")}
-              </button>
-            )}
-          </div>
+          {/* Pagination controls */}
+          {(currentPage > 1 || products.length === PRODUCTS_PER_PAGE) && (
+            <div className="mt-8 flex justify-center gap-2">
+              {currentPage > 1 && (
+                <button
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                  className="rounded-md border border-slate-600 px-4 py-2 text-sm hover:bg-slate-800"
+                >
+                  {t("previousPage")}
+                </button>
+              )}
+              <span className="flex items-center px-4 text-sm">
+                {t("page")} {currentPage}
+              </span>
+              {products.length === PRODUCTS_PER_PAGE && (
+                <button
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                  className="rounded-md border border-slate-600 px-4 py-2 text-sm hover:bg-slate-800"
+                >
+                  {t("nextPage")}
+                </button>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>
