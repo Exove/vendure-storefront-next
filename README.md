@@ -1,4 +1,4 @@
-# Vendure Storefront Template
+# Vendure Storefront Template for Next.js
 
 A modern and high-performance e-commerce storefront built with Next.js 15 for the Vendure e-commerce platform.
 
