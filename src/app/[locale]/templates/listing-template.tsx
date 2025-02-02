@@ -134,7 +134,9 @@ export default function ListingTemplate({
     }
 
     // Add page to URL
-    params.set("page", currentPage.toString());
+    if (currentPage > 1) {
+      params.set("page", currentPage.toString());
+    }
 
     // Update URL without triggering a page reload
     const newUrl = `${window.location.pathname}${params.toString() ? "?" + params.toString() : ""}`;
