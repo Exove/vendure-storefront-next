@@ -5,10 +5,11 @@ A modern and high-performance e-commerce storefront built with Next.js 15 for th
 ## Technologies
 
 - **Frontend Framework:** Next.js 15
-- **Styling:** Tailwind CSS, HeadlessUI
+- **Styling:** Tailwind CSS
 - **State Management:** SWR
 - **GraphQL:** graphql-request
 - **Search:** Searchkit, React InstantSearch
+- **UI Components:** Headless UI, Shadcn
 - **Carousel:** Embla Carousel
 - **Code Quality:** TypeScript, ESLint, Prettier
 - **Git Hooks:** Husky, lint-staged
