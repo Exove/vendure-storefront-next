@@ -9,6 +9,7 @@ import {
   getShippingMethodsQuery,
   orderByCodeQuery,
   filteredProductsQuery,
+  collectionsQuery,
 } from "./queries";
 import {
   CreateAddressInput,
@@ -152,4 +153,10 @@ export async function getFilteredProducts(
     },
   );
   return search;
+}
+
+export async function getCollections() {
+  const client = await getAuthenticatedClient();
+  const { collections } = await client.request(collectionsQuery);
+  return collections;
 }

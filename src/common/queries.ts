@@ -79,6 +79,14 @@ export const filteredProductsQuery = graphql(`
         facetValueFilters: $facetValueFilters
       }
     ) {
+      collections {
+        collection {
+          name
+          parent {
+            name
+          }
+        }
+      }
       totalItems
       facetValues {
         count

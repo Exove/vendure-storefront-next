@@ -167,7 +167,6 @@ export default function ListingTemplate({
         PRODUCTS_PER_PAGE,
         facetFilters,
         true,
-        // Convert euros to cents for the API
         priceRange.min !== null ? priceRange.min * 100 : null,
         priceRange.max !== null ? priceRange.max * 100 : null,
         sortOrder,

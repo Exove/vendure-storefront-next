@@ -13,6 +13,7 @@ import {
   updateCustomerAddress,
   getLoggedInUser,
   getFilteredProducts,
+  getCollections,
 } from "@/common/utils-server";
 import {
   CreateAddressInput,
@@ -208,3 +209,8 @@ export async function deleteBearerToken() {
 
   cookieStore.delete("vendure-bearer-token");
 }
+
+export const getCollectionsAction = async () => {
+  const result = await getCollections();
+  return result;
+};

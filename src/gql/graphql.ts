@@ -4057,6 +4057,14 @@ export type GetFilteredProductsQuery = {
   search: {
     __typename?: "SearchResponse";
     totalItems: number;
+    collections: Array<{
+      __typename?: "CollectionResult";
+      collection: {
+        __typename?: "Collection";
+        name: string;
+        parent?: { __typename?: "Collection"; name: string } | null;
+      };
+    }>;
     facetValues: Array<{
       __typename?: "FacetValueResult";
       count: number;
@@ -6687,6 +6695,41 @@ export const GetFilteredProductsDocument = {
             selectionSet: {
               kind: "SelectionSet",
               selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "collections" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "collection" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "parent" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "name" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
                 { kind: "Field", name: { kind: "Name", value: "totalItems" } },
                 {
                   kind: "Field",
