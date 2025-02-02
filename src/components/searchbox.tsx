@@ -15,6 +15,7 @@ import type { Hit } from "instantsearch.js";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { formatCurrency } from "@/common/utils";
 
 interface SearchHit {
   slug: string;
@@ -83,9 +84,21 @@ function SearchComponent() {
       }
     };
 
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsOpen(false);
+        setQuery("");
+        refine("");
+      }
+    };
+
     document.addEventListener("click", handleClick);
-    return () => document.removeEventListener("click", handleClick);
-  }, []);
+    document.addEventListener("keydown", handleEscape);
+    return () => {
+      document.removeEventListener("click", handleClick);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [refine]);
 
   return (
     <div className="search-container relative mx-auto w-full max-w-lg">
@@ -94,6 +107,11 @@ function SearchComponent() {
           if (hit) {
             router.push(`/en/products/${hit.slug}`);
           }
+        }}
+        onClose={() => {
+          setIsOpen(false);
+          setQuery("");
+          refine("");
         }}
       >
         <div className="relative">
@@ -151,7 +169,7 @@ function SearchComponent() {
                           {hit.productName}
                         </div>
                         <div className="text-sm text-gray-400">
-                          {hit.priceWithTax}€
+                          {formatCurrency(hit.priceWithTax)}
                         </div>
                       </div>
                     </div>
