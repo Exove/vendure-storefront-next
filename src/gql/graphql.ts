@@ -4184,6 +4184,28 @@ export type OrderByCodeQuery = {
     | null;
 };
 
+export type CollectionsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type CollectionsQuery = {
+  __typename?: "Query";
+  collections: {
+    __typename?: "CollectionList";
+    items: Array<{
+      __typename?: "Collection";
+      name: string;
+      slug: string;
+      id: string;
+      parent?: { __typename?: "Collection"; name: string } | null;
+      children?: Array<{
+        __typename?: "Collection";
+        name: string;
+        slug: string;
+        id: string;
+      }> | null;
+    }>;
+  };
+};
+
 export const ActiveOrderFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -7422,3 +7444,73 @@ export const OrderByCodeDocument = {
     },
   ],
 } as unknown as DocumentNode<OrderByCodeQuery, OrderByCodeQueryVariables>;
+export const CollectionsDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "Collections" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "collections" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "items" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                      { kind: "Field", name: { kind: "Name", value: "slug" } },
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "parent" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "children" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "slug" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<CollectionsQuery, CollectionsQueryVariables>;

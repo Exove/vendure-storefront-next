@@ -202,3 +202,23 @@ export const orderByCodeQuery = graphql(`
     }
   }
 `);
+
+export const collectionsQuery = graphql(`
+  query Collections {
+    collections {
+      items {
+        name
+        slug
+        id
+        parent {
+          name
+        }
+        children {
+          name
+          slug
+          id
+        }
+      }
+    }
+  }
+`);
