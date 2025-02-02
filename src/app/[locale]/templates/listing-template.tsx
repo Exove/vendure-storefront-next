@@ -100,6 +100,7 @@ export default function ListingTemplate({
   const [sortOrder, setSortOrder] = useState<SearchResultSortParameter>(
     getInitialSortOrder(),
   );
+  const [userAction, setUserAction] = useState(false);
 
   // Update URL when state changes
   useEffect(() => {
@@ -169,6 +170,15 @@ export default function ListingTemplate({
 
       setProducts(results.items as SearchResult[]);
 
+      // Jos käyttäjä on tehnyt toiminnon (sivunvaihto), vieritetään sivu oikeaan kohtaan
+      if (userAction) {
+        const element = document.getElementById("listing-view");
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+        setUserAction(false);
+      }
+
       // If results are empty and we have more than one facet group selected,
       // keep only the first selected group
       if (
@@ -203,7 +213,14 @@ export default function ListingTemplate({
     };
 
     fetchProducts();
-  }, [selectedFacets, firstSelectedGroup, priceRange, sortOrder, currentPage]);
+  }, [
+    selectedFacets,
+    firstSelectedGroup,
+    priceRange,
+    sortOrder,
+    currentPage,
+    userAction,
+  ]);
 
   // Handle facet checkbox changes
   const handleFacetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -394,12 +411,16 @@ export default function ListingTemplate({
               </li>
             ))}
           </ul>
+
           {/* Pagination controls */}
           {(currentPage > 1 || products.length === PRODUCTS_PER_PAGE) && (
             <div className="mt-8 flex justify-center gap-2">
               {currentPage > 1 && (
                 <button
-                  onClick={() => setCurrentPage(currentPage - 1)}
+                  onClick={() => {
+                    setUserAction(true);
+                    setCurrentPage(currentPage - 1);
+                  }}
                   className="rounded-md border border-slate-600 px-4 py-2 text-sm hover:bg-slate-800"
                 >
                   {t("previousPage")}
@@ -410,7 +431,10 @@ export default function ListingTemplate({
               </span>
               {products.length === PRODUCTS_PER_PAGE && (
                 <button
-                  onClick={() => setCurrentPage(currentPage + 1)}
+                  onClick={() => {
+                    setUserAction(true);
+                    setCurrentPage(currentPage + 1);
+                  }}
                   className="rounded-md border border-slate-600 px-4 py-2 text-sm hover:bg-slate-800"
                 >
                   {t("nextPage")}
