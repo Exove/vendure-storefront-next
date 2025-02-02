@@ -28,12 +28,14 @@ interface ListingTemplateProps {
     facetValue: FacetValue;
   }[];
   title?: string;
+  collectionSlug: string;
 }
 
 export default function ListingTemplate({
   products: initialProducts,
   facets,
   title,
+  collectionSlug,
 }: ListingTemplateProps) {
   const t = useTranslations("listing");
   const searchParams = useSearchParams();
@@ -159,6 +161,7 @@ export default function ListingTemplate({
         }, []);
 
       const results = await getFilteredProductsAction(
+        collectionSlug,
         "",
         (currentPage - 1) * PRODUCTS_PER_PAGE,
         PRODUCTS_PER_PAGE,
@@ -222,6 +225,7 @@ export default function ListingTemplate({
     sortOrder,
     currentPage,
     userAction,
+    collectionSlug,
   ]);
 
   // Handle facet checkbox changes

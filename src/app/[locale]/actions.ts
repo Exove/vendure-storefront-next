@@ -111,6 +111,7 @@ export const adjustOrderLineAction = async (
 };
 
 export const getFilteredProductsAction = async (
+  collectionSlug: string,
   term: string,
   skip: number,
   take: number,
@@ -121,6 +122,7 @@ export const getFilteredProductsAction = async (
   sort?: SearchResultSortParameter,
 ) => {
   const result = await getFilteredProducts(
+    collectionSlug,
     term,
     skip,
     take,

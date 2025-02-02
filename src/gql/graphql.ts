@@ -4041,13 +4041,15 @@ export type ProductBySlugQuery = {
 
 export type GetFilteredProductsQueryVariables = Exact<{
   term?: InputMaybe<Scalars["String"]["input"]>;
-  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  collectionId?: InputMaybe<Scalars["ID"]["input"]>;
+  collectionSlug?: InputMaybe<Scalars["String"]["input"]>;
+  groupByProduct?: InputMaybe<Scalars["Boolean"]["input"]>;
   take?: InputMaybe<Scalars["Int"]["input"]>;
-  facetValueFilters: Array<FacetValueFilterInput> | FacetValueFilterInput;
-  groupByProduct: Scalars["Boolean"]["input"];
-  priceMin: Scalars["Int"]["input"];
-  priceMax: Scalars["Int"]["input"];
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
   sort?: InputMaybe<SearchResultSortParameter>;
+  facetValueFilters?: InputMaybe<
+    Array<FacetValueFilterInput> | FacetValueFilterInput
+  >;
 }>;
 
 export type GetFilteredProductsQuery = {
@@ -6543,8 +6545,27 @@ export const GetFilteredProductsDocument = {
         },
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "skip" } },
-          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "collectionId" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "collectionSlug" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "groupByProduct" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } },
         },
         {
           kind: "VariableDefinition",
@@ -6553,59 +6574,8 @@ export const GetFilteredProductsDocument = {
         },
         {
           kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "facetValueFilters" },
-          },
-          type: {
-            kind: "NonNullType",
-            type: {
-              kind: "ListType",
-              type: {
-                kind: "NonNullType",
-                type: {
-                  kind: "NamedType",
-                  name: { kind: "Name", value: "FacetValueFilterInput" },
-                },
-              },
-            },
-          },
-        },
-        {
-          kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "groupByProduct" },
-          },
-          type: {
-            kind: "NonNullType",
-            type: {
-              kind: "NamedType",
-              name: { kind: "Name", value: "Boolean" },
-            },
-          },
-        },
-        {
-          kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "priceMin" },
-          },
-          type: {
-            kind: "NonNullType",
-            type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
-          },
-        },
-        {
-          kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "priceMax" },
-          },
-          type: {
-            kind: "NonNullType",
-            type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
-          },
+          variable: { kind: "Variable", name: { kind: "Name", value: "skip" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
         },
         {
           kind: "VariableDefinition",
@@ -6613,6 +6583,23 @@ export const GetFilteredProductsDocument = {
           type: {
             kind: "NamedType",
             name: { kind: "Name", value: "SearchResultSortParameter" },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "facetValueFilters" },
+          },
+          type: {
+            kind: "ListType",
+            type: {
+              kind: "NonNullType",
+              type: {
+                kind: "NamedType",
+                name: { kind: "Name", value: "FacetValueFilterInput" },
+              },
+            },
           },
         },
       ],
@@ -6639,26 +6626,18 @@ export const GetFilteredProductsDocument = {
                     },
                     {
                       kind: "ObjectField",
-                      name: { kind: "Name", value: "skip" },
+                      name: { kind: "Name", value: "collectionId" },
                       value: {
                         kind: "Variable",
-                        name: { kind: "Name", value: "skip" },
+                        name: { kind: "Name", value: "collectionId" },
                       },
                     },
                     {
                       kind: "ObjectField",
-                      name: { kind: "Name", value: "take" },
+                      name: { kind: "Name", value: "collectionSlug" },
                       value: {
                         kind: "Variable",
-                        name: { kind: "Name", value: "take" },
-                      },
-                    },
-                    {
-                      kind: "ObjectField",
-                      name: { kind: "Name", value: "facetValueFilters" },
-                      value: {
-                        kind: "Variable",
-                        name: { kind: "Name", value: "facetValueFilters" },
+                        name: { kind: "Name", value: "collectionSlug" },
                       },
                     },
                     {
@@ -6671,27 +6650,18 @@ export const GetFilteredProductsDocument = {
                     },
                     {
                       kind: "ObjectField",
-                      name: { kind: "Name", value: "priceRange" },
+                      name: { kind: "Name", value: "take" },
                       value: {
-                        kind: "ObjectValue",
-                        fields: [
-                          {
-                            kind: "ObjectField",
-                            name: { kind: "Name", value: "min" },
-                            value: {
-                              kind: "Variable",
-                              name: { kind: "Name", value: "priceMin" },
-                            },
-                          },
-                          {
-                            kind: "ObjectField",
-                            name: { kind: "Name", value: "max" },
-                            value: {
-                              kind: "Variable",
-                              name: { kind: "Name", value: "priceMax" },
-                            },
-                          },
-                        ],
+                        kind: "Variable",
+                        name: { kind: "Name", value: "take" },
+                      },
+                    },
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "skip" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "skip" },
                       },
                     },
                     {
@@ -6700,6 +6670,14 @@ export const GetFilteredProductsDocument = {
                       value: {
                         kind: "Variable",
                         name: { kind: "Name", value: "sort" },
+                      },
+                    },
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "facetValueFilters" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "facetValueFilters" },
                       },
                     },
                   ],

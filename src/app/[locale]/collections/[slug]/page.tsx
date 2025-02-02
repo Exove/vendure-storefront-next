@@ -1,28 +1,33 @@
 import Container from "@/components/container";
 import Header from "@/components/header";
 import ListingTemplate from "@/app/[locale]/templates/listing-template";
-import { getFilteredProductsAction } from "@/app/[locale]/actions";
 import { SearchResult } from "@/gql/graphql";
 import { FacetValue } from "@/gql/graphql";
-import { PRODUCTS_PER_PAGE } from "@/common/constants";
-type Params = Promise<{ locale: string }>;
+import { PRODUCTS_PER_PAGE, VENDURE_API_URL } from "@/common/constants";
+import { filteredProductsQuery } from "@/common/queries";
+import { request } from "graphql-request";
+import { GetFilteredProductsQuery } from "@/gql/graphql";
+
+type Params = Promise<{ locale: string; slug: string }>;
 
 export default async function CollectionPage(props: {
   params: Params;
-  searchParams: { page?: string };
+  searchParams: Promise<{ page?: string }>;
 }) {
-  const { locale: languageCode } = await props.params;
-  const page = props.searchParams.page
-    ? parseInt(props.searchParams.page) - 1
-    : 0;
-  console.log("languageCode", languageCode);
+  const { locale: languageCode, slug: collectionSlug } = await props.params;
+  const { page: pageParam } = await props.searchParams;
+  const page = pageParam ? parseInt(pageParam) - 1 : 0;
 
-  const filteredProducts = await getFilteredProductsAction(
-    "",
-    page * PRODUCTS_PER_PAGE,
-    PRODUCTS_PER_PAGE,
-    [],
-    true,
+  const { search } = await request<GetFilteredProductsQuery>(
+    `${VENDURE_API_URL}?languageCode=${languageCode}`,
+    filteredProductsQuery,
+    {
+      collectionSlug,
+      term: "",
+      skip: page * PRODUCTS_PER_PAGE,
+      take: PRODUCTS_PER_PAGE,
+      groupByProduct: true,
+    },
   );
 
   return (
@@ -30,12 +35,13 @@ export default async function CollectionPage(props: {
       <Header />
       <ListingTemplate
         facets={
-          filteredProducts.facetValues as {
+          search.facetValues as {
             count: number;
             facetValue: FacetValue;
           }[]
         }
-        products={filteredProducts.items as SearchResult[]}
+        collectionSlug={collectionSlug || ""}
+        products={search.items as SearchResult[]}
         title="Elektroniikka ja kodinkoneet"
       />
     </Container>

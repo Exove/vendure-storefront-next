@@ -126,6 +126,7 @@ export async function updateCustomer(input: UpdateCustomerInput) {
 }
 
 export async function getFilteredProducts(
+  collectionSlug: string,
   term: string,
   skip: number,
   take: number,
@@ -139,6 +140,7 @@ export async function getFilteredProducts(
   const { search } = await client.request<GetFilteredProductsQuery>(
     filteredProductsQuery,
     {
+      collectionSlug,
       term,
       skip,
       take,

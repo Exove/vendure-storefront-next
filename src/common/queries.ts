@@ -59,23 +59,24 @@ export const productBySlugQuery = graphql(`
 export const filteredProductsQuery = graphql(`
   query GetFilteredProducts(
     $term: String
-    $skip: Int
+    $collectionId: ID
+    $collectionSlug: String
+    $groupByProduct: Boolean
     $take: Int
-    $facetValueFilters: [FacetValueFilterInput!]!
-    $groupByProduct: Boolean!
-    $priceMin: Int!
-    $priceMax: Int!
+    $skip: Int
     $sort: SearchResultSortParameter
+    $facetValueFilters: [FacetValueFilterInput!]
   ) {
     search(
       input: {
         term: $term
-        skip: $skip
-        take: $take
-        facetValueFilters: $facetValueFilters
+        collectionId: $collectionId
+        collectionSlug: $collectionSlug
         groupByProduct: $groupByProduct
-        priceRange: { min: $priceMin, max: $priceMax }
+        take: $take
+        skip: $skip
         sort: $sort
+        facetValueFilters: $facetValueFilters
       }
     ) {
       totalItems
