@@ -13,6 +13,7 @@ A modern and high-performance e-commerce storefront built with Next.js 15 for th
 - **Carousel:** Embla Carousel
 - **Code Quality:** TypeScript, ESLint, Prettier
 - **Git Hooks:** Husky, lint-staged
+- **Testing:** Playwright
 
 ## Getting Started
 
