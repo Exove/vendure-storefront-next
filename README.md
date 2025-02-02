@@ -1,36 +1,99 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Vendure Storefront Template
+
+A modern and high-performance e-commerce storefront built with Next.js 15 for the Vendure e-commerce platform.
+
+## Technologies
+
+- **Frontend Framework:** Next.js 15
+- **Styling:** Tailwind CSS, HeadlessUI
+- **State Management:** SWR
+- **GraphQL:** graphql-request
+- **Search:** Searchkit, React InstantSearch
+- **Carousel:** Embla Carousel
+- **Code Quality:** TypeScript, ESLint, Prettier
+- **Git Hooks:** Husky, lint-staged
 
 ## Getting Started
 
-First, run the development server:
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` - Start development server with Turbopack
+- `npm run build` - Create production build
+- `npm run start` - Start production server
+- `npm run lint` - Check code quality
+- `npm run gen` - Generate GraphQL types
+- `npm run prepare` - Install Husky git hooks
 
-## Learn More
+## GraphQL Type Generation
 
-To learn more about Next.js, take a look at the following resources:
+The project uses GraphQL Code Generator to create TypeScript types from GraphQL queries. To generate types:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Ensure your Vendure server is running
+2. Run `npm run gen`
+3. Use the generated types in your components
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Types are automatically generated based on the configuration in `codegen.ts`.
 
-## Deploy on Vercel
+## Project Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+src/
+├── app/                    # Next.js App Router
+│   ├── [locale]/          # Localized routes
+│   └── api/               # API routes
+├── common/                # Shared utilities and constants
+├── components/            # Reusable components
+└── messages/              # Translation files
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Development
+
+- Project uses TypeScript for type-safe development
+- ESLint and Prettier ensure consistent code style
+- Husky and lint-staged check code quality before commits
+- GraphQL Code Generator creates types for GraphQL queries
+
+## E2E Testing
+
+The project uses Playwright for end-to-end testing. Tests are located in the `tests` directory.
+
+To run the tests:
+
+```bash
+# Install Playwright browsers
+npx playwright install
+
+# Run tests
+npx playwright test
+
+# Run tests with UI
+npx playwright test --ui
+```
+
+## Deployment
+
+1. Create a production build:
+
+```bash
+npm run build
+```
+
+2. Start the production server:
+
+```bash
+npm run start
+```
