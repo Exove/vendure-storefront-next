@@ -4216,6 +4216,15 @@ export type CollectionsQuery = {
   };
 };
 
+export type CollectionBySlugQueryVariables = Exact<{
+  slug: Scalars["String"]["input"];
+}>;
+
+export type CollectionBySlugQuery = {
+  __typename?: "Query";
+  collection?: { __typename?: "Collection"; name: string } | null;
+};
+
 export const ActiveOrderFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -7535,3 +7544,54 @@ export const CollectionsDocument = {
     },
   ],
 } as unknown as DocumentNode<CollectionsQuery, CollectionsQueryVariables>;
+export const CollectionBySlugDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "CollectionBySlug" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "slug" } },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "collection" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "slug" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "slug" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CollectionBySlugQuery,
+  CollectionBySlugQueryVariables
+>;

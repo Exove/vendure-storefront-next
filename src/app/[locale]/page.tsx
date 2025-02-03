@@ -2,22 +2,34 @@ import Container from "@/components/container";
 import Header from "@/components/header";
 import { Link } from "@/i18n/routing";
 import { VENDURE_API_URL } from "@/common/constants";
-import { collectionsQuery } from "@/common/queries";
+import { collectionsQuery, filteredProductsQuery } from "@/common/queries";
 import { request } from "graphql-request";
-import type { CollectionsQuery } from "@/gql/graphql";
+import type { CollectionsQuery, GetFilteredProductsQuery } from "@/gql/graphql";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { getTranslations } from "next-intl/server";
+import ProductCard from "@/components/product-card";
 
 export default async function Home(props: {
   params: Promise<{ locale: string }>;
   searchParams: { page?: string };
 }) {
+  const t = await getTranslations("home");
   const { locale: languageCode } = await props.params;
   const { collections } = await request<CollectionsQuery>(
     `${VENDURE_API_URL}?languageCode=${languageCode}`,
     collectionsQuery,
   );
-  const t = await getTranslations("home");
+  const { search: frontPageProducts } = await request<GetFilteredProductsQuery>(
+    `${VENDURE_API_URL}?languageCode=${languageCode}`,
+    filteredProductsQuery,
+    {
+      collectionSlug: "front-page",
+      term: "",
+      skip: 0,
+      take: 100,
+      groupByProduct: true,
+    },
+  );
 
   // Filter to show only root-level collections
   const rootCollections = collections.items.filter(
@@ -51,6 +63,28 @@ export default async function Home(props: {
               </Link>
             ))}
           </div>
+          {frontPageProducts.items.length > 0 && (
+            <div className="mt-24">
+              <h2 className="mb-8 text-center text-3xl font-bold text-slate-100">
+                {t("featuredProducts")}
+              </h2>
+              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+                {frontPageProducts.items.map((product) => (
+                  <ProductCard
+                    key={product.slug}
+                    slug={product.slug}
+                    name={product.productName}
+                    imageSource={product.productAsset?.preview || ""}
+                    priceWithTax={
+                      "min" in product.priceWithTax
+                        ? product.priceWithTax.min
+                        : product.priceWithTax.value
+                    }
+                  />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </main>
     </Container>

@@ -10,7 +10,8 @@
   },
   "home": {
     "categories": "Kategoriat",
-    "browseProducts": "Selaa tuotteita"
+    "browseProducts": "Selaa tuotteita",
+    "featuredProducts": "Suositellut tuotteet"
   },
   "order": {
     "complete": "Tilaus valmis",

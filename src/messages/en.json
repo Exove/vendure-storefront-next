@@ -1,7 +1,8 @@
 {
   "home": {
     "categories": "Categories",
-    "browseProducts": "Browse Products"
+    "browseProducts": "Browse Products",
+    "featuredProducts": "Featured Products"
   },
   "common": {
     "login": "Login",

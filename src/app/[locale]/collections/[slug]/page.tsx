@@ -7,7 +7,6 @@ import { PRODUCTS_PER_PAGE, VENDURE_API_URL } from "@/common/constants";
 import { filteredProductsQuery } from "@/common/queries";
 import { request } from "graphql-request";
 import { GetFilteredProductsQuery } from "@/gql/graphql";
-import { getFilteredProducts } from "@/common/utils-server";
 
 type Params = Promise<{ locale: string; slug: string }>;
 
@@ -31,19 +30,7 @@ export default async function CollectionPage(props: {
     },
   );
 
-  const results = await getFilteredProducts(
-    collectionSlug,
-    "",
-    0,
-    PRODUCTS_PER_PAGE,
-    [],
-    true,
-    null,
-    null,
-    {},
-  );
-
-  const rootCollectionName = results.collections?.find(
+  const rootCollectionName = search.collections?.find(
     (c) => c.collection.parent?.name === "__root_collection__",
   )?.collection.name;
 
@@ -58,7 +45,7 @@ export default async function CollectionPage(props: {
           }[]
         }
         collectionSlug={collectionSlug || ""}
-        products={results.items as SearchResult[]}
+        products={search.items as SearchResult[]}
         title={rootCollectionName}
       />
     </Container>
