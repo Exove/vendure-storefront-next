@@ -5,7 +5,6 @@ import {
   DialogPanel,
   Transition,
   TransitionChild,
-  CloseButton,
 } from "@headlessui/react";
 import { ChevronRightIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
@@ -85,14 +84,13 @@ export default function SidePanel({
                 <div className="flex h-full max-w-[500px] flex-col">
                   <div className="mb-4 flex items-end justify-between">
                     {showBackButton && title ? (
-                      <CloseButton
-                        as="button"
+                      <button
                         className="flex items-center gap-2 text-lg"
                         onClick={onBack}
                       >
                         <ChevronRightIcon className="h-6 w-6 rotate-180 stroke-2" />
                         {title}
-                      </CloseButton>
+                      </button>
                     ) : title ? (
                       <h2 className="text-2xl font-bold">{title}</h2>
                     ) : (

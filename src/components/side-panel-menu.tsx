@@ -26,6 +26,14 @@ export default function SidePanelMenu({ items }: SidePanelMenuProps) {
     setCurrentItems(submenuItems);
   };
 
+  const handleBack = () => {
+    if (navigationStack.length > 0) {
+      const previousState = navigationStack[navigationStack.length - 1];
+      setCurrentItems(previousState.items);
+      setNavigationStack(navigationStack.slice(0, -1));
+    }
+  };
+
   return (
     <SidePanel
       openLabel="Open menu"
@@ -36,6 +44,7 @@ export default function SidePanelMenu({ items }: SidePanelMenuProps) {
           : undefined
       }
       showBackButton={navigationStack.length > 0}
+      onBack={handleBack}
     >
       <div className="flex w-full flex-col">
         <ul className="w-full divide-y overflow-scroll break-words p-2 text-lg">
