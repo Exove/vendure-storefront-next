@@ -19,14 +19,14 @@ export default function Header({ menuItems }: HeaderProps) {
           {SHOP_NAME}
         </Link>
       </div>
-      <header className="sticky top-0 z-20 mx-auto flex w-full max-w-screen-2xl items-center justify-between bg-slate-900 py-4">
-        <div className="flex items-center">
+      <header className="sticky top-0 z-20 mx-auto grid w-full max-w-screen-2xl grid-cols-3 items-center bg-slate-900 py-4">
+        <div className="flex w-full items-center">
           {menuItems && <SidePanelMenu items={menuItems} />}
         </div>
-        <div className="h-[50px] flex-1">
+        <div className="flex h-[50px] w-full justify-center">
           <SearchBox />
         </div>
-        <div className="flex items-center gap-10">
+        <div className="flex w-full items-center justify-end gap-10">
           <LanguageSwitcher />
           <Link href="/account">
             <UserIcon className="h-6 w-6" />
