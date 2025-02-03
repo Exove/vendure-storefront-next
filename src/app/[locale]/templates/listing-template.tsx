@@ -18,7 +18,7 @@ import {
   AccordionContent,
 } from "@/components/facet-accordion";
 import SortSelect from "@/components/sort-select";
-import { PRODUCTS_PER_PAGE } from "@/common/constants";
+import { PRODUCTS_PER_PAGE, HIDDEN_FACET_GROUPS } from "@/common/constants";
 import { useSearchParams } from "next/navigation";
 
 interface ListingTemplateProps {
@@ -338,6 +338,8 @@ export default function ListingTemplate({
               facets.reduce(
                 (acc, { facetValue }) => {
                   const group = facetValue.facet.name;
+                  // Skip hidden facet groups
+                  if (HIDDEN_FACET_GROUPS.includes(group)) return acc;
                   acc[group] = acc[group] || [];
                   acc[group].push(facetValue);
                   return acc;

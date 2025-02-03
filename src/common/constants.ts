@@ -7,3 +7,7 @@ export const VENDURE_ROOT_URL =
 export const SHOP_NAME = "Vendure Next.js Starter";
 
 export const PRODUCTS_PER_PAGE = 48;
+
+export const FRONT_PAGE_COLLECTION_SLUG = "front-page";
+
+export const HIDDEN_FACET_GROUPS = ["visibility"] as string[];

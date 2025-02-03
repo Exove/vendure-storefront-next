@@ -1,7 +1,10 @@
 import Container from "@/components/container";
 import Header from "@/components/header";
 import { Link } from "@/i18n/routing";
-import { VENDURE_API_URL } from "@/common/constants";
+import {
+  FRONT_PAGE_COLLECTION_SLUG,
+  VENDURE_API_URL,
+} from "@/common/constants";
 import { collectionsQuery, filteredProductsQuery } from "@/common/queries";
 import { request } from "graphql-request";
 import type { CollectionsQuery, GetFilteredProductsQuery } from "@/gql/graphql";
@@ -24,7 +27,7 @@ export default async function Home(props: { params: Params }) {
     `${VENDURE_API_URL}?languageCode=${languageCode}`,
     filteredProductsQuery,
     {
-      collectionSlug: "front-page",
+      collectionSlug: FRONT_PAGE_COLLECTION_SLUG,
       term: "",
       skip: 0,
       take: 100,
@@ -34,7 +37,9 @@ export default async function Home(props: { params: Params }) {
 
   // Filter to show only root-level collections
   const rootCollections = collections.items.filter(
-    (collection) => collection.parent?.name === "__root_collection__",
+    (collection) =>
+      collection.parent?.name === "__root_collection__" &&
+      collection.slug !== FRONT_PAGE_COLLECTION_SLUG,
   );
 
   return (
