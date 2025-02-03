@@ -9,6 +9,7 @@ import { createContext, useState } from "react";
 import AddToCartOptions from "@/components/add-to-cart-options";
 import { formatCurrency } from "@/common/utils";
 import { useLocale } from "next-intl";
+import { MenuItem } from "@/common/get-menu-items";
 
 export const CartContext = createContext<{
   cartQuantity: number;
@@ -17,9 +18,13 @@ export const CartContext = createContext<{
 
 interface ProductTemplateProps {
   product: Product;
+  menuItems: MenuItem[];
 }
 
-export default function ProductTemplate({ product }: ProductTemplateProps) {
+export default function ProductTemplate({
+  product,
+  menuItems,
+}: ProductTemplateProps) {
   const [cartQuantity, setCartQuantity] = useState(0);
   const locale = useLocale();
 
@@ -30,7 +35,7 @@ export default function ProductTemplate({ product }: ProductTemplateProps) {
   return (
     <CartContext.Provider value={{ cartQuantity, setCartQuantity }}>
       <Container>
-        <Header />
+        <Header menuItems={menuItems} />
         <div className="mt-20 grid grid-cols-1 gap-20 md:grid-cols-2">
           <ImageGallery images={product.assets} />
           <div className="flex flex-col gap-8">

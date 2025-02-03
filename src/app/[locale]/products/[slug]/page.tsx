@@ -5,6 +5,7 @@ import { Product } from "@/gql/graphql";
 import { request } from "graphql-request";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
+import { getMenuItems } from "@/common/get-menu-items";
 
 type Params = Promise<{ slug: string; locale: string }>;
 
@@ -46,5 +47,10 @@ export default async function ProductPage(props: { params: Params }) {
     notFound();
   }
 
-  return <ProductTemplate product={product as Product} />;
+  return (
+    <ProductTemplate
+      product={product as Product}
+      menuItems={await getMenuItems()}
+    />
+  );
 }

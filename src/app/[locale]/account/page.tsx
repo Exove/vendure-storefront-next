@@ -7,6 +7,7 @@ import { getTranslations } from "next-intl/server";
 import Container from "@/components/container";
 import Header from "@/components/header";
 import Login from "@/components/login";
+import { getMenuItems } from "@/common/get-menu-items";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("account");
@@ -17,10 +18,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function AccountPage() {
   const user = await getLoggedInUser();
+  const menuItems = await getMenuItems();
 
   return (
     <Container>
-      <Header />
+      <Header menuItems={menuItems} />
       {user ? <AccountTemplate user={user as Customer} /> : <Login />}
     </Container>
   );

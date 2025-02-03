@@ -5,18 +5,10 @@ import LanguageSwitcher from "./language-switcher";
 import { SHOP_NAME } from "@/common/constants";
 import SearchBox from "@/components/searchbox";
 import SidePanelMenu from "./side-panel-menu";
-
-type MenuItem = {
-  title: string;
-  url: string;
-  sublinks?: {
-    title: string;
-    url: string;
-  }[];
-};
+import { MenuItem } from "@/common/get-menu-items";
 
 type HeaderProps = {
-  menuItems: MenuItem[];
+  menuItems?: MenuItem[];
 };
 
 export default function Header({ menuItems }: HeaderProps) {
@@ -29,7 +21,7 @@ export default function Header({ menuItems }: HeaderProps) {
       </div>
       <header className="sticky top-0 z-20 mx-auto flex w-full max-w-screen-2xl items-center justify-between bg-slate-900 py-4">
         <div className="flex items-center">
-          <SidePanelMenu items={menuItems} />
+          {menuItems && <SidePanelMenu items={menuItems} />}
         </div>
         <div className="h-[50px] flex-1">
           <SearchBox />

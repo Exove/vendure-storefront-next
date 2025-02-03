@@ -11,6 +11,7 @@ import type { CollectionsQuery, GetFilteredProductsQuery } from "@/gql/graphql";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { getTranslations } from "next-intl/server";
 import ProductCard from "@/components/product-card";
+import { getMenuItems } from "@/common/get-menu-items";
 
 type Params = Promise<{ locale: string }>;
 
@@ -18,6 +19,7 @@ export default async function Home(props: { params: Params }) {
   const params = await props.params;
   const t = await getTranslations("home");
   const languageCode = params.locale;
+  const menuItems = await getMenuItems();
 
   const { collections } = await request<CollectionsQuery>(
     `${VENDURE_API_URL}?languageCode=${languageCode}`,
@@ -44,7 +46,7 @@ export default async function Home(props: { params: Params }) {
 
   return (
     <Container>
-      <Header />
+      <Header menuItems={menuItems} />
       <main className="px-4 py-12 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <h2 className="mb-8 text-center text-3xl font-bold text-slate-100">

@@ -7,6 +7,7 @@ import { PRODUCTS_PER_PAGE, VENDURE_API_URL } from "@/common/constants";
 import { filteredProductsQuery } from "@/common/queries";
 import { request } from "graphql-request";
 import { GetFilteredProductsQuery } from "@/gql/graphql";
+import { getMenuItems } from "@/common/get-menu-items";
 
 type Params = Promise<{ locale: string; slug: string }>;
 
@@ -17,6 +18,7 @@ export default async function CollectionPage(props: {
   const { locale: languageCode, slug: collectionSlug } = await props.params;
   const { page: pageParam } = await props.searchParams;
   const page = pageParam ? parseInt(pageParam) - 1 : 0;
+  const menuItems = await getMenuItems();
 
   const { search } = await request<GetFilteredProductsQuery>(
     `${VENDURE_API_URL}?languageCode=${languageCode}`,
@@ -36,7 +38,7 @@ export default async function CollectionPage(props: {
 
   return (
     <Container>
-      <Header />
+      <Header menuItems={menuItems} />
       <ListingTemplate
         facets={
           search.facetValues as {
