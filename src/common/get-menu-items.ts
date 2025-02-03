@@ -1,6 +1,9 @@
 import { request } from "graphql-request";
 import { getLocale } from "next-intl/server";
-import { VENDURE_API_URL } from "@/common/constants";
+import {
+  VENDURE_API_URL,
+  FRONT_PAGE_COLLECTION_SLUG,
+} from "@/common/constants";
 import { collectionsQuery } from "@/common/queries";
 
 export type MenuItem = {
@@ -21,7 +24,11 @@ export async function getMenuItems() {
 
   // Filter to show only root-level collections and their children
   return collections.items
-    .filter((collection) => collection.parent?.name === "__root_collection__")
+    .filter(
+      (collection) =>
+        collection.parent?.name === "__root_collection__" &&
+        collection.slug !== FRONT_PAGE_COLLECTION_SLUG,
+    )
     .map((collection) => ({
       title: collection.name,
       url: `/collections/${collection.slug}`,

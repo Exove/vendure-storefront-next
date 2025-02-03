@@ -34,6 +34,11 @@ export default function SidePanelMenu({ items }: SidePanelMenuProps) {
     }
   };
 
+  const title =
+    navigationStack.length > 0
+      ? navigationStack[navigationStack.length - 1].title
+      : undefined;
+
   return (
     <SidePanel
       openLabel={
@@ -43,16 +48,12 @@ export default function SidePanelMenu({ items }: SidePanelMenuProps) {
         </div>
       }
       position="left"
-      title={
-        navigationStack.length > 0
-          ? navigationStack[navigationStack.length - 1].title
-          : undefined
-      }
       showBackButton={navigationStack.length > 0}
       onBack={handleBack}
     >
       <div className="flex w-full flex-col">
-        <ul className="w-full divide-y overflow-scroll break-words p-2 text-lg">
+        {title && <h2 className="mb-6 text-2xl font-bold">{title}</h2>}
+        <ul className="w-full divide-y overflow-scroll break-words border-y text-lg">
           {currentItems?.map((item, index) => (
             <li key={`${item.url}-${index}`}>
               {!item.sublinks ? (

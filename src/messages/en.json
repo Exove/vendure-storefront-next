@@ -11,7 +11,9 @@
     "search": "Search",
     "menu": "Menu",
     "searchPlaceholder": "Search products...",
-    "noResults": "No results found"
+    "noResults": "No results found",
+    "back": "Back",
+    "closeMenu": "Close menu"
   },
   "order": {
     "complete": "Order Complete",

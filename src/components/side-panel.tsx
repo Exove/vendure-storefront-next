@@ -9,6 +9,7 @@ import {
 import { ChevronRightIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import { Fragment, useState } from "react";
+import { useTranslations } from "next-intl";
 
 interface MenuDialogProps {
   openLabel: React.ReactNode;
@@ -35,6 +36,7 @@ export default function SidePanel({
   onBack,
 }: MenuDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const t = useTranslations("common");
 
   return (
     <>
@@ -83,13 +85,13 @@ export default function SidePanel({
               <DialogPanel className="h-full w-full max-w-[500px] rounded-lg bg-slate-800 p-5">
                 <div className="flex h-full max-w-[500px] flex-col">
                   <div className="mb-4 flex items-end justify-between">
-                    {showBackButton && title ? (
+                    {showBackButton ? (
                       <button
                         className="flex items-center gap-2 text-lg"
                         onClick={onBack}
                       >
                         <ChevronRightIcon className="h-6 w-6 rotate-180 stroke-2" />
-                        {title}
+                        {t("back")}
                       </button>
                     ) : title ? (
                       <h2 className="text-2xl font-bold">{title}</h2>
@@ -98,7 +100,7 @@ export default function SidePanel({
                     )}
 
                     <button onClick={() => setIsOpen(false)}>
-                      <span className="sr-only">Close cart</span>
+                      <span className="sr-only">{t("closeMenu")}</span>
                       <XMarkIcon className="h-10 w-10 rounded-full bg-slate-700 p-2 hover:bg-slate-600 active:bg-slate-700" />
                     </button>
                   </div>

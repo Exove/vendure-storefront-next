@@ -6,7 +6,9 @@
     "search": "Haku",
     "menu": "Valikko",
     "searchPlaceholder": "Etsi tuotteita...",
-    "noResults": "Ei hakutuloksia"
+    "noResults": "Ei hakutuloksia",
+    "back": "Takaisin",
+    "closeMenu": "Sulje valikko"
   },
   "home": {
     "categories": "Kategoriat",
