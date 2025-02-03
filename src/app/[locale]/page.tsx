@@ -9,12 +9,13 @@ import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { getTranslations } from "next-intl/server";
 import ProductCard from "@/components/product-card";
 
-export default async function Home(props: {
-  params: Promise<{ locale: string }>;
-  searchParams: { page?: string };
-}) {
+type Params = Promise<{ locale: string }>;
+
+export default async function Home(props: { params: Params }) {
+  const params = await props.params;
   const t = await getTranslations("home");
-  const { locale: languageCode } = await props.params;
+  const languageCode = params.locale;
+
   const { collections } = await request<CollectionsQuery>(
     `${VENDURE_API_URL}?languageCode=${languageCode}`,
     collectionsQuery,
