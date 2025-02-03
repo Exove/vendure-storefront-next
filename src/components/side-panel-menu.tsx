@@ -51,6 +51,7 @@ function SidePanelSubmenu({ items, title }: SidePanelSubmenuProps) {
       title={title}
       fullWidthButton
       position="left"
+      showBackButton
     >
       <div className="flex w-full flex-col">
         <ul className="w-full divide-y break-words px-4">

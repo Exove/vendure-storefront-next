@@ -31,7 +31,7 @@ export default function SidePanel({
   footer,
   title,
   buttonId = "open-side-panel",
-  showBackButton = true,
+  showBackButton = false,
 }: MenuDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -85,7 +85,7 @@ export default function SidePanel({
                     {showBackButton && title ? (
                       <CloseButton
                         as="button"
-                        className="flex items-center gap-2 border-b p-4 text-lg"
+                        className="flex items-center gap-2 text-lg"
                       >
                         <ChevronRightIcon className="h-6 w-6 rotate-180 stroke-2" />
                         {title}
