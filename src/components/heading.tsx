@@ -8,9 +8,6 @@ interface HeadingProps {
   className?: string;
 }
 
-// Keep track of heading text occurrences
-const headingOccurrences = new Map<string, number>();
-
 export default function Heading({
   level,
   size,
@@ -19,17 +16,12 @@ export default function Heading({
 }: HeadingProps) {
   const Tag = level;
 
-  // Create base id from the text
-  const baseId = children
+  // Create id from the text
+  const id = children
     .toLowerCase()
     .replace(/\u00e4/g, "a")
     .replace(/\u00f6/g, "o")
     .replace(/\W/g, "-");
-
-  // Track occurrences and create unique id
-  const count = headingOccurrences.get(baseId) || 0;
-  headingOccurrences.set(baseId, count + 1);
-  const id = count === 0 ? baseId : `${baseId}-${count}`;
 
   return (
     <Tag
