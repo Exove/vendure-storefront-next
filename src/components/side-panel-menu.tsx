@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import SidePanel from "@/components/side-panel";
-import { ChevronRightIcon } from "@heroicons/react/24/outline";
+import { ChevronRightIcon, Bars3Icon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 
 interface MenuItem {
@@ -36,7 +36,12 @@ export default function SidePanelMenu({ items }: SidePanelMenuProps) {
 
   return (
     <SidePanel
-      openLabel="Open menu"
+      openLabel={
+        <div className="flex items-center gap-2">
+          <Bars3Icon className="h-6 w-6 stroke-2" />
+          <span>Selaa tuotteita</span>
+        </div>
+      }
       position="left"
       title={
         navigationStack.length > 0

@@ -6,72 +6,20 @@ import { SHOP_NAME } from "@/common/constants";
 import SearchBox from "@/components/searchbox";
 import SidePanelMenu from "./side-panel-menu";
 
-export default function Header() {
-  const menuItems = [
-    {
-      title: "Selaa tuotteita",
-      url: "/collections",
-      sublinks: [
-        {
-          title: "Elektroniikka",
-          url: "/collections/elektroniikka",
-        },
-        {
-          title: "Vaatteet",
-          url: "/collections/vaatteet",
-        },
-        {
-          title: "Urheilu",
-          url: "/collections/urheilu",
-        },
-        {
-          title: "Koti ja puutarha",
-          url: "/collections/koti-ja-puutarha",
-        },
-      ],
-    },
-    {
-      title: "Tarjoukset",
-      url: "/collections/tarjoukset",
-      sublinks: [
-        {
-          title: "Päivän tarjoukset",
-          url: "/collections/paivan-tarjoukset",
-        },
-        {
-          title: "Outlet",
-          url: "/collections/outlet",
-        },
-      ],
-    },
-    {
-      title: "Brändit",
-      url: "/collections/brandit",
-      sublinks: [
-        {
-          title: "Nike",
-          url: "/collections/nike",
-        },
-        {
-          title: "Adidas",
-          url: "/collections/adidas",
-        },
-        {
-          title: "Samsung",
-          url: "/collections/samsung",
-        },
-        {
-          title: "Apple",
-          url: "/collections/apple",
-        },
-      ],
-    },
-    {
-      title: "Uutuudet",
-      url: "/collections/uutuudet",
-    },
-  ];
+type MenuItem = {
+  title: string;
+  url: string;
+  sublinks?: {
+    title: string;
+    url: string;
+  }[];
+};
 
+type HeaderProps = {
+  menuItems: MenuItem[];
+};
+
+export default function Header({ menuItems }: HeaderProps) {
   return (
     <>
       <div className="pb-2 pt-4">

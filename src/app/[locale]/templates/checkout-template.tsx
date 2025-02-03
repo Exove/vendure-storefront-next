@@ -17,6 +17,7 @@ import PaymentMethodSelector from "@/components/payment-method-selector";
 import OrderSummary from "@/components/order-summary";
 import Button from "@/components/button";
 import AddressFields from "@/components/address-fields";
+import { MenuItem } from "@/common/get-menu-items";
 
 export const CartContext = createContext<{
   cartQuantity: number;
@@ -27,12 +28,14 @@ interface CheckoutTemplateProps {
   activeUser: GetActiveCustomerQuery["activeCustomer"];
   paymentMethods: GetPaymentMethodsQuery["eligiblePaymentMethods"];
   shippingMethods: GetShippingMethodsQuery["eligibleShippingMethods"];
+  menuItems: MenuItem[];
 }
 
 export default function CheckoutTemplate({
   activeUser,
   paymentMethods,
   shippingMethods,
+  menuItems,
 }: CheckoutTemplateProps) {
   const [cartQuantity, setCartQuantity] = useState(0);
   const t = useTranslations();
@@ -78,7 +81,7 @@ export default function CheckoutTemplate({
   return (
     <CartContext.Provider value={{ cartQuantity, setCartQuantity }}>
       <Container>
-        <Header />
+        <Header menuItems={menuItems} />
         <div className="mx-auto mb-32 max-w-screen-xl pt-16">
           <h1 className="mb-8 text-3xl font-bold">{t("checkout.title")}</h1>
           {order && order.lines.length > 0 ? (
