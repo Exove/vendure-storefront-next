@@ -5,6 +5,7 @@ A modern and high-performance e-commerce storefront built with Next.js 15 for th
 ## Technologies
 
 - **Frontend Framework:** Next.js 15
+- **Localization:** next-intl
 - **Styling:** Tailwind CSS
 - **State Management:** SWR
 - **GraphQL:** graphql-request
@@ -20,7 +21,7 @@ A modern and high-performance e-commerce storefront built with Next.js 15 for th
 1. Install dependencies:
 
 ```bash
-npm install
+npm i
 ```
 
 2. Start the development server:

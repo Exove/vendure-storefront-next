@@ -5,8 +5,9 @@ import {
   DialogPanel,
   Transition,
   TransitionChild,
+  CloseButton,
 } from "@headlessui/react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { ChevronRightIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import { Fragment, useState } from "react";
 
@@ -19,6 +20,7 @@ interface MenuDialogProps {
   open?: boolean;
   title?: string;
   buttonId?: string;
+  showBackButton?: boolean;
 }
 
 export default function SidePanel({
@@ -29,6 +31,7 @@ export default function SidePanel({
   footer,
   title,
   buttonId = "open-side-panel",
+  showBackButton = true,
 }: MenuDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -79,7 +82,15 @@ export default function SidePanel({
               <DialogPanel className="h-full w-full max-w-[500px] rounded-lg bg-slate-800 p-5">
                 <div className="flex h-full max-w-[500px] flex-col">
                   <div className="mb-4 flex items-end justify-between">
-                    {title ? (
+                    {showBackButton && title ? (
+                      <CloseButton
+                        as="button"
+                        className="flex items-center gap-2 border-b p-4 text-lg"
+                      >
+                        <ChevronRightIcon className="h-6 w-6 rotate-180 stroke-2" />
+                        {title}
+                      </CloseButton>
+                    ) : title ? (
                       <h2 className="text-2xl font-bold">{title}</h2>
                     ) : (
                       <div />
