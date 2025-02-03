@@ -41,7 +41,7 @@ export default function Header({ menuItems }: HeaderProps) {
           <div className="hidden md:flex md:w-full md:items-center">
             {menuItems && <SidePanelMenu items={menuItems} />}
           </div>
-          <div className="hidden w-full md:flex md:h-[50px] md:items-center md:justify-center">
+          <div className="hidden items-center md:flex md:h-[50px] md:w-full md:justify-center">
             <SearchBox />
           </div>
           <div className="hidden md:flex md:w-full md:items-center md:justify-end md:gap-10">

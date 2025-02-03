@@ -53,7 +53,7 @@ export default function SidePanelMenu({ items }: SidePanelMenuProps) {
     >
       <div className="flex w-full flex-col">
         {title && <h2 className="mb-6 text-2xl font-bold">{title}</h2>}
-        <ul className="w-full divide-y overflow-scroll break-words border-y text-lg">
+        <ul className="w-full divide-y divide-slate-700 overflow-scroll break-words border-y border-slate-700 text-lg">
           {currentItems?.map((item, index) => (
             <li key={`${item.url}-${index}`}>
               {!item.sublinks ? (

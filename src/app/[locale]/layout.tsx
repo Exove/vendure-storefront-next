@@ -4,12 +4,17 @@ import { Toaster } from "@/components/sonner";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { Footer } from "@/components/footer";
+import { SHOP_NAME } from "@/common/constants";
 
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-inter",
 });
+
+export const metadata = {
+  title: SHOP_NAME,
+};
 
 export default async function RootLayout({
   children,
