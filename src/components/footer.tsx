@@ -1,4 +1,5 @@
 import Container from "./container";
+import Heading from "@/components/heading";
 
 export function Footer() {
   return (
@@ -7,9 +8,9 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-6">
           {/* Company Info */}
           <div className="text-slate-400 md:col-span-2 md:pr-12">
-            <h3 className="mb-4 text-lg font-semibold text-white">
+            <Heading level="h3" size="sm" className="mb-4 text-white">
               Online Store
-            </h3>
+            </Heading>
             <p className="mb-4">
               Welcome to our online store! We offer high-quality products at
               competitive prices.
@@ -42,9 +43,9 @@ export function Footer() {
             <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
               {/* Quick Links */}
               <div className="text-slate-400">
-                <h3 className="mb-4 text-lg font-semibold text-white">
+                <Heading level="h3" size="sm" className="mb-4 text-white">
                   Quick Links
-                </h3>
+                </Heading>
                 <ul className="space-y-2">
                   <li>
                     <a href="#" className="hover:text-white">
@@ -71,9 +72,9 @@ export function Footer() {
 
               {/* Customer Service */}
               <div className="text-slate-400">
-                <h3 className="mb-4 text-lg font-semibold text-white">
+                <Heading level="h3" size="sm" className="mb-4 text-white">
                   Customer Service
-                </h3>
+                </Heading>
                 <ul className="space-y-2">
                   <li>
                     <a href="#" className="hover:text-white">
@@ -100,9 +101,9 @@ export function Footer() {
 
               {/* Contact Info */}
               <div className="text-slate-400">
-                <h3 className="mb-4 text-lg font-semibold text-white">
+                <Heading level="h3" size="sm" className="mb-4 text-white">
                   Contact Info
-                </h3>
+                </Heading>
                 <address className="not-italic">
                   <p>Kauppakatu 1</p>
                   <p>Helsinki</p>
