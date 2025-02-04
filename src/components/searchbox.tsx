@@ -1,6 +1,11 @@
 "use client";
 
-import { InstantSearch, useSearchBox, useHits } from "react-instantsearch";
+import {
+  InstantSearch,
+  useSearchBox,
+  useHits,
+  useInstantSearch,
+} from "react-instantsearch";
 import {
   Combobox,
   ComboboxInput,
@@ -60,6 +65,7 @@ const searchClient = {
 function SearchComponent({ inSidePanel = false }) {
   const { refine } = useSearchBox();
   const { items } = useHits();
+  const { status } = useInstantSearch();
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
   const router = useRouter();
@@ -138,7 +144,11 @@ function SearchComponent({ inSidePanel = false }) {
           static
           className="absolute z-50 mt-1 max-h-96 w-full overflow-auto rounded-md bg-slate-800 py-1 shadow-xl shadow-slate-900/50 ring-1 ring-black ring-opacity-5 focus:outline-none"
         >
-          {uniqueHits.length === 0 ? (
+          {status === "loading" ? (
+            <div className="px-4 py-2 text-sm text-gray-400">
+              {t("loading")}...
+            </div>
+          ) : uniqueHits.length === 0 ? (
             <div className="px-4 py-2 text-sm text-gray-400">
               {t("noResults")}
             </div>

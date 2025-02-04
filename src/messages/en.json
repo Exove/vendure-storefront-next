@@ -15,7 +15,8 @@
     "back": "Back",
     "closeMenu": "Close menu",
     "all": "All",
-    "browseMenu": "Browse Products"
+    "browseMenu": "Browse Products",
+    "loading": "Loading"
   },
   "order": {
     "complete": "Order Complete",

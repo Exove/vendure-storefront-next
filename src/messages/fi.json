@@ -10,7 +10,8 @@
     "back": "Takaisin",
     "closeMenu": "Sulje valikko",
     "all": "Kaikki",
-    "browseMenu": "Selaa tuotteita"
+    "browseMenu": "Selaa tuotteita",
+    "loading": "Ladataan"
   },
   "home": {
     "categories": "Kategoriat",
