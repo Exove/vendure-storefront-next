@@ -13,10 +13,9 @@ import { useTranslations } from "next-intl";
 import { PRODUCTS_PER_PAGE } from "@/common/constants";
 import { useSearchParams } from "next/navigation";
 import SidePanel from "@/components/side-panel";
-import { FunnelIcon } from "@heroicons/react/24/outline";
+import { ChevronLeftIcon, FunnelIcon } from "@heroicons/react/24/outline";
 import ProductFilters from "@/components/product-filters";
 import SortSelect from "@/components/sort-select";
-import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { Link } from "@/i18n/routing";
 
 interface ListingTemplateProps {
@@ -257,21 +256,19 @@ export default function ListingTemplate({
 
   return (
     <div>
-      {parentCollection &&
-        parentCollectionSlug &&
-        parentCollectionSlug !== "__root_collection__" && (
-          <div className="mt-4">
-            <Link
-              href={`/collections/${parentCollectionSlug}`}
-              className="flex items-center gap-2 text-sm text-slate-400 hover:text-white"
-            >
-              <ArrowLeftIcon className="h-4 w-4" />
-              {parentCollection}
-            </Link>
-          </div>
-        )}
       {title && (
-        <div className="mb-16 mt-6 rounded-xl bg-slate-800 px-10 py-24 text-center">
+        <div className="relative mb-16 mt-6 rounded-xl bg-slate-800 px-10 py-24 text-center">
+          {parentCollection &&
+            parentCollectionSlug &&
+            parentCollectionSlug !== "__root_collection__" && (
+              <Link
+                href={`/collections/${parentCollectionSlug}`}
+                className="absolute left-10 top-8 flex items-center gap-2 text-sm text-slate-300 hover:text-white"
+              >
+                <ChevronLeftIcon className="h-4 w-4 stroke-2" />
+                {parentCollection}
+              </Link>
+            )}
           <h1 className="text-4xl font-black">{title}</h1>
         </div>
       )}
