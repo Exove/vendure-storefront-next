@@ -13,7 +13,8 @@
     "searchPlaceholder": "Search products...",
     "noResults": "No results found",
     "back": "Back",
-    "closeMenu": "Close menu"
+    "closeMenu": "Close menu",
+    "all": "All"
   },
   "order": {
     "complete": "Order Complete",

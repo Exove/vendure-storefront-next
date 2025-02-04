@@ -1,9 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import SidePanel from "@/components/side-panel";
+import { Link } from "@/i18n/routing";
 import { ChevronRightIcon, Bars3Icon } from "@heroicons/react/24/outline";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 interface MenuItem {
   title: string;
@@ -20,6 +21,7 @@ export default function SidePanelMenu({ items }: SidePanelMenuProps) {
   const [navigationStack, setNavigationStack] = useState<
     { items: MenuItem[]; title: string }[]
   >([]);
+  const t = useTranslations("common");
 
   const handleSubmenuClick = (submenuItems: MenuItem[], title: string) => {
     setNavigationStack([...navigationStack, { items: currentItems, title }]);
@@ -52,7 +54,23 @@ export default function SidePanelMenu({ items }: SidePanelMenuProps) {
       onBack={handleBack}
     >
       <div className="flex w-full flex-col">
-        {title && <h2 className="my-6 text-2xl font-bold">{title}</h2>}
+        {title && (
+          <>
+            <h2 className="my-6 text-2xl font-bold">{title}</h2>
+            {navigationStack.length > 0 && (
+              <Link
+                href={
+                  navigationStack[navigationStack.length - 1].items.find(
+                    (item) => item.title === title,
+                  )?.url || "#"
+                }
+                className="block p-3 text-lg"
+              >
+                {t("all")}
+              </Link>
+            )}
+          </>
+        )}
         <ul className="w-full divide-y divide-slate-700 overflow-scroll break-words border-y border-slate-700 text-lg">
           {currentItems?.map((item, index) => (
             <li key={`${item.url}-${index}`}>

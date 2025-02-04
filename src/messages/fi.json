@@ -8,7 +8,8 @@
     "searchPlaceholder": "Etsi tuotteita...",
     "noResults": "Ei hakutuloksia",
     "back": "Takaisin",
-    "closeMenu": "Sulje valikko"
+    "closeMenu": "Sulje valikko",
+    "all": "Kaikki"
   },
   "home": {
     "categories": "Kategoriat",
