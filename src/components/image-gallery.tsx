@@ -12,6 +12,43 @@ interface ImageGalleryProps {
 }
 
 const ImageGallery = ({ images }: ImageGalleryProps) => {
+  // If there is only one image, show a single image modal
+  if (images.length === 1) {
+    return (
+      <div className="flex justify-center">
+        <div className="max-w-screen-sm">
+          <ImageGalleryModal
+            openButton={
+              <div className="group relative">
+                <Image
+                  src={images[0].source}
+                  alt=""
+                  width={images[0].width}
+                  height={images[0].height}
+                  className="h-[408px] w-[544px] rounded-md object-cover"
+                />
+                <div className="absolute right-4 top-4 flex items-center justify-center rounded-full bg-black/30 p-2 opacity-0 transition-opacity group-hover:opacity-100">
+                  <MagnifyingGlassIcon className="h-5 w-5 text-white" />
+                </div>
+              </div>
+            }
+          >
+            <div className="flex w-full items-center justify-center">
+              <Image
+                src={images[0].source}
+                alt=""
+                width={images[0].width}
+                height={images[0].height}
+                className="h-screen w-screen object-contain"
+              />
+            </div>
+          </ImageGalleryModal>
+        </div>
+      </div>
+    );
+  }
+
+  // If there are multiple images, show a carousel
   return (
     <div className="flex justify-center">
       <div className="max-w-screen-sm">
