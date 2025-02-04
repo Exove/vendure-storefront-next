@@ -203,7 +203,13 @@ export default function SearchBox() {
     <>
       {/* Desktop version */}
       <div className="hidden w-full md:block">
-        <InstantSearch searchClient={searchClient} indexName="vendure-variants">
+        <InstantSearch
+          searchClient={searchClient}
+          indexName="vendure-variants"
+          future={{
+            preserveSharedStateOnUnmount: true,
+          }}
+        >
           <SearchComponent />
         </InstantSearch>
       </div>
@@ -224,6 +230,9 @@ export default function SearchBox() {
           <InstantSearch
             searchClient={searchClient}
             indexName="vendure-variants"
+            future={{
+              preserveSharedStateOnUnmount: true,
+            }}
           >
             <SearchComponent inSidePanel={true} />
           </InstantSearch>
