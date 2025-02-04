@@ -257,36 +257,6 @@ export default function ListingTemplate({
         </div>
       )}
       <div className="mt-10 gap-16 lg:flex" id="listing-view">
-        {/* Mobile Filters */}
-        <div className="lg:hidden">
-          <SidePanel
-            openLabel={
-              <button className="flex items-center gap-2 rounded-md border border-slate-600 px-4 py-2 text-sm hover:bg-slate-800">
-                <FunnelIcon className="h-5 w-5" />
-                {t("filters")}
-              </button>
-            }
-            title={t("filters")}
-            position="left"
-          >
-            <div className="max-w-[300px]">
-              <ProductFilters
-                facets={facets}
-                selectedFacets={selectedFacets}
-                onFacetChange={handleFacetChange}
-                priceRange={priceRange}
-                onPriceRangeChange={setPriceRange}
-                onClearFilters={handleClearFilters}
-                currentFacets={currentFacets}
-                originalFacets={originalFacets}
-                firstSelectedGroup={firstSelectedGroup}
-                isLoading={isLoading}
-                isMobile
-              />
-            </div>
-          </SidePanel>
-        </div>
-
         {/* Desktop filters */}
         <div className="hidden w-[200px] lg:block">
           <ProductFilters
@@ -305,10 +275,39 @@ export default function ListingTemplate({
 
         {/* Product listing */}
         <div className="flex-1">
-          <div className="mb-6 flex items-center justify-end">
-            <h1 className="sr-only">Products</h1>
+          {/* Mobile Filters */}
+          <div className="mb-6 flex items-center justify-between lg:justify-end">
+            <div className="lg:hidden">
+              <SidePanel
+                openLabel={
+                  <button className="flex items-center gap-2 rounded-md border border-slate-600 px-4 py-2 text-sm hover:bg-slate-800">
+                    <FunnelIcon className="h-5 w-5" />
+                    {t("filters")}
+                  </button>
+                }
+                title={t("filters")}
+                position="left"
+              >
+                <div className="max-w-[300px]">
+                  <ProductFilters
+                    facets={facets}
+                    selectedFacets={selectedFacets}
+                    onFacetChange={handleFacetChange}
+                    priceRange={priceRange}
+                    onPriceRangeChange={setPriceRange}
+                    onClearFilters={handleClearFilters}
+                    currentFacets={currentFacets}
+                    originalFacets={originalFacets}
+                    firstSelectedGroup={firstSelectedGroup}
+                    isLoading={isLoading}
+                    isMobile
+                  />
+                </div>
+              </SidePanel>
+            </div>
             <SortSelect sortOrder={sortOrder} onSortChange={setSortOrder} />
           </div>
+
           <ul className="grid grid-cols-1 gap-x-4 gap-y-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {products.map((product, index) => (
               <li key={index}>
