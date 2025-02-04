@@ -14,7 +14,8 @@
     "noResults": "No results found",
     "back": "Back",
     "closeMenu": "Close menu",
-    "all": "All"
+    "all": "All",
+    "browseMenu": "Browse Products"
   },
   "order": {
     "complete": "Order Complete",

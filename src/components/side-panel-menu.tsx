@@ -46,7 +46,7 @@ export default function SidePanelMenu({ items }: SidePanelMenuProps) {
       openLabel={
         <div className="flex items-center gap-2">
           <Bars3Icon className="h-6 w-6 stroke-2" />
-          <span className="hidden md:inline-block">Selaa tuotteita</span>
+          <span className="hidden md:inline-block">{t("browseMenu")}</span>
         </div>
       }
       position="left"
