@@ -241,6 +241,19 @@ export default function ListingTemplate({
         : (selectedFacets[groupName] || []).filter((id) => id !== facetId),
     };
 
+    // If all filters are removed, return the original products without a new fetch
+    const hasAnyFilters = Object.values(newSelectedFacets).some(
+      (group) => group.length > 0,
+    );
+    if (!hasAnyFilters && !priceRange.min && !priceRange.max) {
+      setIsLoading(false);
+      setProducts(initialProducts);
+      setCurrentFacets(originalFacets);
+      setSelectedFacets({});
+      setFirstSelectedGroup(null);
+      return;
+    }
+
     setSelectedFacets(newSelectedFacets);
 
     // Update firstSelectedGroup immediately
