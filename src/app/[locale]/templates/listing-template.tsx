@@ -234,15 +234,26 @@ export default function ListingTemplate({
       facets.find((f) => f.facetValue.id === facetId)?.facetValue.facet.name ||
       "";
 
-    setSelectedFacets((prev) => {
-      const groupFacets = prev[groupName] || [];
-      return {
-        ...prev,
-        [groupName]: e.target.checked
-          ? [...groupFacets, facetId]
-          : groupFacets.filter((id) => id !== facetId),
-      };
-    });
+    const newSelectedFacets = {
+      ...selectedFacets,
+      [groupName]: e.target.checked
+        ? [...(selectedFacets[groupName] || []), facetId]
+        : (selectedFacets[groupName] || []).filter((id) => id !== facetId),
+    };
+
+    setSelectedFacets(newSelectedFacets);
+
+    // Update firstSelectedGroup immediately
+    const selectedGroups = Object.entries(newSelectedFacets).filter(
+      ([, values]) => values.length > 0,
+    );
+    const newFirstSelectedGroup =
+      selectedGroups.length === 1
+        ? selectedGroups[0][0]
+        : selectedGroups.length === 0
+          ? null
+          : firstSelectedGroup;
+    setFirstSelectedGroup(newFirstSelectedGroup);
   };
 
   const handleClearFilters = () => {
