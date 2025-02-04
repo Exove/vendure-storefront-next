@@ -18,19 +18,27 @@ A modern and high-performance e-commerce storefront built with Next.js 15 for th
 
 ## Getting Started
 
-1. Install dependencies:
+1. Ensure you have a Vendure server running with the Elasticsearch plugin installed. See [Elasticsearch Plugin documentation](https://docs.vendure.io/reference/core-plugins/elasticsearch-plugin/) for installation instructions.
+
+2. Create `.env` file and add your Vendure API URL:
+
+```bash
+NEXT_PUBLIC_VENDURE_API_URL=http://path-to-your-vendure-server/shop-api
+```
+
+3. Install dependencies:
 
 ```bash
 npm i
 ```
 
-2. Start the development server:
+4. Start the development server:
 
 ```bash
 npm run dev
 ```
 
-3. Open [http://localhost:3000](http://localhost:3000) in your browser
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
 ## Scripts
 
