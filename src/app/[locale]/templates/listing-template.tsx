@@ -16,6 +16,8 @@ import SidePanel from "@/components/side-panel";
 import { FunnelIcon } from "@heroicons/react/24/outline";
 import ProductFilters from "@/components/product-filters";
 import SortSelect from "@/components/sort-select";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { Link } from "@/i18n/routing";
 
 interface ListingTemplateProps {
   products: SearchResult[];
@@ -25,6 +27,8 @@ interface ListingTemplateProps {
   }[];
   title?: string;
   collectionSlug: string;
+  parentCollection?: string;
+  parentCollectionSlug?: string;
 }
 
 export default function ListingTemplate({
@@ -32,6 +36,8 @@ export default function ListingTemplate({
   facets,
   title,
   collectionSlug,
+  parentCollection,
+  parentCollectionSlug,
 }: ListingTemplateProps) {
   const t = useTranslations("listing");
   const searchParams = useSearchParams();
@@ -251,6 +257,19 @@ export default function ListingTemplate({
 
   return (
     <div>
+      {parentCollection &&
+        parentCollectionSlug &&
+        parentCollectionSlug !== "__root_collection__" && (
+          <div className="mt-4">
+            <Link
+              href={`/collections/${parentCollectionSlug}`}
+              className="flex items-center gap-2 text-sm text-slate-400 hover:text-white"
+            >
+              <ArrowLeftIcon className="h-4 w-4" />
+              {parentCollection}
+            </Link>
+          </div>
+        )}
       {title && (
         <div className="mb-16 mt-6 rounded-xl bg-slate-800 px-10 py-24 text-center">
           <h1 className="text-4xl font-black">{title}</h1>

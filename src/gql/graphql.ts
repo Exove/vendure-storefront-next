@@ -4222,7 +4222,11 @@ export type CollectionBySlugQueryVariables = Exact<{
 
 export type CollectionBySlugQuery = {
   __typename?: "Query";
-  collection?: { __typename?: "Collection"; name: string } | null;
+  collection?: {
+    __typename?: "Collection";
+    name: string;
+    parent?: { __typename?: "Collection"; name: string; slug: string } | null;
+  } | null;
 };
 
 export const ActiveOrderFragmentDoc = {
@@ -7584,6 +7588,17 @@ export const CollectionBySlugDocument = {
               kind: "SelectionSet",
               selections: [
                 { kind: "Field", name: { kind: "Name", value: "name" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "parent" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                      { kind: "Field", name: { kind: "Name", value: "slug" } },
+                    ],
+                  },
+                },
               ],
             },
           },

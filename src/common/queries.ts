@@ -236,6 +236,10 @@ export const collectionBySlugQuery = graphql(`
   query CollectionBySlug($slug: String!) {
     collection(slug: $slug) {
       name
+      parent {
+        name
+        slug
+      }
     }
   }
 `);

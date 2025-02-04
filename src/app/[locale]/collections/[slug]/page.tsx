@@ -51,6 +51,8 @@ export default async function CollectionPage(props: {
         collectionSlug={collectionSlug || ""}
         products={search.items as SearchResult[]}
         title={collectionName.collection?.name || ""}
+        parentCollection={collectionName.collection?.parent?.name || ""}
+        parentCollectionSlug={collectionName.collection?.parent?.slug || ""}
       />
     </Container>
   );

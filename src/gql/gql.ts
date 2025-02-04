@@ -64,7 +64,7 @@ const documents = {
     types.OrderByCodeDocument,
   "\n  query Collections {\n    collections {\n      items {\n        name\n        slug\n        id\n        parent {\n          name\n        }\n        children {\n          name\n          slug\n          id\n        }\n      }\n    }\n  }\n":
     types.CollectionsDocument,
-  "\n  query CollectionBySlug($slug: String!) {\n    collection(slug: $slug) {\n      name\n    }\n  }\n":
+  "\n  query CollectionBySlug($slug: String!) {\n    collection(slug: $slug) {\n      name\n      parent {\n        name\n        slug\n      }\n    }\n  }\n":
     types.CollectionBySlugDocument,
 };
 
@@ -236,8 +236,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  query CollectionBySlug($slug: String!) {\n    collection(slug: $slug) {\n      name\n    }\n  }\n",
-): (typeof documents)["\n  query CollectionBySlug($slug: String!) {\n    collection(slug: $slug) {\n      name\n    }\n  }\n"];
+  source: "\n  query CollectionBySlug($slug: String!) {\n    collection(slug: $slug) {\n      name\n      parent {\n        name\n        slug\n      }\n    }\n  }\n",
+): (typeof documents)["\n  query CollectionBySlug($slug: String!) {\n    collection(slug: $slug) {\n      name\n      parent {\n        name\n        slug\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
