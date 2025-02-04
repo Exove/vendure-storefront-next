@@ -4,7 +4,7 @@ import ListingTemplate from "@/app/[locale]/templates/listing-template";
 import { SearchResult } from "@/gql/graphql";
 import { FacetValue } from "@/gql/graphql";
 import { PRODUCTS_PER_PAGE, VENDURE_API_URL } from "@/common/constants";
-import { filteredProductsQuery } from "@/common/queries";
+import { collectionBySlugQuery, filteredProductsQuery } from "@/common/queries";
 import { request } from "graphql-request";
 import { GetFilteredProductsQuery } from "@/gql/graphql";
 import { getMenuItems } from "@/common/get-menu-items";
@@ -32,9 +32,11 @@ export default async function CollectionPage(props: {
     },
   );
 
-  const rootCollectionName = search.collections?.find(
-    (c) => c.collection.parent?.name === "__root_collection__",
-  )?.collection.name;
+  const collectionName = await request(
+    `${VENDURE_API_URL}?languageCode=${languageCode}`,
+    collectionBySlugQuery,
+    { slug: collectionSlug },
+  );
 
   return (
     <Container>
@@ -48,7 +50,7 @@ export default async function CollectionPage(props: {
         }
         collectionSlug={collectionSlug || ""}
         products={search.items as SearchResult[]}
-        title={rootCollectionName}
+        title={collectionName.collection?.name || ""}
       />
     </Container>
   );
