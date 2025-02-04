@@ -3,13 +3,35 @@ import Header from "@/components/header";
 import ListingTemplate from "@/app/[locale]/templates/listing-template";
 import { SearchResult } from "@/gql/graphql";
 import { FacetValue } from "@/gql/graphql";
-import { PRODUCTS_PER_PAGE, VENDURE_API_URL } from "@/common/constants";
+import {
+  PRODUCTS_PER_PAGE,
+  VENDURE_API_URL,
+  SHOP_NAME,
+} from "@/common/constants";
 import { collectionBySlugQuery, filteredProductsQuery } from "@/common/queries";
 import { request } from "graphql-request";
 import { GetFilteredProductsQuery } from "@/gql/graphql";
 import { getMenuItems } from "@/common/get-menu-items";
+import { Metadata } from "next";
 
 type Params = Promise<{ locale: string; slug: string }>;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Params;
+}): Promise<Metadata> {
+  const { locale: languageCode, slug: collectionSlug } = await params;
+  const { collection } = await request(
+    `${VENDURE_API_URL}?languageCode=${languageCode}`,
+    collectionBySlugQuery,
+    { slug: collectionSlug },
+  );
+
+  return {
+    title: `${collection?.name || ""} | ${SHOP_NAME}`,
+  };
+}
 
 export default async function CollectionPage(props: {
   params: Params;

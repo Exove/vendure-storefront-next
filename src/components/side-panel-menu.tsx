@@ -64,7 +64,7 @@ export default function SidePanelMenu({ items }: SidePanelMenuProps) {
                     (item) => item.title === title,
                   )?.url || "#"
                 }
-                className="block p-3 text-lg"
+                className="block border-t border-slate-700 p-3 text-lg"
               >
                 {t("all")}
               </Link>
