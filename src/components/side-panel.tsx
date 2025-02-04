@@ -10,6 +10,7 @@ import { ChevronRightIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import { Fragment, useState } from "react";
 import { useTranslations } from "next-intl";
+import React from "react";
 
 interface MenuDialogProps {
   openLabel: React.ReactNode;
@@ -38,15 +39,21 @@ export default function SidePanel({
   const [isOpen, setIsOpen] = useState(false);
   const t = useTranslations("common");
 
+  // Check if openLabel is a button element
+  const isButtonLabel =
+    React.isValidElement(openLabel) && openLabel.type === "button";
+
+  const Trigger = isButtonLabel ? "div" : "button";
+
   return (
     <>
-      <button
+      <Trigger
         onClick={() => setIsOpen(true)}
         className={clsx(fullWidthButton && "w-full")}
         id={buttonId}
       >
         {openLabel}
-      </button>
+      </Trigger>
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog className="relative z-50" onClose={() => setIsOpen(false)}>
@@ -82,8 +89,8 @@ export default function SidePanel({
                 position === "right" && "right-0",
               )}
             >
-              <DialogPanel className="h-full w-full max-w-[500px] rounded-lg bg-slate-800 p-5">
-                <div className="flex h-full max-w-[500px] flex-col">
+              <DialogPanel className="min-h-full w-full max-w-[500px] rounded-lg bg-slate-800 p-5">
+                <div className="flex min-h-full max-w-[500px] flex-col">
                   <div className="mb-4 flex items-end justify-between">
                     {showBackButton ? (
                       <button

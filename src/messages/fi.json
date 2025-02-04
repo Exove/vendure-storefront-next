@@ -83,6 +83,7 @@
     "description": "Valitettavasti etsimääsi sivua ei löytynyt."
   },
   "listing": {
+    "filters": "Suodattimet",
     "clearFilters": "Tyhjennä suodattimet",
     "priceRange": "Hintahaitari",
     "sortBy": "Järjestä",

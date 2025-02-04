@@ -9,17 +9,13 @@ import {
 import { useState, useEffect } from "react";
 import { getFilteredProductsAction } from "../actions";
 import ProductCard from "@/components/product-card";
-import { XMarkIcon } from "@heroicons/react/20/solid";
 import { useTranslations } from "next-intl";
-import PriceRangeFilter from "@/components/price-range-filter";
-import {
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from "@/components/facet-accordion";
-import SortSelect from "@/components/sort-select";
-import { PRODUCTS_PER_PAGE, HIDDEN_FACET_GROUPS } from "@/common/constants";
+import { PRODUCTS_PER_PAGE } from "@/common/constants";
 import { useSearchParams } from "next/navigation";
+import SidePanel from "@/components/side-panel";
+import { FunnelIcon } from "@heroicons/react/24/outline";
+import ProductFilters from "@/components/product-filters";
+import SortSelect from "@/components/sort-select";
 
 interface ListingTemplateProps {
   products: SearchResult[];
@@ -174,7 +170,7 @@ export default function ListingTemplate({
 
       setProducts(results.items as SearchResult[]);
 
-      // Jos käyttäjä on tehnyt toiminnon (sivunvaihto), vieritetään sivu oikeaan kohtaan
+      // If the user has made an action (page change), scroll to the right place
       if (userAction) {
         const element = document.getElementById("listing-view");
         if (element) {
@@ -227,7 +223,6 @@ export default function ListingTemplate({
     collectionSlug,
   ]);
 
-  // Handle facet checkbox changes
   const handleFacetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const facetId = e.target.value;
     const groupName =
@@ -245,40 +240,6 @@ export default function ListingTemplate({
     });
   };
 
-  // Determine whether a facet should be displayed based on current filters
-  const shouldShowFacet = (groupName: string, facetValue: FacetValue) => {
-    // Always show all facets in the first selected group
-    if (groupName === firstSelectedGroup) {
-      return true;
-    }
-
-    // During loading, keep showing what was visible before
-    if (isLoading && selectedFacets[groupName]?.includes(facetValue.id)) {
-      return true;
-    }
-
-    // For other groups, only show facets that would yield results
-    return currentFacets.some(
-      (f) => f.facetValue.id === facetValue.id && f.count > 0,
-    );
-  };
-
-  const getFacetCount = (facetId: string, groupName: string) => {
-    // For the first selected group, always show original counts
-    if (groupName === firstSelectedGroup) {
-      return (
-        originalFacets.find((f) => f.facetValue.id === facetId)?.count || ""
-      );
-    }
-
-    if (isLoading) {
-      return (
-        currentFacets.find((f) => f.facetValue.id === facetId)?.count || ""
-      );
-    }
-    return currentFacets.find((f) => f.facetValue.id === facetId)?.count || "";
-  };
-
   const handleClearFilters = () => {
     setSelectedFacets({});
     setFirstSelectedGroup(null);
@@ -288,10 +249,6 @@ export default function ListingTemplate({
     setCurrentPage(1);
   };
 
-  const hasActiveFilters = Object.values(selectedFacets).some(
-    (group) => group.length > 0,
-  );
-
   return (
     <div>
       {title && (
@@ -299,99 +256,51 @@ export default function ListingTemplate({
           <h1 className="text-4xl font-black">{title}</h1>
         </div>
       )}
-      <div className="mt-10 flex gap-16" id="listing-view">
-        <div className="w-[200px]">
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="sr-only">Facets</h2>
-            <div className="h-[35px]">
-              {(hasActiveFilters ||
-                priceRange.min !== null ||
-                priceRange.max !== null) && (
-                <button
-                  onClick={() => {
-                    handleClearFilters();
-                    setPriceRange({ min: null, max: null });
-                  }}
-                  className="flex items-center gap-2 text-xs text-blue-300 hover:text-blue-100"
-                >
-                  <div className="rounded-full border border-blue-300">
-                    <XMarkIcon className="h-4 w-4" />
-                  </div>
-                  {t("clearFilters")}
-                </button>
-              )}
+      <div className="mt-10 gap-16 lg:flex" id="listing-view">
+        {/* Mobile Filters */}
+        <div className="lg:hidden">
+          <SidePanel
+            openLabel={
+              <button className="flex items-center gap-2 rounded-md border border-slate-600 px-4 py-2 text-sm hover:bg-slate-800">
+                <FunnelIcon className="h-5 w-5" />
+                {t("filters")}
+              </button>
+            }
+            title={t("filters")}
+            position="left"
+          >
+            <div className="max-w-[300px]">
+              <ProductFilters
+                facets={facets}
+                selectedFacets={selectedFacets}
+                onFacetChange={handleFacetChange}
+                priceRange={priceRange}
+                onPriceRangeChange={setPriceRange}
+                onClearFilters={handleClearFilters}
+                currentFacets={currentFacets}
+                originalFacets={originalFacets}
+                firstSelectedGroup={firstSelectedGroup}
+                isLoading={isLoading}
+                isMobile
+              />
             </div>
-          </div>
-          <form className="flex flex-col gap-8">
-            <AccordionItem open>
-              <AccordionTrigger>{t("priceRange")}</AccordionTrigger>
-              <AccordionContent>
-                <PriceRangeFilter
-                  priceRange={priceRange}
-                  onPriceRangeChange={setPriceRange}
-                />
-              </AccordionContent>
-            </AccordionItem>
+          </SidePanel>
+        </div>
 
-            {/* Group facets by their facet type (e.g., Color, Size) */}
-            {Object.entries(
-              facets.reduce(
-                (acc, { facetValue }) => {
-                  const group = facetValue.facet.name;
-                  // Skip hidden facet groups
-                  if (HIDDEN_FACET_GROUPS.includes(group)) return acc;
-                  acc[group] = acc[group] || [];
-                  acc[group].push(facetValue);
-                  return acc;
-                },
-                {} as Record<string, FacetValue[]>,
-              ),
-            ).map(([groupName, groupFacets]) => {
-              const hasVisibleFacets = groupFacets.some((facetValue) =>
-                shouldShowFacet(groupName, facetValue),
-              );
-
-              return hasVisibleFacets ? (
-                <AccordionItem key={groupName} open>
-                  <AccordionTrigger>{groupName}</AccordionTrigger>
-                  <AccordionContent>
-                    <div className="flex flex-col gap-2">
-                      {groupFacets.map(
-                        (facetValue) =>
-                          shouldShowFacet(groupName, facetValue) && (
-                            <div
-                              key={facetValue.id}
-                              className="flex items-center justify-between gap-2"
-                            >
-                              <div className="flex items-center gap-2">
-                                <input
-                                  type="checkbox"
-                                  id={facetValue.id}
-                                  value={facetValue.id}
-                                  name={facetValue.name}
-                                  onChange={handleFacetChange}
-                                  checked={
-                                    selectedFacets[groupName]?.includes(
-                                      facetValue.id,
-                                    ) || false
-                                  }
-                                />
-                                <label htmlFor={facetValue.id}>
-                                  {facetValue.name}
-                                </label>
-                              </div>
-                              <span className="text-slate-400">
-                                {getFacetCount(facetValue.id, groupName)}
-                              </span>
-                            </div>
-                          ),
-                      )}
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              ) : null;
-            })}
-          </form>
+        {/* Desktop filters */}
+        <div className="hidden w-[200px] lg:block">
+          <ProductFilters
+            facets={facets}
+            selectedFacets={selectedFacets}
+            onFacetChange={handleFacetChange}
+            priceRange={priceRange}
+            onPriceRangeChange={setPriceRange}
+            onClearFilters={handleClearFilters}
+            currentFacets={currentFacets}
+            originalFacets={originalFacets}
+            firstSelectedGroup={firstSelectedGroup}
+            isLoading={isLoading}
+          />
         </div>
 
         {/* Product listing */}
