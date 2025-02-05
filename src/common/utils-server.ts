@@ -1,5 +1,5 @@
 import { GraphQLClient } from "graphql-request";
-import { VENDURE_API_URL, VENDURE_BEARER_TOKEN } from "./constants";
+import { VENDURE_API_URL, VENDURE_BEARER_TOKEN_KEY } from "./constants";
 import { cookies } from "next/headers";
 import { getFragmentData } from "../gql/fragment-masking";
 import {
@@ -30,7 +30,7 @@ import { activeOrderFragment, orderFragment } from "./fragments";
 // Create reusable function to get GraphQL client with auth cookies
 export async function getAuthenticatedClient(apiUrl: string = VENDURE_API_URL) {
   const cookieStore = await cookies();
-  const bearerToken = cookieStore.get(VENDURE_BEARER_TOKEN);
+  const bearerToken = cookieStore.get(VENDURE_BEARER_TOKEN_KEY);
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",

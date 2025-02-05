@@ -1,7 +1,7 @@
 "use server";
 import { cookies } from "next/headers";
 import { GraphQLClient } from "graphql-request";
-import { VENDURE_API_URL, VENDURE_BEARER_TOKEN } from "@/common/constants";
+import { VENDURE_API_URL, VENDURE_BEARER_TOKEN_KEY } from "@/common/constants";
 import { getFragmentData } from "@/gql";
 import {
   adjustOrderLine,
@@ -154,7 +154,7 @@ export const setOrderShippingAddressAction = async (
   input: CreateAddressInput,
 ) => {
   const cookieStore = await cookies();
-  const bearerToken = cookieStore.get(VENDURE_BEARER_TOKEN);
+  const bearerToken = cookieStore.get(VENDURE_BEARER_TOKEN_KEY);
   const graphQLClient = new GraphQLClient(VENDURE_API_URL, {
     headers: {
       "Content-Type": "application/json",
@@ -190,7 +190,7 @@ export async function setBearerToken(token: string) {
   const cookieStore = await cookies();
 
   cookieStore.set({
-    name: VENDURE_BEARER_TOKEN,
+    name: VENDURE_BEARER_TOKEN_KEY,
     value: token,
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
@@ -201,13 +201,13 @@ export async function setBearerToken(token: string) {
 
 export async function getBearerToken() {
   const cookieStore = await cookies();
-  return cookieStore.get(VENDURE_BEARER_TOKEN);
+  return cookieStore.get(VENDURE_BEARER_TOKEN_KEY);
 }
 
 export async function deleteBearerToken() {
   const cookieStore = await cookies();
 
-  cookieStore.delete(VENDURE_BEARER_TOKEN);
+  cookieStore.delete(VENDURE_BEARER_TOKEN_KEY);
 }
 
 export const getCollectionsAction = async () => {
