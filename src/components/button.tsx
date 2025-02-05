@@ -1,7 +1,6 @@
 "use client";
 
 import clsx from "clsx";
-import { motion } from "motion/react";
 import { Link } from "@/i18n/routing";
 
 interface ButtonProps {
@@ -41,9 +40,7 @@ export default function Button({
   if (href) {
     return (
       <Link href={href} data-testid={id}>
-        <motion.div
-          whileHover={{ scale: style !== "disabled" ? 1.02 : 1 }}
-          whileTap={{ scale: style !== "disabled" ? 1.0 : 1 }}
+        <div
           className={clsx(
             baseStyles,
             styleVariants[style],
@@ -52,7 +49,7 @@ export default function Button({
           )}
         >
           {children}
-        </motion.div>
+        </div>
       </Link>
     );
   }
