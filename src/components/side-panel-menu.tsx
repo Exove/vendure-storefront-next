@@ -22,15 +22,21 @@ export default function SidePanelMenu({ items }: SidePanelMenuProps) {
   const [navigationStack, setNavigationStack] = useState<
     { items: MenuItem[]; title: string }[]
   >([]);
+  const [direction, setDirection] = useState<"forward" | "back">("forward");
+  const [isFirstRender, setIsFirstRender] = useState(true);
   const t = useTranslations("common");
 
   const handleSubmenuClick = (submenuItems: MenuItem[], title: string) => {
+    setIsFirstRender(false);
+    setDirection("forward");
     setNavigationStack([...navigationStack, { items: currentItems, title }]);
     setCurrentItems(submenuItems);
   };
 
   const handleBack = () => {
     if (navigationStack.length > 0) {
+      setIsFirstRender(false);
+      setDirection("back");
       const previousState = navigationStack[navigationStack.length - 1];
       setCurrentItems(previousState.items);
       setNavigationStack(navigationStack.slice(0, -1));
@@ -54,12 +60,15 @@ export default function SidePanelMenu({ items }: SidePanelMenuProps) {
       showBackButton={navigationStack.length > 0}
       onBack={handleBack}
     >
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="popLayout">
         <motion.div
           key={navigationStack.length}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          initial={
+            isFirstRender
+              ? false
+              : { opacity: 0, x: direction === "forward" ? 300 : -300 }
+          }
+          animate={{ opacity: 1, x: 0 }}
           transition={{
             duration: 0.2,
             ease: "easeInOut",
