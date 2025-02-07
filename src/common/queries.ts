@@ -66,6 +66,8 @@ export const filteredProductsQuery = graphql(`
     $skip: Int
     $sort: SearchResultSortParameter
     $facetValueFilters: [FacetValueFilterInput!]
+    $priceMin: Int!
+    $priceMax: Int!
   ) {
     search(
       input: {
@@ -77,6 +79,7 @@ export const filteredProductsQuery = graphql(`
         skip: $skip
         sort: $sort
         facetValueFilters: $facetValueFilters
+        priceRangeWithTax: { min: $priceMin, max: $priceMax }
       }
     ) {
       collections {

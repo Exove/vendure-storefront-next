@@ -4050,6 +4050,8 @@ export type GetFilteredProductsQueryVariables = Exact<{
   facetValueFilters?: InputMaybe<
     Array<FacetValueFilterInput> | FacetValueFilterInput
   >;
+  priceMin: Scalars["Int"]["input"];
+  priceMax: Scalars["Int"]["input"];
 }>;
 
 export type GetFilteredProductsQuery = {
@@ -6623,6 +6625,28 @@ export const GetFilteredProductsDocument = {
             },
           },
         },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "priceMin" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "priceMax" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+          },
+        },
       ],
       selectionSet: {
         kind: "SelectionSet",
@@ -6699,6 +6723,31 @@ export const GetFilteredProductsDocument = {
                       value: {
                         kind: "Variable",
                         name: { kind: "Name", value: "facetValueFilters" },
+                      },
+                    },
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "priceRangeWithTax" },
+                      value: {
+                        kind: "ObjectValue",
+                        fields: [
+                          {
+                            kind: "ObjectField",
+                            name: { kind: "Name", value: "min" },
+                            value: {
+                              kind: "Variable",
+                              name: { kind: "Name", value: "priceMin" },
+                            },
+                          },
+                          {
+                            kind: "ObjectField",
+                            name: { kind: "Name", value: "max" },
+                            value: {
+                              kind: "Variable",
+                              name: { kind: "Name", value: "priceMax" },
+                            },
+                          },
+                        ],
                       },
                     },
                   ],

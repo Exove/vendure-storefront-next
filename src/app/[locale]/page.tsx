@@ -34,6 +34,8 @@ export default async function Home(props: { params: Params }) {
       skip: 0,
       take: 100,
       groupByProduct: true,
+      priceMin: 0,
+      priceMax: 1000000000,
     },
   );
 

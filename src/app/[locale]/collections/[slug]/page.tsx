@@ -51,6 +51,8 @@ export default async function CollectionPage(props: {
       skip: page * PRODUCTS_PER_PAGE,
       take: PRODUCTS_PER_PAGE,
       groupByProduct: true,
+      priceMin: 0,
+      priceMax: 1000000000,
     },
   );
 
