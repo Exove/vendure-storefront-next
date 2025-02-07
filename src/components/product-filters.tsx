@@ -1,5 +1,6 @@
 import { FacetValue } from "@/gql/graphql";
 import { XMarkIcon } from "@heroicons/react/20/solid";
+import { CheckIcon } from "@heroicons/react/24/outline";
 import { useTranslations } from "next-intl";
 import PriceRangeFilter from "@/components/price-range-filter";
 import {
@@ -153,22 +154,27 @@ export default function ProductFilters({
                           className="flex items-center justify-between gap-2"
                         >
                           <div className="flex items-center gap-2">
-                            <input
-                              type="checkbox"
-                              id={`${isMobile ? "mobile-" : ""}${facetValue.id}`}
-                              value={facetValue.id}
-                              name={facetValue.name}
-                              onChange={onFacetChange}
-                              checked={
-                                selectedFacets[groupName]?.includes(
-                                  facetValue.id,
-                                ) || false
-                              }
-                            />
+                            <div className="relative flex h-5 w-5 items-center justify-center">
+                              <input
+                                type="checkbox"
+                                id={`${isMobile ? "mobile-" : ""}${facetValue.id}`}
+                                value={facetValue.id}
+                                name={facetValue.name}
+                                onChange={onFacetChange}
+                                checked={
+                                  selectedFacets[groupName]?.includes(
+                                    facetValue.id,
+                                  ) || false
+                                }
+                                className="absolute h-5 w-5 cursor-pointer appearance-none rounded-md border-2 border-slate-500 bg-slate-800 transition-all checked:border-blue-500 checked:bg-blue-500 hover:border-blue-400 hover:bg-slate-700"
+                              />
+                              <CheckIcon className="pointer-events-none z-10 h-3 w-3 stroke-[3] text-white opacity-0 transition-opacity [input:checked~&]:opacity-100" />
+                            </div>
                             <label
                               htmlFor={`${isMobile ? "mobile-" : ""}${
                                 facetValue.id
                               }`}
+                              className="cursor-pointer text-sm font-medium capitalize text-slate-200 hover:text-white"
                             >
                               {facetValue.name}
                             </label>
