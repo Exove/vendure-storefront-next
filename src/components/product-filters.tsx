@@ -166,7 +166,7 @@ export default function ProductFilters({
                                     facetValue.id,
                                   ) || false
                                 }
-                                className="absolute h-5 w-5 cursor-pointer appearance-none rounded-md border-2 border-slate-500 bg-slate-800 transition-all checked:border-blue-500 checked:bg-blue-500 hover:border-blue-400 hover:bg-slate-700"
+                                className="absolute h-5 w-5 cursor-pointer appearance-none rounded-md bg-slate-700 transition-all checked:bg-blue-500 hover:bg-slate-500"
                               />
                               <CheckIcon className="pointer-events-none z-10 h-3 w-3 stroke-[3] text-white opacity-0 transition-opacity [input:checked~&]:opacity-100" />
                             </div>
