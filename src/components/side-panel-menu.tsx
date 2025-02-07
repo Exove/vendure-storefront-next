@@ -5,6 +5,7 @@ import { Link } from "@/i18n/routing";
 import { ChevronRightIcon, Bars3Icon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { motion, AnimatePresence } from "motion/react";
 
 interface MenuItem {
   title: string;
@@ -53,44 +54,63 @@ export default function SidePanelMenu({ items }: SidePanelMenuProps) {
       showBackButton={navigationStack.length > 0}
       onBack={handleBack}
     >
-      <div className="flex w-full flex-col">
-        {title && (
-          <>
-            <h2 className="my-6 text-2xl font-bold">{title}</h2>
-            {navigationStack.length > 0 && (
-              <Link
-                href={
-                  navigationStack[navigationStack.length - 1].items.find(
-                    (item) => item.title === title,
-                  )?.url || "#"
-                }
-                className="block border-t border-slate-700 p-3 text-lg"
-              >
-                {t("all")}
-              </Link>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={navigationStack.length}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{
+            duration: 0.2,
+            ease: "easeInOut",
+          }}
+        >
+          <div className="flex w-full flex-col">
+            {title && (
+              <>
+                <h2 className="my-6 text-2xl font-bold">{title}</h2>
+                {navigationStack.length > 0 && (
+                  <Link
+                    href={
+                      navigationStack[navigationStack.length - 1].items.find(
+                        (item) => item.title === title,
+                      )?.url || "#"
+                    }
+                    className="block border-t border-slate-700 p-3 text-lg transition-all duration-200 hover:bg-slate-700"
+                  >
+                    {t("all")}
+                  </Link>
+                )}
+              </>
             )}
-          </>
-        )}
-        <ul className="w-full divide-y divide-slate-700 overflow-scroll break-words border-y border-slate-700 text-lg">
-          {currentItems?.map((item, index) => (
-            <li key={`${item.url}-${index}`}>
-              {!item.sublinks ? (
-                <Link href={item.url} className="block p-3">
-                  {item.title}
-                </Link>
-              ) : (
-                <button
-                  onClick={() => handleSubmenuClick(item.sublinks!, item.title)}
-                  className="flex w-full items-center justify-between p-3 text-lg"
-                >
-                  {item.title}
-                  <ChevronRightIcon className="h-6 w-6 stroke-2" />
-                </button>
-              )}
-            </li>
-          ))}
-        </ul>
-      </div>
+
+            <ul className="w-full divide-y divide-slate-700 overflow-scroll break-words border-y border-slate-700 text-lg">
+              {currentItems?.map((item, index) => (
+                <li key={`${item.url}-${index}`}>
+                  {!item.sublinks ? (
+                    <Link
+                      href={item.url}
+                      className="block p-3 transition-all duration-200 hover:bg-slate-700"
+                    >
+                      {item.title}
+                    </Link>
+                  ) : (
+                    <button
+                      onClick={() =>
+                        handleSubmenuClick(item.sublinks!, item.title)
+                      }
+                      className="flex w-full items-center justify-between p-3 text-lg transition-all duration-200 hover:bg-slate-700"
+                    >
+                      {item.title}
+                      <ChevronRightIcon className="h-6 w-6 stroke-2" />
+                    </button>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </motion.div>
+      </AnimatePresence>
     </SidePanel>
   );
 }
