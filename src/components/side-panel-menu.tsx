@@ -26,6 +26,15 @@ export default function SidePanelMenu({ items }: SidePanelMenuProps) {
   const [isFirstRender, setIsFirstRender] = useState(true);
   const t = useTranslations("common");
 
+  const handleClose = () => {
+    setTimeout(() => {
+      setCurrentItems(items);
+      setNavigationStack([]);
+      setDirection("forward");
+      setIsFirstRender(true);
+    }, 200); // 200ms delay to ensure the animation is complete
+  };
+
   const handleSubmenuClick = (submenuItems: MenuItem[], title: string) => {
     setIsFirstRender(false);
     setDirection("forward");
@@ -59,6 +68,7 @@ export default function SidePanelMenu({ items }: SidePanelMenuProps) {
       position="left"
       showBackButton={navigationStack.length > 0}
       onBack={handleBack}
+      onClose={handleClose}
     >
       <AnimatePresence mode="popLayout">
         <motion.div

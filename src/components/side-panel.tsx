@@ -23,6 +23,7 @@ interface MenuDialogProps {
   buttonId?: string;
   showBackButton?: boolean;
   onBack?: () => void;
+  onClose?: () => void;
 }
 
 export default function SidePanel({
@@ -35,9 +36,15 @@ export default function SidePanel({
   buttonId = "open-side-panel",
   showBackButton = false,
   onBack,
+  onClose,
 }: MenuDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const t = useTranslations("common");
+
+  const handleClose = () => {
+    setIsOpen(false);
+    onClose?.();
+  };
 
   // Check if openLabel is a button element
   const isButtonLabel =
@@ -56,7 +63,7 @@ export default function SidePanel({
       </Trigger>
 
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog className="relative z-50" onClose={() => setIsOpen(false)}>
+        <Dialog className="relative z-50" onClose={handleClose}>
           <TransitionChild
             as={Fragment}
             enter="ease-out duration-300"
@@ -112,7 +119,7 @@ export default function SidePanel({
                             <div />
                           )}
 
-                          <button onClick={() => setIsOpen(false)}>
+                          <button onClick={handleClose}>
                             <span className="sr-only">{t("closeMenu")}</span>
                             <XMarkIcon className="h-10 w-10 rounded-full bg-slate-700 p-2 hover:bg-slate-600 active:bg-slate-700" />
                           </button>
