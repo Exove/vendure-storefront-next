@@ -36,27 +36,29 @@ export default function ProductTemplate({
     <CartContext.Provider value={{ cartQuantity, setCartQuantity }}>
       <Container>
         <Header menuItems={menuItems} />
-        <div className="mt-20 grid grid-cols-1 gap-20 md:grid-cols-2">
-          <ImageGallery images={product.assets} />
-          <div className="flex flex-col gap-8">
-            <div>
-              <Heading level="h1" size="xl" className="mb-4">
-                {product.name}
-              </Heading>
-              {allVariantsHaveSamePrice && (
-                <div className="mb-10 text-xl text-blue-400">
-                  {formatCurrency(product.variants[0].priceWithTax, locale)}
-                </div>
-              )}
-              <div
-                className="prose prose-invert text-white"
-                dangerouslySetInnerHTML={{ __html: product.description }}
+        <div className="mx-auto max-w-screen-xl">
+          <div className="mt-20 grid grid-cols-1 gap-20 md:grid-cols-2">
+            <ImageGallery images={product.assets} />
+            <div className="flex flex-col gap-8">
+              <div>
+                <Heading level="h1" size="xl" className="mb-4">
+                  {product.name}
+                </Heading>
+                {allVariantsHaveSamePrice && (
+                  <div className="mb-10 text-xl text-blue-400">
+                    {formatCurrency(product.variants[0].priceWithTax, locale)}
+                  </div>
+                )}
+                <div
+                  className="prose prose-invert text-white"
+                  dangerouslySetInnerHTML={{ __html: product.description }}
+                />
+              </div>
+              <AddToCartOptions
+                variants={product.variants}
+                displayPrice={!allVariantsHaveSamePrice}
               />
             </div>
-            <AddToCartOptions
-              variants={product.variants}
-              displayPrice={!allVariantsHaveSamePrice}
-            />
           </div>
         </div>
       </Container>

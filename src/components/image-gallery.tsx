@@ -25,7 +25,7 @@ const ImageGallery = ({ images }: ImageGalleryProps) => {
                   alt=""
                   width={images[0].width}
                   height={images[0].height}
-                  className="size-[544px] rounded-md object-cover"
+                  className="mx-auto aspect-square w-full rounded-lg object-cover"
                 />
                 <div className="absolute right-4 top-4 flex items-center justify-center rounded-full bg-black/30 p-2 opacity-0 transition-opacity group-hover:opacity-100">
                   <MagnifyingGlassIcon className="h-5 w-5 text-white" />
@@ -65,7 +65,7 @@ const ImageGallery = ({ images }: ImageGalleryProps) => {
                           alt=""
                           width={image.width}
                           height={image.height}
-                          className="size-[544px] rounded-md object-cover"
+                          className="mx-auto aspect-square w-full rounded-lg object-cover"
                         />
                         <div className="absolute right-4 top-4 flex items-center justify-center rounded-full bg-black/30 p-2 opacity-0 transition-opacity group-hover:opacity-100">
                           <MagnifyingGlassIcon className="h-5 w-5 text-white" />
