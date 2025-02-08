@@ -361,6 +361,10 @@ export default function ListingTemplate({
                         ? product.priceWithTax.min
                         : product.priceWithTax.value
                     }
+                    hasVariantPrices={
+                      "min" in product.priceWithTax &&
+                      product.priceWithTax.min !== product.priceWithTax.max
+                    }
                   />
                 )}
               </li>

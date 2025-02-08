@@ -5,23 +5,25 @@ import { Link } from "@/i18n/routing";
 import { formatCurrency } from "@/common/utils";
 import { PhotoIcon } from "@heroicons/react/24/outline";
 import { useLocale } from "next-intl";
+import { useTranslations } from "use-intl";
 
 interface ProductCardProps {
   slug: string;
   name: string;
   imageSource: string;
-  collection?: string;
   priceWithTax: number;
+  hasVariantPrices?: boolean;
 }
 
 export default function ProductCard({
   slug,
   name,
   imageSource,
-  collection,
   priceWithTax,
+  hasVariantPrices = false,
 }: ProductCardProps) {
   const locale = useLocale();
+  const t = useTranslations();
 
   return (
     <Link
@@ -44,9 +46,13 @@ export default function ProductCard({
       </div>
       <div className="flex flex-1 flex-col gap-2 p-4">
         <h2 className="text-lg font-semibold">{name}</h2>
-        {collection && <p className="text-sm text-slate-400">{collection}</p>}
-        <p className="mt-auto text-lg font-semibold text-blue-400">
-          {formatCurrency(priceWithTax, locale)}
+        <p className="mt-auto text-blue-400">
+          <span className="text-sm">
+            {hasVariantPrices && t("product.fromPrice")}{" "}
+          </span>
+          <span className="text-lg font-semibold">
+            {formatCurrency(priceWithTax, locale)}
+          </span>
         </p>
       </div>
     </Link>

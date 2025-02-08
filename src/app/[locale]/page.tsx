@@ -87,8 +87,12 @@ export default async function Home(props: { params: Params }) {
                     imageSource={product.productAsset?.preview || ""}
                     priceWithTax={
                       "min" in product.priceWithTax
-                        ? product.priceWithTax.min
+                        ? product.priceWithTax?.min
                         : product.priceWithTax.value
+                    }
+                    hasVariantPrices={
+                      "min" in product.priceWithTax &&
+                      product.priceWithTax.min !== product.priceWithTax.max
                     }
                   />
                 ))}

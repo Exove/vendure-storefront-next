@@ -29,7 +29,8 @@
     "outOfStock": "Out of Stock",
     "price": "Price",
     "quantity": "Quantity",
-    "selectVariant": "Select Variant"
+    "selectVariant": "Select Variant",
+    "fromPrice": "From"
   },
   "account": {
     "title": "Account",

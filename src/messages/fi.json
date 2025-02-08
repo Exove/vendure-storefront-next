@@ -29,7 +29,8 @@
     "outOfStock": "Loppu varastosta",
     "price": "Hinta",
     "quantity": "Määrä",
-    "selectVariant": "Valitse vaihtoehto"
+    "selectVariant": "Valitse vaihtoehto",
+    "fromPrice": "Alk."
   },
   "account": {
     "title": "Tili",

@@ -43,9 +43,11 @@ export default function ProductTemplate({
               <Heading level="h1" size="xl" className="mb-4">
                 {product.name}
               </Heading>
-              <div className="mb-10 text-xl text-blue-400">
-                {formatCurrency(product.variants[0].priceWithTax, locale)}
-              </div>
+              {allVariantsHaveSamePrice && (
+                <div className="mb-10 text-xl text-blue-400">
+                  {formatCurrency(product.variants[0].priceWithTax, locale)}
+                </div>
+              )}
               <div
                 className="prose prose-invert text-white"
                 dangerouslySetInnerHTML={{ __html: product.description }}
