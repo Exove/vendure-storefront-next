@@ -4027,6 +4027,7 @@ export type ProductBySlugQuery = {
       __typename?: "ProductVariant";
       name: string;
       price: any;
+      priceWithTax: any;
       id: string;
     }>;
     collections: Array<{ __typename?: "Collection"; name: string }>;
@@ -6503,6 +6504,10 @@ export const ProductBySlugDocument = {
                     selections: [
                       { kind: "Field", name: { kind: "Name", value: "name" } },
                       { kind: "Field", name: { kind: "Name", value: "price" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "priceWithTax" },
+                      },
                       { kind: "Field", name: { kind: "Name", value: "id" } },
                     ],
                   },

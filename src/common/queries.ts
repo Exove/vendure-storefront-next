@@ -39,6 +39,7 @@ export const productBySlugQuery = graphql(`
       variants {
         name
         price
+        priceWithTax
         id
       }
       collections {

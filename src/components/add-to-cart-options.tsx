@@ -18,7 +18,7 @@ interface AddToCartOptionsProps {
   variants: {
     id: string;
     name: string;
-    price: number;
+    priceWithTax: number;
   }[];
   quantity?: number;
   displayPrice?: boolean;
@@ -101,7 +101,7 @@ export default function AddToCartOptions({
                   <span className="font-medium">{variant.name}</span>
                   {displayPrice && (
                     <span className="text-lg font-semibold text-blue-400">
-                      {formatCurrency(variant.price)}
+                      {formatCurrency(variant.priceWithTax)}
                     </span>
                   )}
                 </label>
