@@ -79,7 +79,8 @@
     "password": "Salasana",
     "login": "Kirjaudu",
     "invalidCredentials": "Virheellinen sähköposti tai salasana",
-    "loginFailed": "Kirjautuminen epäonnistui"
+    "loginFailed": "Kirjautuminen epäonnistui",
+    "forgotPassword": "Unohditko salasanasi?"
   },
   "notFound": {
     "title": "404 - Sivua ei löytynyt",

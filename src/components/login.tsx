@@ -3,12 +3,14 @@
 import { VENDURE_API_URL } from "@/common/constants";
 import { GraphQLClient } from "graphql-request";
 import { useRouter } from "next/navigation";
+
 import { FormEvent, useState } from "react";
 import { useTranslations } from "next-intl";
 import { loginMutation } from "@/common/mutations";
 import { print } from "graphql";
 import { LoginMutation } from "@/gql/graphql";
 import { setBearerToken } from "../app/[locale]/actions";
+import { Link } from "@/i18n/routing";
 
 export default function Login() {
   const t = useTranslations();
@@ -92,6 +94,14 @@ export default function Login() {
           {t("auth.login")}
         </button>
       </form>
+      <div className="mt-8 flex flex-col gap-4 text-center">
+        <Link href="/register" className="text-blue-500 hover:text-blue-700">
+          {t("Register.createAccount")}
+        </Link>
+        <Link href="#" className="text-blue-500 hover:text-blue-700">
+          {t("auth.forgotPassword")}
+        </Link>
+      </div>
     </div>
   );
 }

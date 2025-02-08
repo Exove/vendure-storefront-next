@@ -76,7 +76,8 @@
     "password": "Password",
     "login": "Login",
     "invalidCredentials": "Invalid email or password",
-    "loginFailed": "Failed to login"
+    "loginFailed": "Failed to login",
+    "forgotPassword": "Forgot your password?"
   },
   "notFound": {
     "title": "404 - Page Not Found",
