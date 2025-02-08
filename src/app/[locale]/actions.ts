@@ -14,12 +14,15 @@ import {
   getLoggedInUser,
   getFilteredProducts,
   getCollections,
+  registerCustomer,
+  verifyCustomer,
 } from "@/common/utils-server";
 import {
   CreateAddressInput,
   UpdateAddressInput,
   UpdateCustomerInput,
   SearchResultSortParameter,
+  RegisterCustomerInput,
 } from "@/gql/graphql";
 import {
   addPaymentToOrderMutation,
@@ -212,5 +215,15 @@ export async function deleteBearerToken() {
 
 export const getCollectionsAction = async () => {
   const result = await getCollections();
+  return result;
+};
+
+export const registerCustomerAction = async (input: RegisterCustomerInput) => {
+  const result = await registerCustomer(input);
+  return result;
+};
+
+export const verifyCustomerAction = async (token: string, password: string) => {
+  const result = await verifyCustomer(token, password);
   return result;
 };

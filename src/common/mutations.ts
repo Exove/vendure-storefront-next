@@ -179,3 +179,32 @@ export const setCustomerForOrderMutation = graphql(`
     }
   }
 `);
+
+export const registerMutation = graphql(`
+  mutation Register($input: RegisterCustomerInput!) {
+    registerCustomerAccount(input: $input) {
+      ... on Success {
+        success
+      }
+      ... on ErrorResult {
+        errorCode
+        message
+      }
+    }
+  }
+`);
+
+export const verifyMutation = graphql(`
+  mutation Verify($password: String!, $token: String!) {
+    verifyCustomerAccount(password: $password, token: $token) {
+      ... on CurrentUser {
+        id
+        identifier
+      }
+      ... on ErrorResult {
+        errorCode
+        message
+      }
+    }
+  }
+`);

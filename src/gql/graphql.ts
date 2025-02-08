@@ -3979,6 +3979,72 @@ export type SetCustomerForOrderMutation = {
       });
 };
 
+export type RegisterMutationVariables = Exact<{
+  input: RegisterCustomerInput;
+}>;
+
+export type RegisterMutation = {
+  __typename?: "Mutation";
+  registerCustomerAccount:
+    | {
+        __typename?: "MissingPasswordError";
+        errorCode: ErrorCode;
+        message: string;
+      }
+    | {
+        __typename?: "NativeAuthStrategyError";
+        errorCode: ErrorCode;
+        message: string;
+      }
+    | {
+        __typename?: "PasswordValidationError";
+        errorCode: ErrorCode;
+        message: string;
+      }
+    | { __typename?: "Success"; success: boolean };
+};
+
+export type VerifyMutationVariables = Exact<{
+  password: Scalars["String"]["input"];
+  token: Scalars["String"]["input"];
+}>;
+
+export type VerifyMutation = {
+  __typename?: "Mutation";
+  verifyCustomerAccount:
+    | { __typename?: "CurrentUser"; id: string; identifier: string }
+    | {
+        __typename?: "MissingPasswordError";
+        errorCode: ErrorCode;
+        message: string;
+      }
+    | {
+        __typename?: "NativeAuthStrategyError";
+        errorCode: ErrorCode;
+        message: string;
+      }
+    | {
+        __typename?: "PasswordAlreadySetError";
+        errorCode: ErrorCode;
+        message: string;
+      }
+    | {
+        __typename?: "PasswordValidationError";
+        errorCode: ErrorCode;
+        message: string;
+      }
+    | {
+        __typename?: "VerificationTokenExpiredError";
+        errorCode: ErrorCode;
+        message: string;
+      }
+    | {
+        __typename?: "VerificationTokenInvalidError";
+        errorCode: ErrorCode;
+        message: string;
+      };
+};
+
 export type ProductsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type ProductsQuery = {
@@ -6341,6 +6407,201 @@ export const SetCustomerForOrderDocument = {
   SetCustomerForOrderMutation,
   SetCustomerForOrderMutationVariables
 >;
+export const RegisterDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "Register" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "RegisterCustomerInput" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "registerCustomerAccount" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "Success" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "success" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "ErrorResult" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "errorCode" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<RegisterMutation, RegisterMutationVariables>;
+export const VerifyDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "Verify" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "password" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "token" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "verifyCustomerAccount" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "password" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "password" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "token" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "token" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "CurrentUser" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "identifier" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "ErrorResult" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "errorCode" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<VerifyMutation, VerifyMutationVariables>;
 export const ProductsDocument = {
   kind: "Document",
   definitions: [

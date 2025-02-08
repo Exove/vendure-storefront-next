@@ -44,6 +44,10 @@ const documents = {
     types.UpdateCustomerDocument,
   "\n  mutation SetCustomerForOrder($input: CreateCustomerInput!) {\n    setCustomerForOrder(input: $input) {\n      ...ActiveOrder\n      ... on ErrorResult {\n        errorCode\n        message\n      }\n    }\n  }\n":
     types.SetCustomerForOrderDocument,
+  "\n  mutation Register($input: RegisterCustomerInput!) {\n    registerCustomerAccount(input: $input) {\n      ... on Success {\n        success\n      }\n      ... on ErrorResult {\n        errorCode\n        message\n      }\n    }\n  }\n":
+    types.RegisterDocument,
+  "\n  mutation Verify($password: String!, $token: String!) {\n    verifyCustomerAccount(password: $password, token: $token) {\n      ... on CurrentUser {\n        id\n        identifier\n      }\n      ... on ErrorResult {\n        errorCode\n        message\n      }\n    }\n  }\n":
+    types.VerifyDocument,
   "\n  query Products {\n    products {\n      items {\n        id\n        name\n        slug\n        collections {\n          name\n        }\n        variantList {\n          items {\n            priceWithTax\n          }\n        }\n        assets {\n          source\n          width\n          height\n        }\n      }\n    }\n  }\n":
     types.ProductsDocument,
   "\n  query ProductBySlug($slug: String!) {\n    product(slug: $slug) {\n      id\n      name\n      description\n      assets {\n        source\n        width\n        height\n      }\n      variants {\n        name\n        price\n        priceWithTax\n        id\n      }\n      collections {\n        name\n      }\n      optionGroups {\n        name\n      }\n      languageCode\n      translations {\n        name\n        description\n      }\n    }\n  }\n":
@@ -172,6 +176,18 @@ export function graphql(
 export function graphql(
   source: "\n  mutation SetCustomerForOrder($input: CreateCustomerInput!) {\n    setCustomerForOrder(input: $input) {\n      ...ActiveOrder\n      ... on ErrorResult {\n        errorCode\n        message\n      }\n    }\n  }\n",
 ): (typeof documents)["\n  mutation SetCustomerForOrder($input: CreateCustomerInput!) {\n    setCustomerForOrder(input: $input) {\n      ...ActiveOrder\n      ... on ErrorResult {\n        errorCode\n        message\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  mutation Register($input: RegisterCustomerInput!) {\n    registerCustomerAccount(input: $input) {\n      ... on Success {\n        success\n      }\n      ... on ErrorResult {\n        errorCode\n        message\n      }\n    }\n  }\n",
+): (typeof documents)["\n  mutation Register($input: RegisterCustomerInput!) {\n    registerCustomerAccount(input: $input) {\n      ... on Success {\n        success\n      }\n      ... on ErrorResult {\n        errorCode\n        message\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  mutation Verify($password: String!, $token: String!) {\n    verifyCustomerAccount(password: $password, token: $token) {\n      ... on CurrentUser {\n        id\n        identifier\n      }\n      ... on ErrorResult {\n        errorCode\n        message\n      }\n    }\n  }\n",
+): (typeof documents)["\n  mutation Verify($password: String!, $token: String!) {\n    verifyCustomerAccount(password: $password, token: $token) {\n      ... on CurrentUser {\n        id\n        identifier\n      }\n      ... on ErrorResult {\n        errorCode\n        message\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

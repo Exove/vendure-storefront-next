@@ -102,5 +102,31 @@
     "previousPage": "Edellinen sivu",
     "nextPage": "Seuraava sivu",
     "page": "Sivu"
+  },
+  "Register": {
+    "createAccount": "Luo tili",
+    "firstName": "Etunimi",
+    "lastName": "Sukunimi",
+    "email": "Sähköposti",
+    "phone": "Puhelinnumero",
+    "firstNameRequired": "Etunimi vaaditaan",
+    "lastNameRequired": "Sukunimi vaaditaan",
+    "validEmailRequired": "Kelvollinen sähköpostiosoite vaaditaan",
+    "registering": "Rekisteröidään...",
+    "register": "Rekisteröidy",
+    "registrationFailed": "Rekisteröinti epäonnistui"
+  },
+  "Verify": {
+    "verifyAccount": "Vahvista tili",
+    "password": "Salasana",
+    "confirmPassword": "Vahvista salasana",
+    "passwordRequired": "Salasana vaaditaan",
+    "passwordMinLength": "Salasanan tulee olla vähintään 8 merkkiä",
+    "passwordsDoNotMatch": "Salasanat eivät täsmää",
+    "verifying": "Vahvistetaan...",
+    "verify": "Vahvista",
+    "verificationFailed": "Vahvistus epäonnistui",
+    "invalidToken": "Virheellinen vahvistuskoodi",
+    "noToken": "Vahvistuskoodi puuttuu"
   }
 }

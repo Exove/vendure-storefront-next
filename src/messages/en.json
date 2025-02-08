@@ -99,5 +99,31 @@
     "previousPage": "Previous page",
     "nextPage": "Next page",
     "page": "Page"
+  },
+  "Register": {
+    "createAccount": "Create Account",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "phone": "Phone",
+    "firstNameRequired": "First name is required",
+    "lastNameRequired": "Last name is required",
+    "validEmailRequired": "Valid email is required",
+    "registering": "Registering...",
+    "register": "Register",
+    "registrationFailed": "Registration failed"
+  },
+  "Verify": {
+    "verifyAccount": "Verify Account",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "passwordRequired": "Password is required",
+    "passwordMinLength": "Password must be at least 8 characters",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "verifying": "Verifying...",
+    "verify": "Verify",
+    "verificationFailed": "Verification failed",
+    "invalidToken": "Invalid verification token",
+    "noToken": "Verification token is missing"
   }
 }

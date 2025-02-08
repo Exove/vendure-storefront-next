@@ -17,6 +17,7 @@ import {
   UpdateCustomerInput,
   GetFilteredProductsQuery,
   SearchResultSortParameter,
+  RegisterCustomerInput,
 } from "../gql/graphql";
 import {
   adjustOrderLineMutation,
@@ -24,6 +25,8 @@ import {
   removeItemFromOrderMutation,
   updateCustomerAddressMutation,
   updateCustomerMutation,
+  registerMutation,
+  verifyMutation,
 } from "./mutations";
 import { activeOrderFragment, orderFragment } from "./fragments";
 
@@ -159,4 +162,21 @@ export async function getCollections() {
   const client = await getAuthenticatedClient();
   const { collections } = await client.request(collectionsQuery);
   return collections;
+}
+
+export async function registerCustomer(input: RegisterCustomerInput) {
+  const client = await getAuthenticatedClient();
+  const { registerCustomerAccount } = await client.request(registerMutation, {
+    input,
+  });
+  return registerCustomerAccount;
+}
+
+export async function verifyCustomer(token: string, password: string) {
+  const client = await getAuthenticatedClient();
+  const { verifyCustomerAccount } = await client.request(verifyMutation, {
+    token,
+    password,
+  });
+  return verifyCustomerAccount;
 }
