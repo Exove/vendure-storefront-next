@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslations } from "next-intl";
 import { verifyCustomerAction } from "../actions";
+import Button from "@/components/button";
 
 type VerifyFormData = {
   password: string;
@@ -58,65 +59,71 @@ export default function VerifyPage() {
   }
 
   return (
-    <div className="mx-auto mt-8 max-w-md rounded-lg bg-white p-6 shadow-md">
-      <h1 className="mb-6 text-2xl font-bold">{t("verifyAccount")}</h1>
+    <div className="mx-auto mt-8 max-w-md rounded-lg bg-slate-800/50 p-6 shadow-lg backdrop-blur">
+      <h1 className="mb-6 text-2xl font-bold text-white">
+        {t("verifyAccount")}
+      </h1>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            {t("password")}
-          </label>
-          <input
-            type="password"
-            {...register("password", {
-              required: true,
-              minLength: 8,
-            })}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
-          />
-          {errors.password && (
-            <span className="text-sm text-red-500">
-              {errors.password.type === "required"
-                ? t("passwordRequired")
-                : t("passwordMinLength")}
-            </span>
-          )}
-        </div>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-slate-300">
+              {t("password")}
+            </label>
+            <input
+              type="password"
+              {...register("password", {
+                required: true,
+                minLength: 8,
+              })}
+              className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 px-3 py-2 shadow-sm"
+            />
+            {errors.password && (
+              <span className="text-sm text-red-500">
+                {errors.password.type === "required"
+                  ? t("passwordRequired")
+                  : t("passwordMinLength")}
+              </span>
+            )}
+          </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            {t("confirmPassword")}
-          </label>
-          <input
-            type="password"
-            {...register("confirmPassword", {
-              required: true,
-              validate: (val: string) => {
-                if (watch("password") != val) {
-                  return t("passwordsDoNotMatch");
-                }
-              },
-            })}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-          />
-          {errors.confirmPassword && (
-            <span className="text-sm text-red-500">
-              {errors.confirmPassword.message}
-            </span>
-          )}
+          <div>
+            <label className="block text-sm font-medium text-slate-300">
+              {t("confirmPassword")}
+            </label>
+            <input
+              type="password"
+              {...register("confirmPassword", {
+                required: true,
+                validate: (val: string) => {
+                  if (watch("password") != val) {
+                    return t("passwordsDoNotMatch");
+                  }
+                },
+              })}
+              className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 px-3 py-2 shadow-sm"
+            />
+            {errors.confirmPassword && (
+              <span className="text-sm text-red-500">
+                {errors.confirmPassword.message}
+              </span>
+            )}
+          </div>
         </div>
 
         {errorMessage && (
           <div className="text-sm text-red-500">{errorMessage}</div>
         )}
 
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="hover:bg-primary-dark w-full rounded-md border border-transparent bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm"
-        >
-          {isLoading ? t("verifying") : t("verify")}
-        </button>
+        <div className="mt-8">
+          <Button
+            type="submit"
+            style={isLoading ? "disabled" : "primary"}
+            fullWidth
+          >
+            {isLoading ? t("verifying") : t("verify")}
+          </Button>
+        </div>
       </form>
     </div>
   );
