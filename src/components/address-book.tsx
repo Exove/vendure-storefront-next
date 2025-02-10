@@ -68,6 +68,7 @@ export default function AddressBook({
       postalCode: formData.get("postalCode") as string,
       city: formData.get("city") as string,
       countryCode: formData.get("countryCode") as string,
+      defaultShippingAddress: addresses?.length === 0,
     };
 
     try {
@@ -168,7 +169,7 @@ export default function AddressBook({
                   </Button>
                 )}
                 {address.defaultShippingAddress && (
-                  <span className="ml-2 rounded-full bg-green-100 px-3 py-1 text-sm text-green-800">
+                  <span className="ml-2 flex items-center rounded-full bg-green-100 px-3 py-1 text-sm text-green-800">
                     {t("account.defaultAddress")}
                   </span>
                 )}
