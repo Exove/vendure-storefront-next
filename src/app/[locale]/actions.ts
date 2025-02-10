@@ -30,6 +30,8 @@ import {
   setOrderShippingMethodMutation,
   transitionToStateMutation,
   setCustomerForOrderMutation,
+  deleteCustomerAddressMutation,
+  updateCustomerAddressMutation,
 } from "@/common/mutations";
 import { activeOrderFragment } from "@/common/fragments";
 
@@ -225,5 +227,28 @@ export const registerCustomerAction = async (input: RegisterCustomerInput) => {
 
 export const verifyCustomerAction = async (token: string, password: string) => {
   const result = await verifyCustomer(token, password);
+  return result;
+};
+
+export const deleteCustomerAddressAction = async (addressId: string) => {
+  const client = await getAuthenticatedClient();
+  const { deleteCustomerAddress } = await client.request(
+    deleteCustomerAddressMutation,
+    { id: addressId },
+  );
+  return deleteCustomerAddress;
+};
+
+export const setDefaultAddressAction = async (addressId: string) => {
+  const client = await getAuthenticatedClient();
+  const { updateCustomerAddress } = await client.request(
+    updateCustomerAddressMutation,
+    { input: { id: addressId, defaultShippingAddress: true } },
+  );
+  return updateCustomerAddress;
+};
+
+export const getLoggedInUserAction = async () => {
+  const result = await getLoggedInUser();
   return result;
 };

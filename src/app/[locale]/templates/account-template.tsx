@@ -8,8 +8,14 @@ import Heading from "@/components/heading";
 import Logout from "@/components/logout";
 import { GetActiveCustomerQuery } from "@/gql/graphql";
 import useSWR from "swr";
-import { updateCustomerAddressAction } from "../actions";
-import { FormEvent } from "react";
+import {
+  createCustomerAddressAction,
+  deleteCustomerAddressAction,
+  updateCustomerAddressAction,
+  setDefaultAddressAction,
+  getLoggedInUserAction,
+} from "../actions";
+import { FormEvent, useState } from "react";
 import AddressFields from "@/components/address-fields";
 import { useTranslations } from "next-intl";
 
@@ -17,12 +23,28 @@ interface AccountTemplateProps {
   user: GetActiveCustomerQuery["activeCustomer"];
 }
 
-export default function AccountTemplate({ user }: AccountTemplateProps) {
+type Address = NonNullable<
+  NonNullable<GetActiveCustomerQuery["activeCustomer"]>["addresses"]
+>[number];
+type Order = NonNullable<
+  GetActiveCustomerQuery["activeCustomer"]
+>["orders"]["items"][number];
+type OrderLine = Order["lines"][number];
+
+export default function AccountTemplate({
+  user: initialUser,
+}: AccountTemplateProps) {
   const t = useTranslations();
-  const { mutate } = useSWR("shop-api", updateCustomerAddressAction, {
-    revalidateOnFocus: false,
-    revalidateOnMount: true,
-  });
+  const [showNewAddressForm, setShowNewAddressForm] = useState(false);
+
+  const { data: user, mutate } = useSWR(
+    "active-customer",
+    getLoggedInUserAction,
+    {
+      fallbackData: initialUser,
+      revalidateOnFocus: false,
+    },
+  );
 
   const handleSubmit = async (
     e: FormEvent<HTMLFormElement>,
@@ -43,11 +65,58 @@ export default function AccountTemplate({ user }: AccountTemplateProps) {
 
     try {
       await updateCustomerAddressAction(addressData);
-      await mutate(); // Refresh SWR cache
+      await mutate();
+      toast(t("account.addressUpdated"));
     } catch (error) {
       console.error("Failed to update address:", error);
-    } finally {
-      toast(t("account.addressUpdated"));
+      toast.error(t("account.addressUpdateError"));
+    }
+  };
+
+  const handleCreateAddress = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    const addressData = {
+      fullName: formData.get("fullName") as string,
+      streetLine1: formData.get("streetLine1") as string,
+      postalCode: formData.get("postalCode") as string,
+      city: formData.get("city") as string,
+      countryCode: formData.get("countryCode") as string,
+    };
+
+    try {
+      await createCustomerAddressAction(addressData);
+      await mutate();
+      setShowNewAddressForm(false);
+      form.reset();
+      toast(t("account.addressCreated"));
+    } catch (error) {
+      console.error("Failed to create address:", error);
+      toast.error(t("account.addressCreateError"));
+    }
+  };
+
+  const handleDeleteAddress = async (addressId: string) => {
+    try {
+      await deleteCustomerAddressAction(addressId);
+      await mutate();
+      toast(t("account.addressDeleted"));
+    } catch (error) {
+      console.error("Failed to delete address:", error);
+      toast.error(t("account.addressDeleteError"));
+    }
+  };
+
+  const handleSetDefaultAddress = async (addressId: string) => {
+    try {
+      await setDefaultAddressAction(addressId);
+      await mutate();
+      toast(t("account.defaultAddressSet"));
+    } catch (error) {
+      console.error("Failed to set default address:", error);
+      toast.error(t("account.defaultAddressError"));
     }
   };
 
@@ -72,18 +141,46 @@ export default function AccountTemplate({ user }: AccountTemplateProps) {
       <div className="grid grid-cols-1 gap-16 md:grid-cols-2">
         <div className="flex flex-col gap-16">
           <section>
-            <h2 className="mb-4 text-xl font-semibold">
-              {t("account.shippingAddress")}
-            </h2>
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-xl font-semibold">
+                {t("account.shippingAddress")}
+              </h2>
+              <Button
+                size="small"
+                style="primary"
+                onClick={() => setShowNewAddressForm(!showNewAddressForm)}
+              >
+                {showNewAddressForm
+                  ? t("account.cancel")
+                  : t("account.addNewAddress")}
+              </Button>
+            </div>
+
             <div className="space-y-4">
-              {user?.addresses?.map((address) => (
+              {showNewAddressForm && (
+                <BoxWrap>
+                  <form
+                    className="flex flex-col gap-2"
+                    onSubmit={handleCreateAddress}
+                  >
+                    <AddressFields />
+                    <div className="mt-4 flex gap-2">
+                      <Button size="small" style="primary" type="submit">
+                        {t("account.addAddress")}
+                      </Button>
+                    </div>
+                  </form>
+                </BoxWrap>
+              )}
+
+              {user?.addresses?.map((address: Address) => (
                 <BoxWrap key={address.id}>
                   <form
                     className="flex flex-col gap-2"
                     onSubmit={(e) => handleSubmit(e, address.id)}
                   >
                     <AddressFields defaultAddress={address} />
-                    <div className="mt-4 flex gap-2">
+                    <div className="mt-4 flex flex-wrap gap-2">
                       <Button size="small" style="secondary" type="submit">
                         {t("account.saveChanges")}
                       </Button>
@@ -91,14 +188,25 @@ export default function AccountTemplate({ user }: AccountTemplateProps) {
                         size="small"
                         style="text"
                         type="button"
-                        onClick={() => {
-                          const form = document.forms[0];
-                          const inputs = form.querySelectorAll("input");
-                          inputs.forEach((input) => (input.value = ""));
-                        }}
+                        onClick={() => handleDeleteAddress(address.id)}
                       >
-                        {t("account.emptyFields")}
+                        {t("account.deleteAddress")}
                       </Button>
+                      {!address.defaultShippingAddress && (
+                        <Button
+                          size="small"
+                          style="text"
+                          type="button"
+                          onClick={() => handleSetDefaultAddress(address.id)}
+                        >
+                          {t("account.setAsDefault")}
+                        </Button>
+                      )}
+                      {address.defaultShippingAddress && (
+                        <span className="ml-2 rounded-full bg-green-100 px-3 py-1 text-sm text-green-800">
+                          {t("account.defaultAddress")}
+                        </span>
+                      )}
                     </div>
                   </form>
                 </BoxWrap>
@@ -115,16 +223,16 @@ export default function AccountTemplate({ user }: AccountTemplateProps) {
               </h2>
               <div className="space-y-4">
                 {user?.orders?.items
-                  .filter((order) => order.state !== "AddingItems")
+                  .filter((order: Order) => order.state !== "AddingItems")
                   .slice(-1)
-                  .map((order, index) => (
+                  .map((order: Order, index: number) => (
                     <BoxWrap key={index}>
                       <div className="text-sm text-slate-400">
                         {formatDate(order.orderPlacedAt)}
                       </div>
                       <div className="flex items-start justify-between">
                         <div className="space-y-2">
-                          {order.lines.map((line) => (
+                          {order.lines.map((line: OrderLine) => (
                             <div
                               key={line.productVariant.name}
                               className="font-medium"

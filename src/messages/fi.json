@@ -41,7 +41,19 @@
     "saveChanges": "Tallenna muutokset",
     "emptyFields": "Tyhjennä kentät",
     "latestOrder": "Viimeisin tilaus",
-    "addressUpdated": "Osoite päivitetty."
+    "addressUpdated": "Osoite päivitetty.",
+    "addNewAddress": "Lisää uusi osoite",
+    "cancel": "Peruuta",
+    "addAddress": "Lisää osoite",
+    "deleteAddress": "Poista osoite",
+    "setAsDefault": "Aseta oletukseksi",
+    "defaultAddress": "Oletusosoite",
+    "addressCreated": "Osoite lisätty",
+    "addressCreateError": "Osoitteen lisääminen epäonnistui",
+    "addressDeleted": "Osoite poistettu",
+    "addressDeleteError": "Osoitteen poistaminen epäonnistui",
+    "defaultAddressSet": "Oletusosoite asetettu",
+    "defaultAddressError": "Oletusosoitteen asettaminen epäonnistui"
   },
   "checkout": {
     "title": "Kassa",

@@ -39,7 +39,19 @@
     "saveChanges": "Save Changes",
     "emptyFields": "Empty Fields",
     "latestOrder": "Latest Order",
-    "addressUpdated": "Address updated."
+    "addressUpdated": "Address updated.",
+    "addNewAddress": "Add New Address",
+    "cancel": "Cancel",
+    "addAddress": "Add Address",
+    "deleteAddress": "Delete Address",
+    "setAsDefault": "Set as Default",
+    "defaultAddress": "Default Address",
+    "addressCreated": "Address created",
+    "addressCreateError": "Failed to create address",
+    "addressDeleted": "Address deleted",
+    "addressDeleteError": "Failed to delete address",
+    "defaultAddressSet": "Default address set",
+    "defaultAddressError": "Failed to set default address"
   },
   "checkout": {
     "title": "Checkout",

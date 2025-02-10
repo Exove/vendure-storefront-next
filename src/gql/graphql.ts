@@ -4047,6 +4047,15 @@ export type VerifyMutation = {
       };
 };
 
+export type DeleteCustomerAddressMutationVariables = Exact<{
+  id: Scalars["ID"]["input"];
+}>;
+
+export type DeleteCustomerAddressMutation = {
+  __typename?: "Mutation";
+  deleteCustomerAddress: { __typename?: "Success"; success: boolean };
+};
+
 export type ProductsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type ProductsQuery = {
@@ -6612,6 +6621,54 @@ export const VerifyDocument = {
     },
   ],
 } as unknown as DocumentNode<VerifyMutation, VerifyMutationVariables>;
+export const DeleteCustomerAddressDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "DeleteCustomerAddress" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "deleteCustomerAddress" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "id" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "id" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "success" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  DeleteCustomerAddressMutation,
+  DeleteCustomerAddressMutationVariables
+>;
 export const ProductsDocument = {
   kind: "Document",
   definitions: [

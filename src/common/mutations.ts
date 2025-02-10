@@ -210,3 +210,11 @@ export const verifyMutation = graphql(`
     }
   }
 `);
+
+export const deleteCustomerAddressMutation = graphql(`
+  mutation DeleteCustomerAddress($id: ID!) {
+    deleteCustomerAddress(id: $id) {
+      success
+    }
+  }
+`);
