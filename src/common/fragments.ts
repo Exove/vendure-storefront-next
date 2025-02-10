@@ -40,6 +40,8 @@ export const activeOrderFragment = graphql(`
     }
     shippingLines {
       shippingMethod {
+        id
+        name
         description
       }
       priceWithTax
@@ -67,6 +69,8 @@ export const orderFragment = graphql(`
     shippingLines {
       shippingMethod {
         name
+        description
+        id
       }
     }
     shippingAddress {

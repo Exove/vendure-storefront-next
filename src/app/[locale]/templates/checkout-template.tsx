@@ -186,7 +186,12 @@ export default function CheckoutTemplate({
                       />
                     )}
                   </div>
-                  <ShippingMethodSelector shippingMethods={shippingMethods} />
+                  <ShippingMethodSelector
+                    shippingMethods={shippingMethods}
+                    selectedShippingMethod={
+                      order?.shippingLines?.[0]?.shippingMethod?.id
+                    }
+                  />
                   <PaymentMethodSelector paymentMethods={paymentMethods} />
                   <Button type="submit" fullWidth id="submit-order">
                     {t("checkout.placeOrder")}

@@ -6,10 +6,12 @@ import { mutate } from "swr";
 
 interface ShippingMethodSelectorProps {
   shippingMethods: GetShippingMethodsQuery["eligibleShippingMethods"];
+  selectedShippingMethod?: string;
 }
 
 export default function ShippingMethodSelector({
   shippingMethods,
+  selectedShippingMethod,
 }: ShippingMethodSelectorProps) {
   const t = useTranslations("checkout");
 
@@ -33,6 +35,7 @@ export default function ShippingMethodSelector({
             value={method.id}
             groupName="shippingMethod"
             onChange={() => handleShippingMethodChange(method.id)}
+            checked={selectedShippingMethod === method.id}
           />
         ))}
       </div>

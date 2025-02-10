@@ -3629,7 +3629,12 @@ export type ActiveOrderFragment = {
   shippingLines: Array<{
     __typename?: "ShippingLine";
     priceWithTax: any;
-    shippingMethod: { __typename?: "ShippingMethod"; description: string };
+    shippingMethod: {
+      __typename?: "ShippingMethod";
+      id: string;
+      name: string;
+      description: string;
+    };
   }>;
 } & { " $fragmentName"?: "ActiveOrderFragment" };
 
@@ -3652,7 +3657,12 @@ export type OrderFragment = {
   } | null;
   shippingLines: Array<{
     __typename?: "ShippingLine";
-    shippingMethod: { __typename?: "ShippingMethod"; name: string };
+    shippingMethod: {
+      __typename?: "ShippingMethod";
+      name: string;
+      description: string;
+      id: string;
+    };
   }>;
   shippingAddress?: {
     __typename?: "OrderAddress";
@@ -4454,6 +4464,8 @@ export const ActiveOrderFragmentDoc = {
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
                       {
                         kind: "Field",
                         name: { kind: "Name", value: "description" },
@@ -4523,6 +4535,11 @@ export const OrderFragmentDoc = {
                     kind: "SelectionSet",
                     selections: [
                       { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "description" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
                     ],
                   },
                 },
@@ -5033,6 +5050,8 @@ export const SetOrderShippingAddressDocument = {
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
                       {
                         kind: "Field",
                         name: { kind: "Name", value: "description" },
@@ -5248,6 +5267,8 @@ export const SetShippingMethodDocument = {
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
                       {
                         kind: "Field",
                         name: { kind: "Name", value: "description" },
@@ -5472,6 +5493,8 @@ export const TransitionToStateDocument = {
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
                       {
                         kind: "Field",
                         name: { kind: "Name", value: "description" },
@@ -5684,6 +5707,8 @@ export const AddPaymentToOrderDocument = {
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
                       {
                         kind: "Field",
                         name: { kind: "Name", value: "description" },
@@ -5893,6 +5918,8 @@ export const RemoveItemFromOrderDocument = {
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
                       {
                         kind: "Field",
                         name: { kind: "Name", value: "description" },
@@ -6121,6 +6148,8 @@ export const AdjustOrderLineDocument = {
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
                       {
                         kind: "Field",
                         name: { kind: "Name", value: "description" },
@@ -6545,6 +6574,8 @@ export const SetCustomerForOrderDocument = {
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
                       {
                         kind: "Field",
                         name: { kind: "Name", value: "description" },
@@ -7000,6 +7031,8 @@ export const SetOrderBillingAddressDocument = {
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
                       {
                         kind: "Field",
                         name: { kind: "Name", value: "description" },
@@ -7766,6 +7799,8 @@ export const ActiveOrderDocument = {
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
                       {
                         kind: "Field",
                         name: { kind: "Name", value: "description" },
@@ -8150,6 +8185,11 @@ export const OrderByCodeDocument = {
                     kind: "SelectionSet",
                     selections: [
                       { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "description" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
                     ],
                   },
                 },
