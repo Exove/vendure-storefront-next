@@ -3911,6 +3911,8 @@ export type UpdateCustomerAddressMutation = {
     province?: string | null;
     postalCode?: string | null;
     phoneNumber?: string | null;
+    defaultShippingAddress?: boolean | null;
+    defaultBillingAddress?: boolean | null;
     country: { __typename?: "Country"; code: string; name: string };
   };
 };
@@ -6069,6 +6071,14 @@ export const UpdateCustomerAddressDocument = {
                   },
                 },
                 { kind: "Field", name: { kind: "Name", value: "phoneNumber" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "defaultShippingAddress" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "defaultBillingAddress" },
+                },
               ],
             },
           },

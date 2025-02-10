@@ -36,7 +36,7 @@ const documents = {
     types.RemoveItemFromOrderDocument,
   "\n  mutation AdjustOrderLine($orderLineId: ID!, $quantity: Int!) {\n    adjustOrderLine(orderLineId: $orderLineId, quantity: $quantity) {\n      ...ActiveOrder\n      ... on ErrorResult {\n        errorCode\n        message\n      }\n    }\n  }\n":
     types.AdjustOrderLineDocument,
-  "\n  mutation UpdateCustomerAddress($input: UpdateAddressInput!) {\n    updateCustomerAddress(input: $input) {\n      id\n      createdAt\n      updatedAt\n      fullName\n      company\n      streetLine1\n      streetLine2\n      city\n      province\n      postalCode\n      country {\n        code\n        name\n      }\n      phoneNumber\n    }\n  }\n":
+  "\n  mutation UpdateCustomerAddress($input: UpdateAddressInput!) {\n    updateCustomerAddress(input: $input) {\n      id\n      createdAt\n      updatedAt\n      fullName\n      company\n      streetLine1\n      streetLine2\n      city\n      province\n      postalCode\n      country {\n        code\n        name\n      }\n      phoneNumber\n      defaultShippingAddress\n      defaultBillingAddress\n    }\n  }\n":
     types.UpdateCustomerAddressDocument,
   "\n  mutation CreateCustomerAddress($input: CreateAddressInput!) {\n    createCustomerAddress(input: $input) {\n      id\n      createdAt\n      updatedAt\n      fullName\n      company\n      streetLine1\n      streetLine2\n      city\n      province\n      postalCode\n      country {\n        code\n        name\n      }\n      phoneNumber\n    }\n  }\n":
     types.CreateCustomerAddressDocument,
@@ -156,8 +156,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  mutation UpdateCustomerAddress($input: UpdateAddressInput!) {\n    updateCustomerAddress(input: $input) {\n      id\n      createdAt\n      updatedAt\n      fullName\n      company\n      streetLine1\n      streetLine2\n      city\n      province\n      postalCode\n      country {\n        code\n        name\n      }\n      phoneNumber\n    }\n  }\n",
-): (typeof documents)["\n  mutation UpdateCustomerAddress($input: UpdateAddressInput!) {\n    updateCustomerAddress(input: $input) {\n      id\n      createdAt\n      updatedAt\n      fullName\n      company\n      streetLine1\n      streetLine2\n      city\n      province\n      postalCode\n      country {\n        code\n        name\n      }\n      phoneNumber\n    }\n  }\n"];
+  source: "\n  mutation UpdateCustomerAddress($input: UpdateAddressInput!) {\n    updateCustomerAddress(input: $input) {\n      id\n      createdAt\n      updatedAt\n      fullName\n      company\n      streetLine1\n      streetLine2\n      city\n      province\n      postalCode\n      country {\n        code\n        name\n      }\n      phoneNumber\n      defaultShippingAddress\n      defaultBillingAddress\n    }\n  }\n",
+): (typeof documents)["\n  mutation UpdateCustomerAddress($input: UpdateAddressInput!) {\n    updateCustomerAddress(input: $input) {\n      id\n      createdAt\n      updatedAt\n      fullName\n      company\n      streetLine1\n      streetLine2\n      city\n      province\n      postalCode\n      country {\n        code\n        name\n      }\n      phoneNumber\n      defaultShippingAddress\n      defaultBillingAddress\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

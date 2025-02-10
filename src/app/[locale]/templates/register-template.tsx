@@ -39,7 +39,7 @@ export default function RegisterTemplate() {
   };
 
   return (
-    <div className="mx-auto mt-8 max-w-md rounded-lg bg-slate-800/50 p-6 shadow-lg backdrop-blur">
+    <div className="mx-auto mt-8 max-w-md rounded-lg">
       <h1 className="mb-6 text-2xl font-bold text-white">
         {t("createAccount")}
       </h1>
@@ -52,7 +52,7 @@ export default function RegisterTemplate() {
             </label>
             <input
               {...register("firstName", { required: true })}
-              className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 px-3 py-2 shadow-sm"
+              className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 px-3 py-2"
             />
             {errors.firstName && (
               <span className="text-sm text-red-500">
@@ -66,7 +66,7 @@ export default function RegisterTemplate() {
             </label>
             <input
               {...register("lastName", { required: true })}
-              className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 px-3 py-2 shadow-sm"
+              className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 px-3 py-2"
             />
             {errors.lastName && (
               <span className="text-sm text-red-500">
@@ -84,7 +84,7 @@ export default function RegisterTemplate() {
                 required: true,
                 pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
               })}
-              className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 px-3 py-2 shadow-sm"
+              className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 px-3 py-2"
             />
             {errors.emailAddress && (
               <span className="text-sm text-red-500">
@@ -99,7 +99,7 @@ export default function RegisterTemplate() {
             <input
               type="tel"
               {...register("phoneNumber")}
-              className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 px-3 py-2 shadow-sm"
+              className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 px-3 py-2"
             />
           </div>
         </div>

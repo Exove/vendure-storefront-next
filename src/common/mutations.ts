@@ -134,6 +134,8 @@ export const updateCustomerAddressMutation = graphql(`
         name
       }
       phoneNumber
+      defaultShippingAddress
+      defaultBillingAddress
     }
   }
 `);

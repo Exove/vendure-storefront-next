@@ -11,6 +11,7 @@ import { print } from "graphql";
 import { LoginMutation } from "@/gql/graphql";
 import { setBearerToken } from "../app/[locale]/actions";
 import { Link } from "@/i18n/routing";
+import Button from "./button";
 
 export default function Login() {
   const t = useTranslations();
@@ -86,19 +87,17 @@ export default function Login() {
           />
         </div>
         {error && <div className="text-red-500">{t("auth.loginFailed")}</div>}
-        <button
-          type="submit"
-          className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-          name="login"
-        >
-          {t("auth.login")}
-        </button>
+        <div className="mt-4">
+          <Button type="submit" id="login" fullWidth>
+            {t("auth.login")}
+          </Button>
+        </div>
       </form>
-      <div className="mt-8 flex flex-col gap-4 text-center">
-        <Link href="/register" className="text-blue-500 hover:text-blue-700">
+      <div className="mt-8 space-y-4 text-center">
+        <Link href="/register" className="text-blue-400 hover:text-blue-300">
           {t("Register.createAccount")}
         </Link>
-        <Link href="#" className="text-blue-500 hover:text-blue-700">
+        <Link href="/verify" className="text-blue-400 hover:text-blue-300">
           {t("auth.forgotPassword")}
         </Link>
       </div>
