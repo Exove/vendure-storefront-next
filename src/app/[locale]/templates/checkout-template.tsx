@@ -100,6 +100,47 @@ export default function CheckoutTemplate({
             <div className="grid grid-cols-1 gap-20 md:grid-cols-2">
               <div className="flex flex-col gap-12">
                 <form onSubmit={handleSubmitOrder} className="space-y-10">
+                  {!activeUser && (
+                    <div>
+                      <h2 className="mb-6 text-xl font-medium">
+                        {t("checkout.contactInformation")}
+                      </h2>
+                      <div className="space-y-4">
+                        <div className="flex gap-4">
+                          <div className="w-1/2">
+                            <label
+                              htmlFor="email"
+                              className="block text-sm font-medium text-slate-300"
+                            >
+                              {t("auth.email")}
+                            </label>
+                            <input
+                              type="email"
+                              id="email"
+                              name="email"
+                              className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 px-3 py-2"
+                              required
+                            />
+                          </div>
+                          <div className="w-1/2">
+                            <label
+                              htmlFor="phone"
+                              className="block text-sm font-medium text-slate-300"
+                            >
+                              {t("Register.phone")}
+                            </label>
+                            <input
+                              type="tel"
+                              id="phone"
+                              name="phone"
+                              className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 px-3 py-2"
+                              required
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                   <div>
                     <h2 className="mb-6 text-xl font-medium">
                       {t("checkout.shippingAddress")}

@@ -64,7 +64,9 @@
     "placeOrder": "Place Order",
     "emptyCart": "Empty Cart",
     "paymentMethod": "Payment Method",
-    "shippingMethod": "Shipping Method"
+    "shippingMethod": "Shipping Method",
+    "notEnoughTokens": "Not enough balance",
+    "contactInformation": "Contact Information"
   },
   "cart": {
     "title": "Shopping Cart",
