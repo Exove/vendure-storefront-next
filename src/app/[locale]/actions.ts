@@ -335,3 +335,20 @@ export const getLoggedInUserAction = async () => {
   const result = await getLoggedInUser();
   return result;
 };
+
+export const setOrderShippingMethodAction = async (
+  shippingMethodId: string,
+) => {
+  const client = await getAuthenticatedClient();
+  const result = await client.request(setOrderShippingMethodMutation, {
+    id: [shippingMethodId],
+  });
+
+  if ("errorCode" in result.setOrderShippingMethod) {
+    throw new Error(
+      `Failed to set shipping method: ${result.setOrderShippingMethod.message}`,
+    );
+  }
+
+  return getFragmentData(activeOrderFragment, result.setOrderShippingMethod);
+};
