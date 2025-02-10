@@ -75,12 +75,20 @@ export default function CheckoutTemplate({
         }
       : undefined;
 
+    const guestDetails = !activeUser
+      ? {
+          emailAddress: formData.get("email") as string,
+          phoneNumber: formData.get("phone") as string,
+        }
+      : undefined;
+
     try {
       await placeOrderAction(
         shippingDetails,
         formData.get("paymentMethod") as string,
         formData.get("shippingMethod") as string,
         billingDetails,
+        guestDetails,
       );
     } catch (error) {
       console.error("Failed to create order:", error);

@@ -3597,6 +3597,11 @@ export type ActiveOrderFragment = {
   subTotalWithTax: any;
   shippingWithTax: any;
   totalWithTax: any;
+  customer?: {
+    __typename?: "Customer";
+    emailAddress: string;
+    phoneNumber?: string | null;
+  } | null;
   discounts: Array<{
     __typename?: "Discount";
     description: string;
@@ -3642,6 +3647,8 @@ export type OrderFragment = {
     __typename?: "Customer";
     firstName: string;
     lastName: string;
+    emailAddress: string;
+    phoneNumber?: string | null;
   } | null;
   shippingLines: Array<{
     __typename?: "ShippingLine";
@@ -4351,6 +4358,20 @@ export const ActiveOrderFragmentDoc = {
           { kind: "Field", name: { kind: "Name", value: "totalWithTax" } },
           {
             kind: "Field",
+            name: { kind: "Name", value: "customer" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "emailAddress" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "phoneNumber" } },
+              ],
+            },
+          },
+          {
+            kind: "Field",
             name: { kind: "Name", value: "discounts" },
             selectionSet: {
               kind: "SelectionSet",
@@ -4480,6 +4501,11 @@ export const OrderFragmentDoc = {
               selections: [
                 { kind: "Field", name: { kind: "Name", value: "firstName" } },
                 { kind: "Field", name: { kind: "Name", value: "lastName" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "emailAddress" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "phoneNumber" } },
               ],
             },
           },
@@ -4911,6 +4937,20 @@ export const SetOrderShippingAddressDocument = {
           { kind: "Field", name: { kind: "Name", value: "totalWithTax" } },
           {
             kind: "Field",
+            name: { kind: "Name", value: "customer" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "emailAddress" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "phoneNumber" } },
+              ],
+            },
+          },
+          {
+            kind: "Field",
             name: { kind: "Name", value: "discounts" },
             selectionSet: {
               kind: "SelectionSet",
@@ -5110,6 +5150,20 @@ export const SetShippingMethodDocument = {
           { kind: "Field", name: { kind: "Name", value: "subTotalWithTax" } },
           { kind: "Field", name: { kind: "Name", value: "shippingWithTax" } },
           { kind: "Field", name: { kind: "Name", value: "totalWithTax" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "customer" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "emailAddress" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "phoneNumber" } },
+              ],
+            },
+          },
           {
             kind: "Field",
             name: { kind: "Name", value: "discounts" },
@@ -5322,6 +5376,20 @@ export const TransitionToStateDocument = {
           { kind: "Field", name: { kind: "Name", value: "totalWithTax" } },
           {
             kind: "Field",
+            name: { kind: "Name", value: "customer" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "emailAddress" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "phoneNumber" } },
+              ],
+            },
+          },
+          {
+            kind: "Field",
             name: { kind: "Name", value: "discounts" },
             selectionSet: {
               kind: "SelectionSet",
@@ -5520,6 +5588,20 @@ export const AddPaymentToOrderDocument = {
           { kind: "Field", name: { kind: "Name", value: "totalWithTax" } },
           {
             kind: "Field",
+            name: { kind: "Name", value: "customer" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "emailAddress" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "phoneNumber" } },
+              ],
+            },
+          },
+          {
+            kind: "Field",
             name: { kind: "Name", value: "discounts" },
             selectionSet: {
               kind: "SelectionSet",
@@ -5713,6 +5795,20 @@ export const RemoveItemFromOrderDocument = {
           { kind: "Field", name: { kind: "Name", value: "subTotalWithTax" } },
           { kind: "Field", name: { kind: "Name", value: "shippingWithTax" } },
           { kind: "Field", name: { kind: "Name", value: "totalWithTax" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "customer" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "emailAddress" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "phoneNumber" } },
+              ],
+            },
+          },
           {
             kind: "Field",
             name: { kind: "Name", value: "discounts" },
@@ -5927,6 +6023,20 @@ export const AdjustOrderLineDocument = {
           { kind: "Field", name: { kind: "Name", value: "subTotalWithTax" } },
           { kind: "Field", name: { kind: "Name", value: "shippingWithTax" } },
           { kind: "Field", name: { kind: "Name", value: "totalWithTax" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "customer" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "emailAddress" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "phoneNumber" } },
+              ],
+            },
+          },
           {
             kind: "Field",
             name: { kind: "Name", value: "discounts" },
@@ -6337,6 +6447,20 @@ export const SetCustomerForOrderDocument = {
           { kind: "Field", name: { kind: "Name", value: "subTotalWithTax" } },
           { kind: "Field", name: { kind: "Name", value: "shippingWithTax" } },
           { kind: "Field", name: { kind: "Name", value: "totalWithTax" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "customer" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "emailAddress" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "phoneNumber" } },
+              ],
+            },
+          },
           {
             kind: "Field",
             name: { kind: "Name", value: "discounts" },
@@ -6778,6 +6902,20 @@ export const SetOrderBillingAddressDocument = {
           { kind: "Field", name: { kind: "Name", value: "subTotalWithTax" } },
           { kind: "Field", name: { kind: "Name", value: "shippingWithTax" } },
           { kind: "Field", name: { kind: "Name", value: "totalWithTax" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "customer" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "emailAddress" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "phoneNumber" } },
+              ],
+            },
+          },
           {
             kind: "Field",
             name: { kind: "Name", value: "discounts" },
@@ -7532,6 +7670,20 @@ export const ActiveOrderDocument = {
           { kind: "Field", name: { kind: "Name", value: "totalWithTax" } },
           {
             kind: "Field",
+            name: { kind: "Name", value: "customer" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "emailAddress" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "phoneNumber" } },
+              ],
+            },
+          },
+          {
+            kind: "Field",
             name: { kind: "Name", value: "discounts" },
             selectionSet: {
               kind: "SelectionSet",
@@ -7976,6 +8128,11 @@ export const OrderByCodeDocument = {
               selections: [
                 { kind: "Field", name: { kind: "Name", value: "firstName" } },
                 { kind: "Field", name: { kind: "Name", value: "lastName" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "emailAddress" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "phoneNumber" } },
               ],
             },
           },

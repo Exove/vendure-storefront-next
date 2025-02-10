@@ -53,56 +53,125 @@ export async function placeOrderAction(
     postalCode: string;
     countryCode: string;
   },
+  guestDetails?: {
+    emailAddress: string;
+    phoneNumber: string;
+  },
 ) {
   const client = await getAuthenticatedClient();
 
-  // Check if user is logged in
-  const activeCustomer = await getLoggedInUser();
+  try {
+    // Check if user is logged in
+    const activeCustomer = await getLoggedInUser();
 
-  // Set customer details
-  if (!activeCustomer) {
-    const [firstName, ...lastNameParts] = shippingDetails.fullName.split(" ");
-    await client.request(setCustomerForOrderMutation, {
+    // Set customer details for guest users first
+    if (!activeCustomer && guestDetails) {
+      const [firstName, ...lastNameParts] = shippingDetails.fullName.split(" ");
+      const customerResult = await client.request(setCustomerForOrderMutation, {
+        input: {
+          firstName,
+          lastName: lastNameParts.join(" "),
+          emailAddress: guestDetails.emailAddress,
+          phoneNumber: guestDetails.phoneNumber,
+          title: "Guest",
+        },
+      });
+
+      if ("errorCode" in customerResult.setCustomerForOrder) {
+        // If the email is already in use, continue without setting customer details
+        if (
+          customerResult.setCustomerForOrder.message.includes(
+            "email address is not available",
+          )
+        ) {
+          console.log("Email already exists, continuing with order...");
+        } else {
+          throw new Error(
+            `Failed to set customer: ${customerResult.setCustomerForOrder.message}`,
+          );
+        }
+      }
+    }
+
+    // Set shipping method
+    const shippingMethodResult = await client.request(
+      setOrderShippingMethodMutation,
+      {
+        id: [shippingMethod],
+      },
+    );
+
+    if ("errorCode" in shippingMethodResult.setOrderShippingMethod) {
+      throw new Error(
+        `Failed to set shipping method: ${shippingMethodResult.setOrderShippingMethod.message}`,
+      );
+    }
+
+    // Set shipping address
+    const shippingAddressResult = await client.request(
+      setOrderShippingAddressMutation,
+      {
+        input: shippingDetails,
+      },
+    );
+
+    if ("errorCode" in shippingAddressResult.setOrderShippingAddress) {
+      throw new Error(
+        `Failed to set shipping address: ${shippingAddressResult.setOrderShippingAddress.message}`,
+      );
+    }
+
+    // Set billing address if provided, otherwise use shipping address
+    const billingAddress = billingDetails || shippingDetails;
+    const billingAddressResult = await client.request(
+      setOrderBillingAddressMutation,
+      {
+        input: billingAddress,
+      },
+    );
+
+    if ("errorCode" in billingAddressResult.setOrderBillingAddress) {
+      throw new Error(
+        `Failed to set billing address: ${billingAddressResult.setOrderBillingAddress.message}`,
+      );
+    }
+
+    // Transition to ArrangingPayment
+    const transitionResult = await client.request(transitionToStateMutation, {
+      state: "ArrangingPayment",
+    });
+
+    if (!transitionResult.transitionOrderToState) {
+      throw new Error("Failed to transition order state: No response received");
+    }
+
+    if ("errorCode" in transitionResult.transitionOrderToState) {
+      throw new Error(
+        `Failed to transition order state: ${transitionResult.transitionOrderToState.message}`,
+      );
+    }
+
+    // Add payment
+    const paymentResult = await client.request(addPaymentToOrderMutation, {
       input: {
-        firstName,
-        lastName: lastNameParts.join(" "),
-        emailAddress: "guest@example.com", // TODO: Get from form
+        method: paymentMethod,
+        metadata: {
+          shouldDecline: false,
+          shouldError: false,
+          shouldErrorOnSettle: false,
+        },
       },
     });
+
+    if ("errorCode" in paymentResult.addPaymentToOrder) {
+      throw new Error(
+        `Failed to add payment: ${paymentResult.addPaymentToOrder.message}`,
+      );
+    }
+  } catch (error) {
+    console.error("Order placement failed:", error);
+    throw error;
   }
-
-  // Set shipping address
-  await client.request(setOrderShippingAddressMutation, {
-    input: shippingDetails,
-  });
-
-  // Set billing address if provided, otherwise use shipping address
-  const billingAddress = billingDetails || shippingDetails;
-  await client.request(setOrderBillingAddressMutation, {
-    input: billingAddress,
-  });
-
-  // Set shipping method
-  await client.request(setOrderShippingMethodMutation, {
-    id: [shippingMethod],
-  });
-
-  // Transition to ArrangingPayment
-  await client.request(transitionToStateMutation, {
-    state: "ArrangingPayment",
-  });
-
-  // Add payment
-  await client.request(addPaymentToOrderMutation, {
-    input: {
-      method: paymentMethod,
-      metadata: {
-        shouldDecline: false,
-        shouldError: false,
-        shouldErrorOnSettle: false,
-      },
-    },
-  });
 }
 
 export const activeOrderAction = async () => {

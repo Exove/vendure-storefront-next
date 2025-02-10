@@ -12,6 +12,10 @@ export const activeOrderFragment = graphql(`
     subTotalWithTax
     shippingWithTax
     totalWithTax
+    customer {
+      emailAddress
+      phoneNumber
+    }
     discounts {
       description
       amountWithTax
@@ -56,6 +60,8 @@ export const orderFragment = graphql(`
     customer {
       firstName
       lastName
+      emailAddress
+      phoneNumber
     }
     shipping
     shippingLines {
