@@ -117,6 +117,7 @@ export default function CheckoutTemplate({
                       </h2>
                       <Button
                         type="button"
+                        size="small"
                         style="secondary"
                         onClick={() =>
                           setShowBillingAddress(!showBillingAddress)

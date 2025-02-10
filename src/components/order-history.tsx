@@ -16,7 +16,7 @@ interface OrderHistoryProps {
   orders: Order[] | undefined;
 }
 
-const ORDER_HISTORY_DISPLAY_COUNT = 20;
+const ORDER_HISTORY_DISPLAY_COUNT = 10;
 
 export default function OrderHistory({ orders }: OrderHistoryProps) {
   const t = useTranslations();
