@@ -16,7 +16,9 @@
     "closeMenu": "Close menu",
     "all": "All",
     "browseMenu": "Browse Products",
-    "showMore": "Show more"
+    "showMore": "Show more",
+    "add": "Add",
+    "remove": "Remove"
   },
   "order": {
     "complete": "Order Complete",
@@ -58,6 +60,7 @@
   "checkout": {
     "title": "Checkout",
     "shippingAddress": "Shipping Address",
+    "billingAddress": "Billing Address",
     "placeOrder": "Place Order",
     "emptyCart": "Empty Cart",
     "paymentMethod": "Payment Method",

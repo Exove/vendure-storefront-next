@@ -218,3 +218,15 @@ export const deleteCustomerAddressMutation = graphql(`
     }
   }
 `);
+
+export const setOrderBillingAddressMutation = graphql(`
+  mutation SetOrderBillingAddress($input: CreateAddressInput!) {
+    setOrderBillingAddress(input: $input) {
+      ...ActiveOrder
+      ... on ErrorResult {
+        errorCode
+        message
+      }
+    }
+  }
+`);

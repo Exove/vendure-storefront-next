@@ -38,6 +38,7 @@ export default function CheckoutTemplate({
   menuItems,
 }: CheckoutTemplateProps) {
   const [cartQuantity, setCartQuantity] = useState(0);
+  const [showBillingAddress, setShowBillingAddress] = useState(false);
   const t = useTranslations();
   const router = useRouter();
   const { data: order, error } = useSWR("shop-api", activeOrderAction, {
@@ -56,20 +57,31 @@ export default function CheckoutTemplate({
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
+    const shippingDetails = {
+      fullName: formData.get("fullName") as string,
+      streetLine1: formData.get("streetLine1") as string,
+      city: formData.get("city") as string,
+      postalCode: formData.get("postalCode") as string,
+      countryCode: formData.get("countryCode") as string,
+    };
+
+    const billingDetails = showBillingAddress
+      ? {
+          fullName: formData.get("billingfullName") as string,
+          streetLine1: formData.get("billingstreetLine1") as string,
+          city: formData.get("billingcity") as string,
+          postalCode: formData.get("billingpostalCode") as string,
+          countryCode: formData.get("billingcountryCode") as string,
+        }
+      : undefined;
+
     try {
       await placeOrderAction(
-        {
-          fullName: formData.get("fullName") as string,
-          streetLine1: formData.get("streetLine1") as string,
-          city: formData.get("city") as string,
-          postalCode: formData.get("postalCode") as string,
-          countryCode: "FI",
-        },
+        shippingDetails,
         formData.get("paymentMethod") as string,
         formData.get("shippingMethod") as string,
+        billingDetails,
       );
-
-      console.log("order11", order);
     } catch (error) {
       console.error("Failed to create order:", error);
       throw error;
@@ -97,6 +109,32 @@ export default function CheckoutTemplate({
                         (address) => address.defaultShippingAddress,
                       )}
                     />
+                  </div>
+                  <div>
+                    <div className="mb-6 flex items-center gap-4">
+                      <h2 className="text-xl font-medium">
+                        {t("checkout.billingAddress")}
+                      </h2>
+                      <Button
+                        type="button"
+                        style="secondary"
+                        onClick={() =>
+                          setShowBillingAddress(!showBillingAddress)
+                        }
+                      >
+                        {showBillingAddress
+                          ? t("common.remove")
+                          : t("common.add")}
+                      </Button>
+                    </div>
+                    {showBillingAddress && (
+                      <AddressFields
+                        defaultAddress={activeUser?.addresses?.find(
+                          (address) => address.defaultBillingAddress,
+                        )}
+                        fieldNamePrefix="billing"
+                      />
+                    )}
                   </div>
                   <ShippingMethodSelector shippingMethods={shippingMethods} />
                   <PaymentMethodSelector paymentMethods={paymentMethods} />

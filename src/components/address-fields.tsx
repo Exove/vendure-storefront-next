@@ -11,10 +11,16 @@ interface AddressFieldsProps {
       code?: string | null;
     };
   };
+  fieldNamePrefix?: string;
 }
 
-export default function AddressFields({ defaultAddress }: AddressFieldsProps) {
+export default function AddressFields({
+  defaultAddress,
+  fieldNamePrefix = "",
+}: AddressFieldsProps) {
   const t = useTranslations("Address");
+  const getFieldName = (name: string) =>
+    fieldNamePrefix ? `${fieldNamePrefix}${name}` : name;
 
   return (
     <div className="space-y-4">
@@ -23,7 +29,7 @@ export default function AddressFields({ defaultAddress }: AddressFieldsProps) {
           {t("fullName")}
         </label>
         <input
-          name="fullName"
+          name={getFieldName("fullName")}
           type="text"
           defaultValue={defaultAddress?.fullName ?? ""}
           className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 px-3 py-2"
@@ -35,7 +41,7 @@ export default function AddressFields({ defaultAddress }: AddressFieldsProps) {
           {t("streetAddress")}
         </label>
         <input
-          name="streetLine1"
+          name={getFieldName("streetLine1")}
           type="text"
           defaultValue={defaultAddress?.streetLine1 ?? ""}
           className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 px-3 py-2"
@@ -48,7 +54,7 @@ export default function AddressFields({ defaultAddress }: AddressFieldsProps) {
             {t("postalCode")}
           </label>
           <input
-            name="postalCode"
+            name={getFieldName("postalCode")}
             type="text"
             defaultValue={defaultAddress?.postalCode ?? ""}
             className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 px-3 py-2"
@@ -59,7 +65,7 @@ export default function AddressFields({ defaultAddress }: AddressFieldsProps) {
             {t("city")}
           </label>
           <input
-            name="city"
+            name={getFieldName("city")}
             type="text"
             defaultValue={defaultAddress?.city ?? ""}
             className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 px-3 py-2"
@@ -73,7 +79,7 @@ export default function AddressFields({ defaultAddress }: AddressFieldsProps) {
         </label>
         <div className="relative">
           <select
-            name="countryCode"
+            name={getFieldName("countryCode")}
             defaultValue={defaultAddress?.country.code ?? "FI"}
             className="mt-1 block w-full appearance-none rounded-md border-slate-600 bg-slate-700 px-3 py-2 pr-8"
           >

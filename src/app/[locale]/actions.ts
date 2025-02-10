@@ -32,6 +32,7 @@ import {
   setCustomerForOrderMutation,
   deleteCustomerAddressMutation,
   updateCustomerAddressMutation,
+  setOrderBillingAddressMutation,
 } from "@/common/mutations";
 import { activeOrderFragment } from "@/common/fragments";
 
@@ -45,6 +46,13 @@ export async function placeOrderAction(
   },
   paymentMethod: string,
   shippingMethod: string,
+  billingDetails?: {
+    fullName: string;
+    streetLine1: string;
+    city: string;
+    postalCode: string;
+    countryCode: string;
+  },
 ) {
   const client = await getAuthenticatedClient();
 
@@ -66,6 +74,12 @@ export async function placeOrderAction(
   // Set shipping address
   await client.request(setOrderShippingAddressMutation, {
     input: shippingDetails,
+  });
+
+  // Set billing address if provided, otherwise use shipping address
+  const billingAddress = billingDetails || shippingDetails;
+  await client.request(setOrderBillingAddressMutation, {
+    input: billingAddress,
   });
 
   // Set shipping method

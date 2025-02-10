@@ -11,7 +11,9 @@
     "closeMenu": "Sulje valikko",
     "all": "Kaikki",
     "browseMenu": "Selaa tuotteita",
-    "showMore": "Näytä lisää"
+    "showMore": "Näytä lisää",
+    "add": "Lisää",
+    "remove": "Poista"
   },
   "home": {
     "categories": "Kategoriat",
@@ -60,6 +62,7 @@
   "checkout": {
     "title": "Kassa",
     "shippingAddress": "Toimitusosoite",
+    "billingAddress": "Laskutusosoite",
     "placeOrder": "Tee tilaus",
     "emptyCart": "Tyhjä ostoskori",
     "paymentMethod": "Maksutapa",
