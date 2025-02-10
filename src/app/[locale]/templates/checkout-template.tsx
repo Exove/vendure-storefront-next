@@ -93,7 +93,9 @@ export default function CheckoutTemplate({
                       {t("checkout.shippingAddress")}
                     </h2>
                     <AddressFields
-                      defaultAddress={activeUser?.addresses?.[0]}
+                      defaultAddress={activeUser?.addresses?.find(
+                        (address) => address.defaultShippingAddress,
+                      )}
                     />
                   </div>
                   <ShippingMethodSelector shippingMethods={shippingMethods} />

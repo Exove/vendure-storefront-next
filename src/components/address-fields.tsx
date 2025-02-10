@@ -26,7 +26,6 @@ export default function AddressFields({ defaultAddress }: AddressFieldsProps) {
           name="fullName"
           type="text"
           defaultValue={defaultAddress?.fullName ?? ""}
-          placeholder={t("fullName")}
           className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 px-3 py-2"
         />
       </div>
@@ -39,7 +38,6 @@ export default function AddressFields({ defaultAddress }: AddressFieldsProps) {
           name="streetLine1"
           type="text"
           defaultValue={defaultAddress?.streetLine1 ?? ""}
-          placeholder={t("streetAddress")}
           className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 px-3 py-2"
         />
       </div>
@@ -53,7 +51,6 @@ export default function AddressFields({ defaultAddress }: AddressFieldsProps) {
             name="postalCode"
             type="text"
             defaultValue={defaultAddress?.postalCode ?? ""}
-            placeholder={t("postalCode")}
             className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 px-3 py-2"
           />
         </div>
@@ -65,7 +62,6 @@ export default function AddressFields({ defaultAddress }: AddressFieldsProps) {
             name="city"
             type="text"
             defaultValue={defaultAddress?.city ?? ""}
-            placeholder={t("city")}
             className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 px-3 py-2"
           />
         </div>
