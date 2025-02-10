@@ -15,7 +15,8 @@
     "back": "Back",
     "closeMenu": "Close menu",
     "all": "All",
-    "browseMenu": "Browse Products"
+    "browseMenu": "Browse Products",
+    "showMore": "Show more"
   },
   "order": {
     "complete": "Order Complete",
@@ -38,7 +39,7 @@
     "shippingAddress": "Shipping Address",
     "saveChanges": "Save Changes",
     "emptyFields": "Empty Fields",
-    "latestOrder": "Latest Order",
+    "orderHistory": "Order History",
     "addressUpdated": "Address updated",
     "addNewAddress": "Add New Address",
     "cancel": "Cancel",
@@ -51,7 +52,8 @@
     "addressDeleted": "Address deleted",
     "addressDeleteError": "Failed to delete address",
     "defaultAddressSet": "Default address set",
-    "defaultAddressError": "Failed to set default address"
+    "defaultAddressError": "Failed to set default address",
+    "noOrders": "No orders"
   },
   "checkout": {
     "title": "Checkout",

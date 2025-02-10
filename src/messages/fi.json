@@ -10,7 +10,8 @@
     "back": "Takaisin",
     "closeMenu": "Sulje valikko",
     "all": "Kaikki",
-    "browseMenu": "Selaa tuotteita"
+    "browseMenu": "Selaa tuotteita",
+    "showMore": "Näytä lisää"
   },
   "home": {
     "categories": "Kategoriat",
@@ -40,7 +41,7 @@
     "shippingAddress": "Toimitusosoite",
     "saveChanges": "Tallenna muutokset",
     "emptyFields": "Tyhjennä kentät",
-    "latestOrder": "Viimeisin tilaus",
+    "orderHistory": "Tilaushistoria",
     "addressUpdated": "Osoite päivitetty",
     "addNewAddress": "Lisää uusi osoite",
     "cancel": "Peruuta",
@@ -53,7 +54,8 @@
     "addressDeleted": "Osoite poistettu",
     "addressDeleteError": "Osoitteen poistaminen epäonnistui",
     "defaultAddressSet": "Oletusosoite asetettu",
-    "defaultAddressError": "Oletusosoitteen asettaminen epäonnistui"
+    "defaultAddressError": "Oletusosoitteen asettaminen epäonnistui",
+    "noOrders": "Ei tilauksia"
   },
   "checkout": {
     "title": "Kassa",

@@ -169,7 +169,7 @@ export default function AddressBook({
                   </Button>
                 )}
                 {address.defaultShippingAddress && (
-                  <span className="ml-2 flex items-center rounded-full bg-green-100 px-3 py-1 text-sm text-green-800">
+                  <span className="ml-2 flex items-center text-sm text-emerald-200">
                     {t("account.defaultAddress")}
                   </span>
                 )}
