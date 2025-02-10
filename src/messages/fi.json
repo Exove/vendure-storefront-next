@@ -143,5 +143,12 @@
     "verificationFailed": "Vahvistus epäonnistui",
     "invalidToken": "Virheellinen vahvistuskoodi",
     "noToken": "Vahvistuskoodi puuttuu"
+  },
+  "Address": {
+    "fullName": "Koko nimi",
+    "streetAddress": "Katuosoite",
+    "postalCode": "Postinumero",
+    "city": "Kaupunki",
+    "country": "Maa"
   }
 }

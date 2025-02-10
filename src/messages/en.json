@@ -140,5 +140,12 @@
     "verificationFailed": "Verification failed",
     "invalidToken": "Invalid verification token",
     "noToken": "Verification token is missing"
+  },
+  "Address": {
+    "fullName": "Full Name",
+    "streetAddress": "Street Address",
+    "postalCode": "Postal Code",
+    "city": "City",
+    "country": "Country"
   }
 }
