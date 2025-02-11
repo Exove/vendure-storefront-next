@@ -27,12 +27,12 @@ export default function Heading({
     <Tag
       className={twMerge(
         clsx(
-          "break-words font-bold",
-          size === "xl" && "mb-10 text-3xl lg:text-4xl lg:leading-tight",
-          size === "lg" && "mb-6 text-2xl lg:text-3xl",
-          size === "md" && "mb-6 text-xl lg:text-2xl",
-          size === "sm" && "mb-4 text-lg",
-          size === "xs" && "mb-4 text-base",
+          "text-slate-100",
+          size === "xl" && "mb-4 text-4xl font-bold",
+          size === "lg" && "mb-8 text-3xl font-bold",
+          size === "md" && "mb-6 text-xl font-semibold",
+          size === "sm" && "mb-4 text-lg font-semibold",
+          size === "xs" && "mb-4 text-base font-medium",
         ),
         className,
       )}

@@ -45,7 +45,7 @@ export default function ProductTemplate({
             <ImageGallery images={product.assets} />
             <div className="flex flex-col gap-8">
               <div>
-                <Heading level="h1" size="xl" className="mb-4">
+                <Heading level="h1" size="xl">
                   {product.name}
                 </Heading>
                 {allVariantsHaveSamePrice && (
