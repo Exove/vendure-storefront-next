@@ -1,6 +1,7 @@
 import { formatCurrency } from "@/common/utils";
 import { Order } from "@/gql/graphql";
 import { useTranslations } from "next-intl";
+import Heading from "@/components/heading";
 
 type Props = {
   order: Order | null;
@@ -20,9 +21,9 @@ export default function OrderCompleteTemplate({ order }: Props) {
   return (
     <div className="mx-auto mb-32 max-w-screen-md pt-16">
       <div className="mb-12 text-center">
-        <h1 className="mb-4 text-4xl font-bold text-blue-400">
+        <Heading level="h1" size="xl" className="text-blue-400">
           {t("orderComplete.thankYou")}
-        </h1>
+        </Heading>
         <p className="text-lg text-slate-300">
           {t("orderComplete.emailConfirmation")}
         </p>
@@ -30,9 +31,9 @@ export default function OrderCompleteTemplate({ order }: Props) {
 
       <div className="space-y-8">
         <div className="rounded-xl bg-slate-800/50 p-8 shadow-lg backdrop-blur">
-          <h2 className="mb-6 text-2xl font-semibold text-slate-200">
+          <Heading level="h2" size="lg" className="text-slate-200">
             {t("orderComplete.orderDetails")}
-          </h2>
+          </Heading>
           <div className="grid gap-4 text-lg">
             <div className="flex justify-between">
               <span className="text-slate-400">
@@ -65,9 +66,9 @@ export default function OrderCompleteTemplate({ order }: Props) {
         </div>
 
         <div className="rounded-xl bg-slate-800/50 p-8 shadow-lg backdrop-blur">
-          <h2 className="mb-6 text-2xl font-semibold text-slate-200">
+          <Heading level="h2" size="lg" className="text-slate-200">
             {t("orderComplete.shippingAddress")}
-          </h2>
+          </Heading>
           <div className="space-y-2 text-lg text-slate-300">
             <p className="font-medium">{order.shippingAddress?.fullName}</p>
             <p>{order.shippingAddress?.streetLine1}</p>
@@ -78,18 +79,18 @@ export default function OrderCompleteTemplate({ order }: Props) {
         </div>
 
         <div className="rounded-xl bg-slate-800/50 p-8 shadow-lg backdrop-blur">
-          <h2 className="mb-6 text-2xl font-semibold text-slate-200">
+          <Heading level="h2" size="lg" className="text-slate-200">
             {t("orderComplete.shippingMethod")}
-          </h2>
+          </Heading>
           <p className="text-lg text-slate-300">
             {order.shippingLines[0]?.shippingMethod.name}
           </p>
         </div>
 
         <div className="rounded-xl bg-slate-800/50 p-8 shadow-lg backdrop-blur">
-          <h2 className="mb-6 text-2xl font-semibold text-slate-200">
+          <Heading level="h2" size="lg" className="text-slate-200">
             {t("orderComplete.orderSummary")}
-          </h2>
+          </Heading>
           <div className="space-y-6">
             {order.lines.map((line) => (
               <div

@@ -6,6 +6,7 @@ import { formatCurrency } from "@/common/utils";
 import { PhotoIcon } from "@heroicons/react/24/outline";
 import { useLocale } from "next-intl";
 import { useTranslations } from "use-intl";
+import Heading from "./heading";
 
 interface ProductCardProps {
   slug: string;
@@ -45,7 +46,9 @@ export default function ProductCard({
         )}
       </div>
       <div className="flex flex-1 flex-col gap-2 p-4">
-        <h2 className="text-lg font-semibold">{name}</h2>
+        <Heading level="h2" size="sm" className="mb-0">
+          {name}
+        </Heading>
         <p className="mt-auto text-blue-400">
           <span className="text-sm">
             {hasVariantPrices && t("product.fromPrice")}{" "}

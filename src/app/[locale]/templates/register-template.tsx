@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { RegisterCustomerInput } from "@/gql/graphql";
 import { registerCustomerAction } from "../actions";
 import Button from "@/components/button";
+import Heading from "@/components/heading";
 
 type RegisterFormData = RegisterCustomerInput;
 
@@ -40,9 +41,9 @@ export default function RegisterTemplate() {
 
   return (
     <div className="mx-auto mt-8 max-w-md rounded-lg">
-      <h1 className="mb-6 text-2xl font-bold text-white">
+      <Heading level="h1" size="lg">
         {t("createAccount")}
-      </h1>
+      </Heading>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-4">

@@ -3,6 +3,7 @@ import RadioOption from "./radio-option";
 import { useTranslations } from "next-intl";
 import { setOrderShippingMethodAction } from "@/app/[locale]/actions";
 import { mutate } from "swr";
+import Heading from "./heading";
 
 interface ShippingMethodSelectorProps {
   shippingMethods: GetShippingMethodsQuery["eligibleShippingMethods"];
@@ -26,7 +27,9 @@ export default function ShippingMethodSelector({
 
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-semibold">{t("shippingMethod")}</h2>
+      <Heading level="h2" size="md">
+        {t("shippingMethod")}
+      </Heading>
       <div className="space-y-2">
         {shippingMethods.map((method) => (
           <RadioOption

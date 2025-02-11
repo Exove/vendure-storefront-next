@@ -18,6 +18,7 @@ import OrderSummary from "@/components/order-summary";
 import Button from "@/components/button";
 import AddressFields from "@/components/address-fields";
 import { MenuItem } from "@/common/get-menu-items";
+import Heading from "@/components/heading";
 
 export const CartContext = createContext<{
   cartQuantity: number;
@@ -103,16 +104,18 @@ export default function CheckoutTemplate({
       <Container>
         <Header menuItems={menuItems} />
         <div className="mx-auto mb-32 max-w-screen-xl pt-16">
-          <h1 className="mb-8 text-3xl font-bold">{t("checkout.title")}</h1>
+          <Heading level="h1" size="lg">
+            {t("checkout.title")}
+          </Heading>
           {order && order.lines.length > 0 ? (
             <div className="grid grid-cols-1 gap-20 md:grid-cols-2">
               <div className="flex flex-col gap-12">
                 <form onSubmit={handleSubmitOrder} className="space-y-10">
                   {!activeUser && (
                     <div>
-                      <h2 className="mb-6 text-xl font-medium">
+                      <Heading level="h2" size="md">
                         {t("checkout.contactInformation")}
-                      </h2>
+                      </Heading>
                       <div className="space-y-4">
                         <div className="flex gap-4">
                           <div className="w-1/2">
@@ -150,9 +153,9 @@ export default function CheckoutTemplate({
                     </div>
                   )}
                   <div>
-                    <h2 className="mb-6 text-xl font-medium">
+                    <Heading level="h2" size="md">
                       {t("checkout.shippingAddress")}
-                    </h2>
+                    </Heading>
                     <AddressFields
                       defaultAddress={activeUser?.addresses?.find(
                         (address) => address.defaultShippingAddress,
@@ -161,9 +164,9 @@ export default function CheckoutTemplate({
                   </div>
                   <div>
                     <div className="mb-6 flex items-center gap-4">
-                      <h2 className="text-xl font-medium">
+                      <Heading level="h2" size="md" className="mb-0">
                         {t("checkout.billingAddress")}
-                      </h2>
+                      </Heading>
                       <Button
                         type="button"
                         size="small"

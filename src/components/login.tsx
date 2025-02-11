@@ -12,7 +12,7 @@ import { LoginMutation } from "@/gql/graphql";
 import { setBearerToken } from "../app/[locale]/actions";
 import { Link } from "@/i18n/routing";
 import Button from "./button";
-
+import Heading from "./heading";
 export default function Login() {
   const t = useTranslations();
   const [email, setEmail] = useState("");
@@ -59,6 +59,9 @@ export default function Login() {
 
   return (
     <div className="mx-auto mt-20 max-w-md">
+      <Heading level="h1" size="lg">
+        {t("auth.login")}
+      </Heading>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div>
           <label

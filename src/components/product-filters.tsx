@@ -9,6 +9,7 @@ import {
   AccordionContent,
 } from "@/components/facet-accordion";
 import { HIDDEN_FACET_GROUPS } from "@/common/constants";
+import Heading from "@/components/heading";
 
 interface ProductFiltersProps {
   facets: {
@@ -96,7 +97,9 @@ export default function ProductFilters({
     <>
       {!isMobile && (
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="sr-only">Facets</h2>
+          <Heading level="h2" size="sm" className="sr-only">
+            Facets
+          </Heading>
           <div className="h-[35px]">
             {(hasActiveFilters ||
               priceRange.min !== null ||

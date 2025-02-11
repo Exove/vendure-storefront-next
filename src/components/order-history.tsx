@@ -6,6 +6,7 @@ import BoxWrap from "@/components/box-wrap";
 import { formatDate } from "@/common/utils";
 import { useState } from "react";
 import Button from "./button";
+import Heading from "./heading";
 
 type Order = NonNullable<
   GetActiveCustomerQuery["activeCustomer"]
@@ -27,9 +28,9 @@ export default function OrderHistory({ orders }: OrderHistoryProps) {
 
   return (
     <section>
-      <h2 className="mb-4 text-xl font-semibold">
+      <Heading level="h2" size="md">
         {t("account.orderHistory")}
-      </h2>
+      </Heading>
       <div className="space-y-4">
         {filteredOrders.length === 0 ? (
           <div className="text-sm">{t("account.noOrders")}</div>

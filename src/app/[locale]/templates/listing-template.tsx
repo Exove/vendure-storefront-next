@@ -17,6 +17,7 @@ import { ChevronLeftIcon, FunnelIcon } from "@heroicons/react/24/outline";
 import ProductFilters from "@/components/product-filters";
 import SortSelect from "@/components/sort-select";
 import { Link } from "@/i18n/routing";
+import Heading from "@/components/heading";
 
 interface ListingTemplateProps {
   products: SearchResult[];
@@ -293,7 +294,9 @@ export default function ListingTemplate({
                 {parentCollection}
               </Link>
             )}
-          <h1 className="text-4xl font-black">{title}</h1>
+          <Heading level="h1" size="xl" className="font-black">
+            {title}
+          </Heading>
         </div>
       )}
       <div className="mt-10 gap-16 lg:flex" id="listing-view">

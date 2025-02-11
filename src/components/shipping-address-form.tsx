@@ -1,5 +1,6 @@
 import { GetActiveCustomerQuery } from "@/gql/graphql";
 import { motion } from "motion/react";
+import Heading from "./heading";
 
 interface ShippingAddressFormProps {
   activeUser: GetActiveCustomerQuery["activeCustomer"];
@@ -15,7 +16,9 @@ export default function ShippingAddressForm({
   return (
     <section>
       <div className="flex items-baseline justify-between">
-        <h2 className="mb-4 text-xl font-semibold">Shipping Address</h2>
+        <Heading level="h2" size="md">
+          Shipping Address
+        </Heading>
         {activeUser?.addresses?.[0] && (
           <button
             type="button"

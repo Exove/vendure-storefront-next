@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import BoxWrap from "@/components/box-wrap";
 import Button from "@/components/button";
 import AddressFields from "@/components/address-fields";
+import Heading from "@/components/heading";
 import {
   createCustomerAddressAction,
   deleteCustomerAddressAction,
@@ -108,9 +109,9 @@ export default function AddressBook({
   return (
     <section>
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-xl font-semibold">
+        <Heading level="h2" size="md">
           {t("account.shippingAddress")}
-        </h2>
+        </Heading>
         <Button
           size="small"
           style="primary"

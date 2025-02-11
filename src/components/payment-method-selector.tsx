@@ -1,6 +1,7 @@
 import { GetPaymentMethodsQuery } from "@/gql/graphql";
 import RadioOption from "./radio-option";
 import { useTranslations } from "next-intl";
+import Heading from "./heading";
 
 interface PaymentMethodSelectorProps {
   paymentMethods: GetPaymentMethodsQuery["eligiblePaymentMethods"];
@@ -13,7 +14,9 @@ export default function PaymentMethodSelector({
 
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-semibold">{t("checkout.paymentMethod")}</h2>
+      <Heading level="h2" size="md">
+        {t("checkout.paymentMethod")}
+      </Heading>
       <div className="space-y-2">
         {paymentMethods.map((method) => (
           <RadioOption

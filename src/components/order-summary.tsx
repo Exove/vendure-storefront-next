@@ -1,6 +1,7 @@
 import { formatCurrency } from "@/common/utils";
 import { ActiveOrderFragment } from "@/gql/graphql";
 import { useLocale, useTranslations } from "next-intl";
+import Heading from "./heading";
 
 interface OrderSummaryProps {
   order: ActiveOrderFragment;
@@ -12,9 +13,9 @@ export default function OrderSummary({ order }: OrderSummaryProps) {
 
   return (
     <section className="sticky top-4">
-      <h2 className="mb-4 text-xl font-semibold">
+      <Heading level="h2" size="md">
         {t("orderComplete.orderSummary")}
-      </h2>
+      </Heading>
 
       <div className="space-y-4">
         {order?.lines.map((item) => (

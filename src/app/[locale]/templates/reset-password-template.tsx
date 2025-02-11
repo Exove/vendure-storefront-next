@@ -8,6 +8,7 @@ import { print } from "graphql/language/printer";
 import { RequestPasswordResetMutation } from "@/gql/graphql";
 import { requestPasswordResetMutation } from "@/common/mutations";
 import Button from "@/components/button";
+import Heading from "@/components/heading";
 
 export default function ResetPasswordTemplate() {
   const t = useTranslations();
@@ -44,6 +45,9 @@ export default function ResetPasswordTemplate() {
 
   return (
     <div className="mx-auto mt-20 max-w-md">
+      <Heading level="h1" size="lg">
+        {t("auth.resetPassword")}
+      </Heading>
       <form onSubmit={handlePasswordReset} className="flex flex-col gap-4">
         <div>
           <label

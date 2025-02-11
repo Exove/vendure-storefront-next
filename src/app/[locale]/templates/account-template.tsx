@@ -30,7 +30,9 @@ export default function AccountTemplate({
   if (!user) {
     return (
       <div className="mx-auto max-w-screen-xl py-16">
-        <h1 className="mb-8 text-3xl font-bold">{t("account.title")}</h1>
+        <Heading level="h1" size="lg">
+          {t("account.title")}
+        </Heading>
         <p>{t("account.notLoggedIn")}</p>
       </div>
     );
