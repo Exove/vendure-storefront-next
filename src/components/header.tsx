@@ -9,14 +9,15 @@ import { MenuItem } from "@/common/get-menu-items";
 
 type HeaderProps = {
   menuItems?: MenuItem[];
+  frontPage?: boolean;
 };
 
-export default function Header({ menuItems }: HeaderProps) {
+export default function Header({ menuItems, frontPage }: HeaderProps) {
   return (
     <>
       <div className="pb-2 pt-4">
         <Link href="/" className="text-xl font-black">
-          {SHOP_NAME}
+          {frontPage ? <h1>{SHOP_NAME}</h1> : SHOP_NAME}
         </Link>
       </div>
       <header className="sticky top-0 z-20 mx-auto w-full bg-slate-900 py-4">
