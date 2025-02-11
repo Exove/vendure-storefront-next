@@ -19,6 +19,12 @@ export default async function Home(props: { params: Params }) {
     `${VENDURE_API_URL}?languageCode=${languageCode}`,
     collectionsQuery,
   );
+  const filteredCollections = {
+    ...collections,
+    items: collections.items.filter(
+      (collection) => collection.slug !== FRONT_PAGE_COLLECTION_SLUG,
+    ),
+  };
   const { search: frontPageProducts } = await request<GetFilteredProductsQuery>(
     `${VENDURE_API_URL}?languageCode=${languageCode}`,
     filteredProductsQuery,
@@ -35,7 +41,7 @@ export default async function Home(props: { params: Params }) {
 
   return (
     <FrontPageTemplate
-      collections={collections}
+      collections={filteredCollections}
       frontPageProducts={frontPageProducts}
       menuItems={menuItems}
     />
