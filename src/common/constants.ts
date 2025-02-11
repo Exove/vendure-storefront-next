@@ -4,6 +4,9 @@ export const VENDURE_API_URL =
 export const VENDURE_ROOT_URL =
   process.env.NEXT_PUBLIC_ROOT_URL || "http://localhost:8000";
 
+export const NEXT_PUBLIC_URL =
+  process.env.NEXT_PUBLIC_URL || "http://localhost:3000";
+
 export const SHOP_NAME = "Vendure Next.js";
 
 export const PRODUCTS_PER_PAGE = 48;

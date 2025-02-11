@@ -14,6 +14,8 @@ import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 const documents = {
+  "\n  query GetAllSlugs {\n    products {\n      items {\n        slug\n      }\n    }\n    collections {\n      items {\n        slug\n      }\n    }\n  }\n":
+    types.GetAllSlugsDocument,
   "\n  fragment ActiveOrder on Order {\n    __typename\n    id\n    code\n    couponCodes\n    state\n    currencyCode\n    totalQuantity\n    subTotalWithTax\n    shippingWithTax\n    totalWithTax\n    customer {\n      emailAddress\n      phoneNumber\n    }\n    discounts {\n      description\n      amountWithTax\n    }\n    lines {\n      id\n      unitPriceWithTax\n      quantity\n      linePriceWithTax\n      productVariant {\n        id\n        name\n        product {\n          slug\n        }\n        sku\n      }\n      featuredAsset {\n        id\n        preview\n      }\n    }\n    shippingLines {\n      shippingMethod {\n        id\n        name\n        description\n      }\n      priceWithTax\n    }\n  }\n":
     types.ActiveOrderFragmentDoc,
   "\n  fragment Order on Order {\n    id\n    type\n    orderPlacedAt\n    code\n    state\n    active\n    totalWithTax\n    customer {\n      firstName\n      lastName\n      emailAddress\n      phoneNumber\n    }\n    shipping\n    shippingLines {\n      shippingMethod {\n        name\n        description\n        id\n      }\n    }\n    shippingAddress {\n      fullName\n      streetLine1\n      postalCode\n      city\n    }\n    lines {\n      id\n      unitPriceWithTax\n      quantity\n      linePriceWithTax\n      productVariant {\n        id\n        name\n        product {\n          slug\n        }\n        sku\n      }\n      featuredAsset {\n        id\n        preview\n      }\n    }\n  }\n":
@@ -92,6 +94,12 @@ const documents = {
  */
 export function graphql(source: string): unknown;
 
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  query GetAllSlugs {\n    products {\n      items {\n        slug\n      }\n    }\n    collections {\n      items {\n        slug\n      }\n    }\n  }\n",
+): (typeof documents)["\n  query GetAllSlugs {\n    products {\n      items {\n        slug\n      }\n    }\n    collections {\n      items {\n        slug\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

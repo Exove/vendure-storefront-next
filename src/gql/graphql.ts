@@ -3586,6 +3586,20 @@ export type Zone = Node & {
   updatedAt: Scalars["DateTime"]["output"];
 };
 
+export type GetAllSlugsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetAllSlugsQuery = {
+  __typename?: "Query";
+  products: {
+    __typename?: "ProductList";
+    items: Array<{ __typename?: "Product"; slug: string }>;
+  };
+  collections: {
+    __typename?: "CollectionList";
+    items: Array<{ __typename?: "Collection"; slug: string }>;
+  };
+};
+
 export type ActiveOrderFragment = {
   __typename: "Order";
   id: string;
@@ -4649,6 +4663,59 @@ export const OrderFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<OrderFragment, unknown>;
+export const GetAllSlugsDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetAllSlugs" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "products" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "items" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "slug" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "collections" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "items" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "slug" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetAllSlugsQuery, GetAllSlugsQueryVariables>;
 export const AddItemToOrderDocument = {
   kind: "Document",
   definitions: [
