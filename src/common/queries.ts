@@ -44,6 +44,15 @@ export const productBySlugQuery = graphql(`
       }
       collections {
         name
+        position
+        parent {
+          name
+        }
+        breadcrumbs {
+          name
+          id
+          slug
+        }
       }
       optionGroups {
         name

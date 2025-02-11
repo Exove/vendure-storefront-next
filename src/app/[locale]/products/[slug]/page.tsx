@@ -47,10 +47,29 @@ export default async function ProductPage(props: { params: Params }) {
     notFound();
   }
 
+  // Find the collection with the longest breadcrumb path
+  const longestBreadcrumbCollection = product.collections.reduce(
+    (longest, current) => {
+      return current.breadcrumbs.length > longest.breadcrumbs.length
+        ? current
+        : longest;
+    },
+    product.collections[0],
+  );
+
+  // Create breadcrumb items from the collection
+  const breadcrumbItems = longestBreadcrumbCollection.breadcrumbs
+    .filter((crumb) => crumb.name !== "__root_collection__")
+    .map((crumb) => ({
+      label: crumb.name,
+      href: `/${languageCode}/collections/${crumb.slug}`,
+    }));
+
   return (
     <ProductTemplate
       product={product as Product}
       menuItems={await getMenuItems()}
+      breadcrumbItems={breadcrumbItems}
     />
   );
 }

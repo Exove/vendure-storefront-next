@@ -4141,7 +4141,18 @@ export type ProductBySlugQuery = {
       priceWithTax: any;
       id: string;
     }>;
-    collections: Array<{ __typename?: "Collection"; name: string }>;
+    collections: Array<{
+      __typename?: "Collection";
+      name: string;
+      position: number;
+      parent?: { __typename?: "Collection"; name: string } | null;
+      breadcrumbs: Array<{
+        __typename?: "CollectionBreadcrumb";
+        name: string;
+        id: string;
+        slug: string;
+      }>;
+    }>;
     optionGroups: Array<{ __typename?: "ProductOptionGroup"; name: string }>;
     translations: Array<{
       __typename?: "ProductTranslation";
@@ -7233,6 +7244,44 @@ export const ProductBySlugDocument = {
                     kind: "SelectionSet",
                     selections: [
                       { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "position" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "parent" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "breadcrumbs" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "slug" },
+                            },
+                          ],
+                        },
+                      },
                     ],
                   },
                 },
