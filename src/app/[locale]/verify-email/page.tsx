@@ -1,8 +1,9 @@
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import VerifyTemplate from "../templates/verify-template";
+import VerifyEmailTemplate from "../templates/verify-email-template";
 import Container from "@/components/container";
 import Header from "@/components/header";
+import { getMenuItems } from "@/common/get-menu-items";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Verify");
@@ -13,11 +14,13 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function VerifyPage() {
+export default async function VerifyEmailPage() {
+  const menuItems = await getMenuItems();
+
   return (
     <Container>
-      <Header />
-      <VerifyTemplate />
+      <Header menuItems={menuItems} />
+      <VerifyEmailTemplate />
     </Container>
   );
 }

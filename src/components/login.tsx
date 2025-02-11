@@ -103,7 +103,10 @@ export default function Login() {
         <Link href="/register" className="text-blue-400 hover:text-blue-300">
           {t("Register.createAccount")}
         </Link>
-        <Link href="/verify" className="text-blue-400 hover:text-blue-300">
+        <Link
+          href="/reset-password"
+          className="text-blue-400 hover:text-blue-300"
+        >
           {t("auth.forgotPassword")}
         </Link>
       </div>
