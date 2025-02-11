@@ -61,7 +61,10 @@ export default function Login() {
     <div className="mx-auto mt-20 max-w-md">
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div>
-          <label htmlFor="email" className="mb-2 block">
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-slate-300"
+          >
             {t("auth.email")}
           </label>
           <input
@@ -69,12 +72,15 @@ export default function Login() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded border p-2 text-black"
+            className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 px-3 py-2"
             required
           />
         </div>
         <div>
-          <label htmlFor="password" className="mb-2 block">
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium text-slate-300"
+          >
             {t("auth.password")}
           </label>
           <input
@@ -82,7 +88,7 @@ export default function Login() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded border p-2 text-black"
+            className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 px-3 py-2"
             required
           />
         </div>
