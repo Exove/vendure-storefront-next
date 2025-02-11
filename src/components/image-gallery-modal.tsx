@@ -18,7 +18,7 @@ export default function ImageGalleryModal({
   return (
     <>
       {openButton && (
-        <button onClick={() => setIsOpen(true)}>
+        <button onClick={() => setIsOpen(true)} className="w-full">
           {openButton}
           <span className="sr-only">Fullscreen</span>
         </button>

@@ -16,7 +16,7 @@ const ImageGallery = ({ images }: ImageGalleryProps) => {
   if (images.length === 1) {
     return (
       <div className="flex justify-center">
-        <div className="max-w-screen-sm">
+        <div className="w-full">
           <ImageGalleryModal
             openButton={
               <div className="group relative">
