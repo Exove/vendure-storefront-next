@@ -4090,6 +4090,22 @@ export type SetOrderBillingAddressMutation = {
       });
 };
 
+export type RequestPasswordResetMutationVariables = Exact<{
+  emailAddress: Scalars["String"]["input"];
+}>;
+
+export type RequestPasswordResetMutation = {
+  __typename?: "Mutation";
+  requestPasswordReset?:
+    | {
+        __typename?: "NativeAuthStrategyError";
+        errorCode: ErrorCode;
+        message: string;
+      }
+    | { __typename?: "Success"; success: boolean }
+    | null;
+};
+
 export type ProductsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type ProductsQuery = {
@@ -7065,6 +7081,95 @@ export const SetOrderBillingAddressDocument = {
 } as unknown as DocumentNode<
   SetOrderBillingAddressMutation,
   SetOrderBillingAddressMutationVariables
+>;
+export const RequestPasswordResetDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "RequestPasswordReset" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "emailAddress" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "requestPasswordReset" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "emailAddress" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "emailAddress" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "Success" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "success" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: {
+                    kind: "NamedType",
+                    name: { kind: "Name", value: "ErrorResult" },
+                  },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "errorCode" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "message" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  RequestPasswordResetMutation,
+  RequestPasswordResetMutationVariables
 >;
 export const ProductsDocument = {
   kind: "Document",

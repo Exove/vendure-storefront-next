@@ -1,130 +1,150 @@
 "use client";
 
+import { VENDURE_API_URL } from "@/common/constants";
+import { GraphQLClient } from "graphql-request";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { FormEvent, useState } from "react";
 import { useTranslations } from "next-intl";
-import { verifyCustomerAction } from "../actions";
+import { print } from "graphql/language/printer";
+import { VerifyMutation, RequestPasswordResetMutation } from "@/gql/graphql";
+import {
+  requestPasswordResetMutation,
+  verifyMutation,
+} from "@/common/mutations";
+import { setBearerToken } from "../actions";
 import Button from "@/components/button";
 
-type VerifyFormData = {
-  password: string;
-  confirmPassword: string;
-};
-
 export default function VerifyTemplate() {
-  const t = useTranslations("Verify");
+  const t = useTranslations();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<VerifyFormData>();
+  const handlePasswordReset = async (e: FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
 
-  const onSubmit = async (data: VerifyFormData) => {
-    if (!token) {
-      setErrorMessage(t("invalidToken"));
-      return;
-    }
-
-    setIsLoading(true);
     try {
-      const result = await verifyCustomerAction(token, data.password);
+      const graphQLClient = new GraphQLClient(VENDURE_API_URL);
+      const response =
+        await graphQLClient.request<RequestPasswordResetMutation>(
+          print(requestPasswordResetMutation),
+          {
+            emailAddress: email,
+          },
+        );
 
-      if ("id" in result) {
-        router.push("/");
-      } else if ("message" in result) {
-        setErrorMessage(result.message);
+      const result = response.requestPasswordReset;
+      if (result && result.__typename === "Success") {
+        setSuccess(t("auth.passwordResetEmailSent"));
+      } else {
+        setError(t("auth.passwordResetFailed"));
       }
-    } catch (error: unknown) {
-      console.error("Verification error:", error);
-      setErrorMessage(t("verificationFailed"));
-    } finally {
-      setIsLoading(false);
+    } catch (error) {
+      console.error("Failed to request password reset:", error);
+      setError(t("auth.passwordResetFailed"));
     }
   };
 
-  if (!token) {
-    return (
-      <div className="mx-auto mt-8 max-w-md rounded-lg bg-white p-6 shadow-md">
-        <div className="text-red-500">{t("noToken")}</div>
-      </div>
-    );
-  }
+  const handleVerify = async (e: FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    if (!token) {
+      setError(t("auth.invalidToken"));
+      return;
+    }
+
+    try {
+      const graphQLClient = new GraphQLClient(VENDURE_API_URL);
+      const response = await graphQLClient.rawRequest<VerifyMutation>(
+        print(verifyMutation),
+        {
+          password: password,
+          token: token,
+        },
+      );
+
+      const authToken = response.headers.get("vendure-auth-token");
+      if (authToken) {
+        await setBearerToken(authToken);
+      }
+
+      const { verifyCustomerAccount } = response.data;
+
+      if ("id" in verifyCustomerAccount) {
+        router.push("/");
+        router.refresh();
+      } else {
+        setError(t("auth.verificationFailed"));
+      }
+    } catch (error) {
+      console.error("Failed to verify:", error);
+      setError(t("auth.verificationFailed"));
+    }
+  };
 
   return (
-    <div className="mx-auto mt-8 max-w-md rounded-lg bg-slate-800/50 p-6 shadow-lg backdrop-blur">
-      <h1 className="mb-6 text-2xl font-bold text-white">
-        {t("verifyAccount")}
-      </h1>
-
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="space-y-4">
+    <div className="mx-auto mt-20 max-w-md">
+      {/* If token is present, show the verify form */}
+      {token ? (
+        <form onSubmit={handleVerify} className="flex flex-col gap-4">
           <div>
-            <label className="block text-sm font-medium text-slate-300">
-              {t("password")}
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-slate-300"
+            >
+              {t("auth.newPassword")}
             </label>
             <input
+              id="password"
               type="password"
-              {...register("password", {
-                required: true,
-                minLength: 8,
-              })}
-              className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 px-3 py-2 shadow-sm"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 px-3 py-2"
+              required
             />
-            {errors.password && (
-              <span className="text-sm text-red-500">
-                {errors.password.type === "required"
-                  ? t("passwordRequired")
-                  : t("passwordMinLength")}
-              </span>
-            )}
           </div>
-
+          {error && <div className="text-red-500">{error}</div>}
+          <div className="mt-4">
+            <Button type="submit" id="verify" fullWidth>
+              {t("auth.setPassword")}
+            </Button>
+          </div>
+        </form>
+      ) : (
+        <form onSubmit={handlePasswordReset} className="flex flex-col gap-4">
+          {/* If token is not present, show the password reset form */}
           <div>
-            <label className="block text-sm font-medium text-slate-300">
-              {t("confirmPassword")}
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-slate-300"
+            >
+              {t("auth.email")}
             </label>
             <input
-              type="password"
-              {...register("confirmPassword", {
-                required: true,
-                validate: (val: string) => {
-                  if (watch("password") != val) {
-                    return t("passwordsDoNotMatch");
-                  }
-                },
-              })}
-              className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 px-3 py-2 shadow-sm"
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="mt-1 block w-full rounded-md border-slate-600 bg-slate-700 px-3 py-2"
+              required
             />
-            {errors.confirmPassword && (
-              <span className="text-sm text-red-500">
-                {errors.confirmPassword.message}
-              </span>
-            )}
           </div>
-        </div>
-
-        {errorMessage && (
-          <div className="text-sm text-red-500">{errorMessage}</div>
-        )}
-
-        <div className="mt-8">
-          <Button
-            type="submit"
-            style={isLoading ? "disabled" : "primary"}
-            fullWidth
-          >
-            {isLoading ? t("verifying") : t("verify")}
-          </Button>
-        </div>
-      </form>
+          {error && <div className="text-red-500">{error}</div>}
+          {success && <div className="text-green-500">{success}</div>}
+          <div className="mt-4">
+            <Button type="submit" id="reset" fullWidth>
+              {t("auth.resetPassword")}
+            </Button>
+          </div>
+        </form>
+      )}
     </div>
   );
 }

@@ -95,8 +95,15 @@
     "password": "Password",
     "login": "Login",
     "invalidCredentials": "Invalid email or password",
-    "loginFailed": "Failed to login",
-    "forgotPassword": "Forgot your password?"
+    "loginFailed": "Login failed",
+    "forgotPassword": "Forgot your password?",
+    "newPassword": "New password",
+    "setPassword": "Set password",
+    "resetPassword": "Reset password",
+    "passwordResetEmailSent": "Password reset link has been sent to your email",
+    "passwordResetFailed": "Password reset failed",
+    "verificationFailed": "Verification failed",
+    "invalidToken": "Invalid verification token"
   },
   "notFound": {
     "title": "404 - Page Not Found",

@@ -98,7 +98,14 @@
     "login": "Kirjaudu",
     "invalidCredentials": "Virheellinen sähköposti tai salasana",
     "loginFailed": "Kirjautuminen epäonnistui",
-    "forgotPassword": "Unohditko salasanasi?"
+    "forgotPassword": "Unohditko salasanasi?",
+    "newPassword": "Uusi salasana",
+    "setPassword": "Aseta salasana",
+    "resetPassword": "Palauta salasana",
+    "passwordResetEmailSent": "Salasanan palautuslinkki on lähetetty sähköpostiisi",
+    "passwordResetFailed": "Salasanan palautus epäonnistui",
+    "verificationFailed": "Vahvistus epäonnistui",
+    "invalidToken": "Virheellinen vahvistuskoodi"
   },
   "notFound": {
     "title": "404 - Sivua ei löytynyt",

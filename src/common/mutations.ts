@@ -230,3 +230,17 @@ export const setOrderBillingAddressMutation = graphql(`
     }
   }
 `);
+
+export const requestPasswordResetMutation = graphql(`
+  mutation RequestPasswordReset($emailAddress: String!) {
+    requestPasswordReset(emailAddress: $emailAddress) {
+      ... on Success {
+        success
+      }
+      ... on ErrorResult {
+        errorCode
+        message
+      }
+    }
+  }
+`);
