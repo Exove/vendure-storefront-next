@@ -93,7 +93,7 @@ export default function Login() {
           </Button>
         </div>
       </form>
-      <div className="mt-8 space-y-4 text-center">
+      <div className="mt-8 flex flex-col gap-4 text-center">
         <Link href="/register" className="text-blue-400 hover:text-blue-300">
           {t("Register.createAccount")}
         </Link>
