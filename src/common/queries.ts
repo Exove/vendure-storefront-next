@@ -41,6 +41,7 @@ export const productBySlugQuery = graphql(`
         price
         priceWithTax
         id
+        stockLevel
       }
       collections {
         name

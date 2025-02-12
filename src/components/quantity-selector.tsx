@@ -7,22 +7,26 @@ interface QuantitySelectorProps {
   initialQuantity?: number;
   onChange?: (quantity: number) => void;
   showRemoveButton?: boolean;
+  disabled?: boolean;
 }
 
 export default function QuantitySelector({
   initialQuantity = 1,
   onChange,
   showRemoveButton = false,
+  disabled = false,
 }: QuantitySelectorProps) {
   const [quantity, setQuantity] = useState(initialQuantity);
 
   const increment = () => {
+    if (disabled) return;
     const newQuantity = quantity + 1;
     setQuantity(newQuantity);
     onChange?.(newQuantity);
   };
 
   const decrement = () => {
+    if (disabled) return;
     if (quantity > 1) {
       const newQuantity = quantity - 1;
       setQuantity(newQuantity);
@@ -36,7 +40,7 @@ export default function QuantitySelector({
         <button
           onClick={decrement}
           className="flex h-8 w-8 items-center justify-center rounded-full"
-          disabled={quantity <= 1}
+          disabled={disabled || quantity <= 1}
         >
           <MinusIcon className="h-4 w-4 stroke-[3]" />
         </button>
@@ -44,10 +48,12 @@ export default function QuantitySelector({
           type="number"
           value={quantity}
           onChange={(e) => {
+            if (disabled) return;
             const newQuantity = Math.max(1, parseInt(e.target.value) || 1);
             setQuantity(newQuantity);
             onChange?.(newQuantity);
           }}
+          disabled={disabled}
           className="w-8 bg-inherit text-center [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
           data-testid="quantity-input"
         />
@@ -55,12 +61,13 @@ export default function QuantitySelector({
         <button
           onClick={increment}
           className="flex h-8 w-8 items-center justify-center rounded-full"
+          disabled={disabled}
         >
           <PlusIcon className="h-4 w-4 stroke-[3]" />
         </button>
       </div>
       {showRemoveButton && (
-        <button>
+        <button disabled={disabled}>
           <TrashIcon className="h-8 w-8 rounded-full bg-red-100 p-2" />
           <span className="sr-only">Remove from cart</span>
         </button>

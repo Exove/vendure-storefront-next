@@ -4170,6 +4170,7 @@ export type ProductBySlugQuery = {
       price: any;
       priceWithTax: any;
       id: string;
+      stockLevel: string;
     }>;
     collections: Array<{
       __typename?: "Collection";
@@ -7406,6 +7407,10 @@ export const ProductBySlugDocument = {
                         name: { kind: "Name", value: "priceWithTax" },
                       },
                       { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "stockLevel" },
+                      },
                     ],
                   },
                 },

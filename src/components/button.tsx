@@ -12,6 +12,7 @@ interface ButtonProps {
   type?: "button" | "submit" | "reset";
   fullWidth?: boolean;
   id?: string;
+  disabled?: boolean;
 }
 
 export default function Button({
@@ -23,6 +24,7 @@ export default function Button({
   size = "medium",
   fullWidth = false,
   id,
+  disabled = false,
 }: ButtonProps) {
   const baseStyles =
     "rounded-lg px-8 py-4 text-center break-words text-white flex justify-center";
@@ -37,13 +39,15 @@ export default function Button({
     disabled: "cursor-not-allowed bg-gray-500",
   };
 
-  if (href) {
+  const buttonStyle = disabled ? "disabled" : style;
+
+  if (href && !disabled) {
     return (
       <Link href={href} data-testid={id}>
         <div
           className={clsx(
             baseStyles,
-            styleVariants[style],
+            styleVariants[buttonStyle],
             sizeStyles,
             widthStyles,
           )}
@@ -56,15 +60,16 @@ export default function Button({
 
   return (
     <button
-      onClick={onClick}
+      onClick={disabled ? undefined : onClick}
       type={type}
       className={clsx(
         baseStyles,
-        styleVariants[style],
+        styleVariants[buttonStyle],
         sizeStyles,
         widthStyles,
       )}
       id={id}
+      disabled={disabled}
     >
       {children}
     </button>

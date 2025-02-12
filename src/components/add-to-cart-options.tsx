@@ -19,6 +19,7 @@ interface AddToCartOptionsProps {
     id: string;
     name: string;
     priceWithTax: number;
+    stockLevel: string;
   }[];
   quantity?: number;
   displayPrice?: boolean;
@@ -34,7 +35,11 @@ export default function AddToCartOptions({
   const [quantity, setQuantity] = useState(initialQuantity);
   const { setCartQuantity, cartQuantity } = useContext(CartContext);
 
+  const isOutOfStock = selectedVariant.stockLevel === "OUT_OF_STOCK";
+
   const addToCart = async () => {
+    if (isOutOfStock) return;
+
     try {
       const bearerToken = await getBearerToken();
       const authHeaders: Record<string, string> = {
@@ -87,6 +92,8 @@ export default function AddToCartOptions({
                     selectedVariant.id === variant.id
                       ? "border-blue-500 bg-blue-500/10"
                       : "border-slate-700 hover:bg-slate-800",
+                    variant.stockLevel === "OUT_OF_STOCK" &&
+                      "cursor-not-allowed opacity-50",
                   )}
                 >
                   <input
@@ -96,9 +103,17 @@ export default function AddToCartOptions({
                     value={variant.id}
                     checked={selectedVariant.id === variant.id}
                     onChange={() => setSelectedVariant(variant)}
+                    disabled={variant.stockLevel === "OUT_OF_STOCK"}
                     className="sr-only"
                   />
-                  <span className="font-medium">{variant.name}</span>
+                  <div className="flex flex-col">
+                    <span className="font-medium">{variant.name}</span>
+                    {variant.stockLevel === "OUT_OF_STOCK" && (
+                      <span className="text-sm text-red-500">
+                        {t("product.outOfStock")}
+                      </span>
+                    )}
+                  </div>
                   {displayPrice && (
                     <span className="text-lg font-semibold text-blue-400">
                       {formatCurrency(variant.priceWithTax)}
@@ -114,7 +129,11 @@ export default function AddToCartOptions({
           <Heading level="h2" size="xs">
             {t("product.quantity")}
           </Heading>
-          <QuantitySelector initialQuantity={quantity} onChange={setQuantity} />
+          <QuantitySelector
+            initialQuantity={quantity}
+            onChange={setQuantity}
+            disabled={isOutOfStock}
+          />
         </div>
       </div>
 
@@ -127,8 +146,9 @@ export default function AddToCartOptions({
           fullWidth
           size="medium"
           id="add-to-cart"
+          disabled={isOutOfStock}
         >
-          {t("product.addToCart")}
+          {isOutOfStock ? t("product.outOfStock") : t("product.addToCart")}
         </Button>
       </div>
     </div>
