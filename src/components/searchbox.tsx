@@ -10,7 +10,7 @@ import {
 import createClient from "@searchkit/instantsearch-client";
 import { VENDURE_ROOT_URL } from "@/common/constants";
 import { useState, useEffect, useRef } from "react";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { MagnifyingGlassIcon, PhotoIcon } from "@heroicons/react/24/outline";
 import type { Hit } from "instantsearch.js";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -154,13 +154,19 @@ function SearchComponent({ inSidePanel = false }) {
                 }
               >
                 <div className="flex items-center gap-3">
-                  <Image
-                    src={`${VENDURE_ROOT_URL}/assets/${hit.productPreview}`}
-                    alt={hit.productName}
-                    width={40}
-                    height={40}
-                    className="rounded object-cover"
-                  />
+                  {hit.productPreview ? (
+                    <Image
+                      src={`${VENDURE_ROOT_URL}/assets/${hit.productPreview}`}
+                      alt={hit.productName}
+                      width={40}
+                      height={40}
+                      className="rounded object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-10 w-10 items-center justify-center rounded bg-slate-800">
+                      <PhotoIcon className="h-6 w-6 text-slate-600" />
+                    </div>
+                  )}
                   <div>
                     <div className="text-sm font-medium">{hit.productName}</div>
                     <div className="text-sm text-gray-400">
