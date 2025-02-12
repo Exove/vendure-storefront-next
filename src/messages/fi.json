@@ -68,7 +68,8 @@
     "paymentMethod": "Maksutapa",
     "shippingMethod": "Toimitustapa",
     "notEnoughTokens": "Ei tarpeeksi saldoa",
-    "contactInformation": "Yhteystiedot"
+    "contactInformation": "Yhteystiedot",
+    "orderError": "Tilauksen tekeminen epäonnistui"
   },
   "cart": {
     "title": "Ostoskori",

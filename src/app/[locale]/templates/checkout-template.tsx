@@ -19,6 +19,7 @@ import Button from "@/components/button";
 import AddressFields from "@/components/address-fields";
 import { MenuItem } from "@/common/get-menu-items";
 import Heading from "@/components/heading";
+import { toast } from "sonner";
 
 export const CartContext = createContext<{
   cartQuantity: number;
@@ -91,12 +92,16 @@ export default function CheckoutTemplate({
         billingDetails,
         guestDetails,
       );
+
+      router.push(`/order-complete/${order?.code}`);
     } catch (error) {
       console.error("Failed to create order:", error);
-      throw error;
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error(t("checkout.orderError"));
+      }
     }
-
-    router.push(`/order-complete/${order?.code}`);
   };
 
   return (
