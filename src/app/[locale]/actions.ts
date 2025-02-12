@@ -209,6 +209,7 @@ export const getFilteredProductsAction = async (
   priceMin?: number | null,
   priceMax?: number | null,
   sort?: SearchResultSortParameter,
+  languageCode?: string,
 ) => {
   const result = await getFilteredProducts(
     collectionSlug,
@@ -220,6 +221,7 @@ export const getFilteredProductsAction = async (
     priceMin,
     priceMax,
     sort,
+    languageCode,
   );
   return result;
 };
@@ -298,8 +300,8 @@ export async function deleteBearerToken() {
   cookieStore.delete(VENDURE_BEARER_TOKEN_KEY);
 }
 
-export const getCollectionsAction = async () => {
-  const result = await getCollections();
+export const getCollectionsAction = async (languageCode?: string) => {
+  const result = await getCollections(languageCode);
   return result;
 };
 

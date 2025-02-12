@@ -10,6 +10,7 @@ import {
   orderByCodeQuery,
   filteredProductsQuery,
   collectionsQuery,
+  productBySlugQuery,
 } from "./queries";
 import {
   CreateAddressInput,
@@ -139,8 +140,13 @@ export async function getFilteredProducts(
   priceMin?: number | null,
   priceMax?: number | null,
   sort?: SearchResultSortParameter,
+  languageCode?: string,
 ) {
-  const client = await getAuthenticatedClient();
+  const client = await getAuthenticatedClient(
+    languageCode
+      ? `${VENDURE_API_URL}?languageCode=${languageCode}`
+      : undefined,
+  );
   const { search } = await client.request<GetFilteredProductsQuery>(
     filteredProductsQuery,
     {
@@ -158,8 +164,12 @@ export async function getFilteredProducts(
   return search;
 }
 
-export async function getCollections() {
-  const client = await getAuthenticatedClient();
+export async function getCollections(languageCode?: string) {
+  const client = await getAuthenticatedClient(
+    languageCode
+      ? `${VENDURE_API_URL}?languageCode=${languageCode}`
+      : undefined,
+  );
   const { collections } = await client.request(collectionsQuery);
   return collections;
 }
@@ -179,4 +189,14 @@ export async function verifyCustomer(token: string, password: string) {
     password,
   });
   return verifyCustomerAccount;
+}
+
+export async function getProductBySlug(slug: string, languageCode?: string) {
+  const client = await getAuthenticatedClient(
+    languageCode
+      ? `${VENDURE_API_URL}?languageCode=${languageCode}`
+      : undefined,
+  );
+  const { product } = await client.request(productBySlugQuery, { slug });
+  return product;
 }

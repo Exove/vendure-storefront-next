@@ -1,11 +1,10 @@
 import ProductTemplate from "@/app/[locale]/templates/product-template";
-import { VENDURE_API_URL, SHOP_NAME } from "@/common/constants";
-import { productBySlugQuery } from "@/common/queries";
+import { SHOP_NAME } from "@/common/constants";
 import { Product } from "@/gql/graphql";
-import { request } from "graphql-request";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { getMenuItems } from "@/common/get-menu-items";
+import { getProductBySlug } from "@/common/utils-server";
 
 type Params = Promise<{ slug: string; locale: string }>;
 
@@ -15,13 +14,7 @@ export async function generateMetadata({
   params: Params;
 }): Promise<Metadata> {
   const { slug, locale: languageCode } = await params;
-  const { product } = await request(
-    `${VENDURE_API_URL}?languageCode=${languageCode}`,
-    productBySlugQuery,
-    {
-      slug: slug,
-    },
-  );
+  const product = await getProductBySlug(slug, languageCode);
 
   if (!product) {
     notFound();
@@ -35,13 +28,7 @@ export async function generateMetadata({
 
 export default async function ProductPage(props: { params: Params }) {
   const { slug, locale: languageCode } = await props.params;
-  const { product } = await request(
-    `${VENDURE_API_URL}?languageCode=${languageCode}`,
-    productBySlugQuery,
-    {
-      slug: slug,
-    },
-  );
+  const product = await getProductBySlug(slug, languageCode);
 
   if (!product) {
     notFound();

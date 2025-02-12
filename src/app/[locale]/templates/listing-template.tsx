@@ -11,7 +11,7 @@ import { getFilteredProductsAction } from "../actions";
 import ProductCard from "@/components/product-card";
 import { useTranslations } from "next-intl";
 import { PRODUCTS_PER_PAGE } from "@/common/constants";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useParams } from "next/navigation";
 import SidePanel from "@/components/side-panel";
 import { ChevronLeftIcon, FunnelIcon } from "@heroicons/react/24/outline";
 import ProductFilters from "@/components/product-filters";
@@ -41,6 +41,8 @@ export default function ListingTemplate({
 }: ListingTemplateProps) {
   const t = useTranslations("listing");
   const searchParams = useSearchParams();
+  const params = useParams();
+  const languageCode = params.locale as string;
 
   // Parse URL parameters
   const getInitialFacets = () => {
@@ -172,6 +174,7 @@ export default function ListingTemplate({
         priceRange.min !== null ? priceRange.min * 100 : null,
         priceRange.max !== null ? priceRange.max * 100 : null,
         sortOrder,
+        languageCode,
       );
 
       setProducts(results.items as SearchResult[]);
@@ -227,6 +230,7 @@ export default function ListingTemplate({
     currentPage,
     userAction,
     collectionSlug,
+    languageCode,
   ]);
 
   const handleFacetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -283,17 +287,15 @@ export default function ListingTemplate({
     <div>
       {title && (
         <div className="relative mb-16 mt-6 rounded-xl bg-slate-800 px-10 py-24 text-center">
-          {parentCollection &&
-            parentCollectionSlug &&
-            parentCollectionSlug !== "__root_collection__" && (
-              <Link
-                href={`/collections/${parentCollectionSlug}`}
-                className="absolute left-10 top-8 flex items-center gap-2 text-sm text-slate-300 hover:text-white"
-              >
-                <ChevronLeftIcon className="h-4 w-4 stroke-2" />
-                {parentCollection}
-              </Link>
-            )}
+          {parentCollectionSlug !== "__root_collection__" && (
+            <Link
+              href={`/collections/${parentCollectionSlug}`}
+              className="absolute left-10 top-8 flex items-center gap-2 text-sm text-slate-300 hover:text-white"
+            >
+              <ChevronLeftIcon className="h-4 w-4 stroke-2" />
+              {parentCollection}
+            </Link>
+          )}
           <Heading level="h1" size="xl" className="font-black">
             {title}
           </Heading>

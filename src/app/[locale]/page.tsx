@@ -1,10 +1,5 @@
-import {
-  FRONT_PAGE_COLLECTION_SLUG,
-  VENDURE_API_URL,
-} from "@/common/constants";
-import { collectionsQuery, filteredProductsQuery } from "@/common/queries";
-import { request } from "graphql-request";
-import type { CollectionsQuery, GetFilteredProductsQuery } from "@/gql/graphql";
+import { FRONT_PAGE_COLLECTION_SLUG } from "@/common/constants";
+import { getFilteredProducts, getCollections } from "@/common/utils-server";
 import { getMenuItems } from "@/common/get-menu-items";
 import FrontPageTemplate from "./templates/front-page-template";
 
@@ -15,28 +10,27 @@ export default async function Home(props: { params: Params }) {
   const languageCode = params.locale;
   const menuItems = await getMenuItems();
 
-  const { collections } = await request<CollectionsQuery>(
-    `${VENDURE_API_URL}?languageCode=${languageCode}`,
-    collectionsQuery,
-  );
+  const collections = await getCollections(languageCode);
   const filteredCollections = {
     ...collections,
     items: collections.items.filter(
-      (collection) => collection.slug !== FRONT_PAGE_COLLECTION_SLUG,
+      (collection) =>
+        collection.parent?.name === "__root_collection__" &&
+        collection.slug !== FRONT_PAGE_COLLECTION_SLUG,
     ),
   };
-  const { search: frontPageProducts } = await request<GetFilteredProductsQuery>(
-    `${VENDURE_API_URL}?languageCode=${languageCode}`,
-    filteredProductsQuery,
-    {
-      collectionSlug: FRONT_PAGE_COLLECTION_SLUG,
-      term: "",
-      skip: 0,
-      take: 100,
-      groupByProduct: true,
-      priceMin: 0,
-      priceMax: 1000000000,
-    },
+
+  const frontPageProducts = await getFilteredProducts(
+    FRONT_PAGE_COLLECTION_SLUG,
+    "",
+    0,
+    100,
+    [],
+    true,
+    0,
+    1000000000,
+    undefined,
+    languageCode,
   );
 
   return (
