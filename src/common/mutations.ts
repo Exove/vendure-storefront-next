@@ -5,6 +5,7 @@ export const addItemToOrderMutation = graphql(`
     addItemToOrder(productVariantId: $productVariantId, quantity: $quantity) {
       ... on Order {
         id
+        totalQuantity
       }
       ... on ErrorResult {
         errorCode

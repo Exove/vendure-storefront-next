@@ -77,7 +77,7 @@ export default function AddToCartOptions({
       setCartQuantity(cartQuantity + quantity);
     } catch (error) {
       console.error("Failed to add item to cart:", error);
-      toast.error(t("cart.addError"));
+      toast.error(error instanceof Error ? error.message : t("cart.addError"));
       throw error;
     }
   };

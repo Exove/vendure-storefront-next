@@ -75,7 +75,7 @@
     "checkout": "Checkout",
     "remove": "Remove from cart",
     "itemsInCart": "items in cart",
-    "addError": "Stock level is insufficient."
+    "addError": "Failed to add item to cart"
   },
   "orderComplete": {
     "thankYou": "Thank you for your order!",

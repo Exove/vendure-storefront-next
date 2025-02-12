@@ -3724,7 +3724,7 @@ export type AddItemToOrderMutation = {
         errorCode: ErrorCode;
         message: string;
       }
-    | { __typename?: "Order"; id: string }
+    | { __typename?: "Order"; id: string; totalQuantity: number }
     | {
         __typename?: "OrderInterceptorError";
         errorCode: ErrorCode;
@@ -4785,6 +4785,10 @@ export const AddItemToOrderDocument = {
                     kind: "SelectionSet",
                     selections: [
                       { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "totalQuantity" },
+                      },
                     ],
                   },
                 },

@@ -20,7 +20,7 @@ const documents = {
     types.ActiveOrderFragmentDoc,
   "\n  fragment Order on Order {\n    id\n    type\n    orderPlacedAt\n    code\n    state\n    active\n    totalWithTax\n    customer {\n      firstName\n      lastName\n      emailAddress\n      phoneNumber\n    }\n    shipping\n    shippingLines {\n      shippingMethod {\n        name\n        description\n        id\n      }\n    }\n    shippingAddress {\n      fullName\n      streetLine1\n      postalCode\n      city\n    }\n    lines {\n      id\n      unitPriceWithTax\n      quantity\n      linePriceWithTax\n      productVariant {\n        id\n        name\n        product {\n          slug\n        }\n        sku\n      }\n      featuredAsset {\n        id\n        preview\n      }\n    }\n  }\n":
     types.OrderFragmentDoc,
-  "\n  mutation AddItemToOrder($productVariantId: ID!, $quantity: Int!) {\n    addItemToOrder(productVariantId: $productVariantId, quantity: $quantity) {\n      ... on Order {\n        id\n      }\n      ... on ErrorResult {\n        errorCode\n        message\n      }\n    }\n  }\n":
+  "\n  mutation AddItemToOrder($productVariantId: ID!, $quantity: Int!) {\n    addItemToOrder(productVariantId: $productVariantId, quantity: $quantity) {\n      ... on Order {\n        id\n        totalQuantity\n      }\n      ... on ErrorResult {\n        errorCode\n        message\n      }\n    }\n  }\n":
     types.AddItemToOrderDocument,
   "\n  mutation Login(\n    $emailAddress: String!\n    $password: String!\n    $rememberMe: Boolean!\n  ) {\n    login(\n      username: $emailAddress\n      password: $password\n      rememberMe: $rememberMe\n    ) {\n      ... on CurrentUser {\n        id\n        identifier\n      }\n    }\n  }\n":
     types.LoginDocument,
@@ -116,8 +116,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  mutation AddItemToOrder($productVariantId: ID!, $quantity: Int!) {\n    addItemToOrder(productVariantId: $productVariantId, quantity: $quantity) {\n      ... on Order {\n        id\n      }\n      ... on ErrorResult {\n        errorCode\n        message\n      }\n    }\n  }\n",
-): (typeof documents)["\n  mutation AddItemToOrder($productVariantId: ID!, $quantity: Int!) {\n    addItemToOrder(productVariantId: $productVariantId, quantity: $quantity) {\n      ... on Order {\n        id\n      }\n      ... on ErrorResult {\n        errorCode\n        message\n      }\n    }\n  }\n"];
+  source: "\n  mutation AddItemToOrder($productVariantId: ID!, $quantity: Int!) {\n    addItemToOrder(productVariantId: $productVariantId, quantity: $quantity) {\n      ... on Order {\n        id\n        totalQuantity\n      }\n      ... on ErrorResult {\n        errorCode\n        message\n      }\n    }\n  }\n",
+): (typeof documents)["\n  mutation AddItemToOrder($productVariantId: ID!, $quantity: Int!) {\n    addItemToOrder(productVariantId: $productVariantId, quantity: $quantity) {\n      ... on Order {\n        id\n        totalQuantity\n      }\n      ... on ErrorResult {\n        errorCode\n        message\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
