@@ -13,6 +13,8 @@ import { useTranslations } from "next-intl";
 import { addItemToOrderMutation } from "@/common/mutations";
 import { getBearerToken, setBearerToken } from "@/app/[locale]/actions";
 import { print } from "graphql";
+import { toast } from "sonner";
+import type { AddItemToOrderMutation } from "@/gql/graphql";
 
 interface AddToCartOptionsProps {
   variants: {
@@ -54,13 +56,18 @@ export default function AddToCartOptions({
         headers: authHeaders,
       });
 
-      const response = await graphQLClient.rawRequest(
+      const response = await graphQLClient.rawRequest<AddItemToOrderMutation>(
         print(addItemToOrderMutation),
         {
           productVariantId: selectedVariant.id,
           quantity,
         },
       );
+
+      const result = response.data.addItemToOrder;
+      if ("errorCode" in result) {
+        throw new Error(result.message);
+      }
 
       const authToken = response.headers.get("vendure-auth-token");
       if (authToken && !bearerToken) {
@@ -70,6 +77,7 @@ export default function AddToCartOptions({
       setCartQuantity(cartQuantity + quantity);
     } catch (error) {
       console.error("Failed to add item to cart:", error);
+      toast.error(t("cart.addError"));
       throw error;
     }
   };

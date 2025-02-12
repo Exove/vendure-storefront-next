@@ -74,7 +74,8 @@
     "subtotal": "Subtotal",
     "checkout": "Checkout",
     "remove": "Remove from cart",
-    "itemsInCart": "items in cart"
+    "itemsInCart": "items in cart",
+    "addError": "Stock level is insufficient."
   },
   "orderComplete": {
     "thankYou": "Thank you for your order!",

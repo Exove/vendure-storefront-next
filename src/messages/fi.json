@@ -76,7 +76,8 @@
     "subtotal": "Välisumma",
     "checkout": "Kassalle",
     "remove": "Poista ostoskorista",
-    "itemsInCart": "tuotetta ostoskorissa"
+    "itemsInCart": "tuotetta ostoskorissa",
+    "addError": "Varastosaldo ei ole riittävä."
   },
   "orderComplete": {
     "thankYou": "Kiitos tilauksestasi!",
