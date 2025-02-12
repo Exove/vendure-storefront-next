@@ -354,26 +354,32 @@ export default function ListingTemplate({
           </div>
 
           <ul className="grid grid-cols-1 gap-x-4 gap-y-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {products.map((product, index) => (
-              <li key={index}>
-                {product.slug && (
-                  <ProductCard
-                    slug={product.slug}
-                    name={product.productName}
-                    imageSource={product.productAsset?.preview ?? ""}
-                    priceWithTax={
-                      "min" in product.priceWithTax
-                        ? product.priceWithTax.min
-                        : product.priceWithTax.value
-                    }
-                    hasVariantPrices={
-                      "min" in product.priceWithTax &&
-                      product.priceWithTax.min !== product.priceWithTax.max
-                    }
-                  />
-                )}
+            {products.length === 0 ? (
+              <li className="col-span-full py-10 text-center">
+                <p className="text-slate-400">{t("noResults")}</p>
               </li>
-            ))}
+            ) : (
+              products.map((product, index) => (
+                <li key={index}>
+                  {product.slug && (
+                    <ProductCard
+                      slug={product.slug}
+                      name={product.productName}
+                      imageSource={product.productAsset?.preview ?? ""}
+                      priceWithTax={
+                        "min" in product.priceWithTax
+                          ? product.priceWithTax.min
+                          : product.priceWithTax.value
+                      }
+                      hasVariantPrices={
+                        "min" in product.priceWithTax &&
+                        product.priceWithTax.min !== product.priceWithTax.max
+                      }
+                    />
+                  )}
+                </li>
+              ))
+            )}
           </ul>
 
           {/* Pagination controls */}

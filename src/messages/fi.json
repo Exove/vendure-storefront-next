@@ -127,7 +127,8 @@
     "loading": "Ladataan...",
     "previousPage": "Edellinen sivu",
     "nextPage": "Seuraava sivu",
-    "page": "Sivu"
+    "page": "Sivu",
+    "noResults": "Tuotteita ei löytynyt"
   },
   "Register": {
     "createAccount": "Luo tili",

@@ -125,7 +125,8 @@
     "loading": "Loading...",
     "previousPage": "Previous page",
     "nextPage": "Next page",
-    "page": "Page"
+    "page": "Page",
+    "noResults": "No products found"
   },
   "Register": {
     "createAccount": "Create Account",
