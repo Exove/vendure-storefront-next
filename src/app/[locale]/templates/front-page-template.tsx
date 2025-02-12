@@ -21,13 +21,6 @@ export default function FrontPageTemplate({
 }: FrontPageTemplateProps) {
   const t = useTranslations("home");
 
-  // Filter to show only root-level collections
-  const rootCollections = collections.items.filter(
-    (collection) =>
-      collection.parent?.name === "__root_collection__" &&
-      collection.slug !== "front-page-products",
-  );
-
   return (
     <Container>
       <Header menuItems={menuItems} frontPage />
@@ -39,7 +32,7 @@ export default function FrontPageTemplate({
             </Heading>
           </div>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {rootCollections.map((collection) => (
+            {collections.items.map((collection) => (
               <Link
                 key={collection.id}
                 href={`/collections/${collection.slug}`}
