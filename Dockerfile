@@ -33,13 +33,13 @@ RUN --mount=type=secret,id=nextjs_build_secrets \
   else echo "Lockfile not found." && exit 1; \
   fi; \
   \
+  # turn the .env into env vars as GraphQL codegen does not read .envs by default
+  source /app/.env;\
   # Generate Vendure Types
   npm run gen; \
   \
   # Delete .env file that NextJS creates during build
   rm -f /app/.next/standalone/.env
-
-RUN npm run build
 
 # Production image, copy all the files and run next
 FROM base AS runner
