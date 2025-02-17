@@ -23,6 +23,8 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN --mount=type=secret,id=nextjs_build_secrets \
+  # Exit on error
+  set -e; \
   # Workaround for Docker build secrets mount not supporting dotfiles.
   # Using symlink so the file contents are not copied to external file.
   ln -s /run/secrets/nextjs_build_secrets /app/.env; \
