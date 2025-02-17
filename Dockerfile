@@ -33,8 +33,12 @@ RUN --mount=type=secret,id=nextjs_build_secrets \
   else echo "Lockfile not found." && exit 1; \
   fi; \
   \
-  # turn the .env into env vars as GraphQL codegen does not read .envs by default
+  # turn the .env into env vars as GraphQL codegen does not read .envs by default.
+  # automatically export all variables;
+  set -a; \
   source /app/.env;\
+  set +a; \
+  \
   # Generate Vendure Types
   npm run gen; \
   \
