@@ -44,4 +44,7 @@ jobs:
           context: ./
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          secrets: |
+            "nextjs_build_secrets=
+            NEXT_PUBLIC_VENDURE_API_URL=${{ vars.NEXT_PUBLIC_VENDURE_API_URL }}"
           push: true

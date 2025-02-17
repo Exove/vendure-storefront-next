@@ -22,7 +22,11 @@ COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED=1
 
-RUN \
+RUN --mount=type=secret,id=nextjs_build_secrets \
+  # Workaround for Docker build secrets mount not supporting dotfiles.
+  # Using symlink so the file contents are not copied to external file.
+  ln -s /run/secrets/nextjs_build_secrets /app/.env; \
+  \
   if [ -f yarn.lock ]; then yarn run build; \
   elif [ -f package-lock.json ]; then npm run build; \
   elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \

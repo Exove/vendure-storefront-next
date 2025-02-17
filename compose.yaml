@@ -4,6 +4,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      secrets:
+        - nextjs_build_secrets
+      network: host
     restart: unless-stopped
     container_name: nextjs
     networks:
@@ -16,3 +19,7 @@ services:
 networks:
   store_net:
     external: true
+
+secrets:
+  nextjs_build_secrets:
+    file: .env
