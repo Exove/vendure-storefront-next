@@ -23,8 +23,8 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN --mount=type=secret,id=nextjs_build_secrets \
-  # Exit on error
-  set -e; \
+  # debug and exit on error
+  set -xe; \
   # Workaround for Docker build secrets mount not supporting dotfiles.
   # Using symlink so the file contents are not copied to external file.
   ln -s /run/secrets/nextjs_build_secrets /app/.env; \
@@ -38,7 +38,7 @@ RUN --mount=type=secret,id=nextjs_build_secrets \
   # turn the .env into env vars as GraphQL codegen does not read .envs by default.
   # automatically export all variables;
   set -a; \
-  source /app/.env;\
+  source /app/.env; \
   set +a; \
   \
   # Generate Vendure Types
