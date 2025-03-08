@@ -1,8 +1,8 @@
 "use client";
 
-import { InstantSearch, SearchBox, Hits } from "react-instantsearch";
+import { InstantSearch, SearchBox } from "react-instantsearch";
 import createClient from "@searchkit/instantsearch-client";
-import { useRefinementList } from "react-instantsearch";
+import { useRefinementList, useHits } from "react-instantsearch";
 import React from "react";
 
 // Mukautettu komponentti RefinementList-suodattimelle käyttäen hookia
@@ -54,6 +54,25 @@ const CustomRefinementList = ({
   );
 };
 
+// Mukautettu Hits-komponentti käyttäen useHits-hookia
+const CustomHits = () => {
+  const { items } = useHits();
+
+  return (
+    <div>
+      <h3>Tuotteet</h3>
+      <div>
+        {items.map((hit) => (
+          <div key={hit.objectID}>
+            <h4>{hit.name}</h4>
+            <p>Slug: {hit.slug}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 const searchClient = createClient({
   url: "/api/search",
 });
@@ -79,7 +98,7 @@ export default function Search() {
           <div>
             <SearchBox placeholder="Etsi tuotteita..." />
           </div>
-          <Hits />
+          <CustomHits />
         </div>
       </div>
     </InstantSearch>
