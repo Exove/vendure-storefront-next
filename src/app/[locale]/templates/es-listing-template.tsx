@@ -78,24 +78,7 @@ const CustomHits = () => {
             }}
           >
             <h4>{hit.productVariantName}</h4>
-            {hit["product-facetValueData"] && (
-              <div>
-                {JSON.parse(hit["product-facetValueData"]).category && (
-                  <p>
-                    Kategoria:{" "}
-                    {JSON.parse(hit["product-facetValueData"]).category.join(
-                      ", ",
-                    )}
-                  </p>
-                )}
-                {JSON.parse(hit["product-facetValueData"]).brand && (
-                  <p>
-                    Brändi:{" "}
-                    {JSON.parse(hit["product-facetValueData"]).brand.join(", ")}
-                  </p>
-                )}
-              </div>
-            )}
+
             <p>Slug: {hit.slug}</p>
           </div>
         ))}
@@ -117,12 +100,9 @@ export default function Search() {
             <h2>Suodata</h2>
             <CustomRefinementList
               title="Kategoriat"
-              attribute="product-facetValueData.category"
+              attribute="product-category"
             />
-            <CustomRefinementList
-              title="Brändit"
-              attribute="product-facetValueData.brand"
-            />
+            <CustomRefinementList title="Brändit" attribute="product-brand" />
           </div>
         </div>
         <div>

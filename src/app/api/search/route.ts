@@ -29,28 +29,13 @@ const apiConfig = {
         type: "string" as "string" | "numeric" | "date",
       },
       {
-        attribute: "facetIds",
-        field: "facetIds.keyword",
+        attribute: "product-category",
+        field: "product-category.keyword",
         type: "string" as "string" | "numeric" | "date",
       },
       {
-        attribute: "facetValueIds",
-        field: "facetValueIds.keyword",
-        type: "string" as "string" | "numeric" | "date",
-      },
-      {
-        attribute: "product-facetValueSlugs",
-        field: "product-facetValueSlugs.keyword",
-        type: "string" as "string" | "numeric" | "date",
-      },
-      {
-        attribute: "product-facetValueData.category",
-        field: "product-facetValueData.category.keyword",
-        type: "string" as "string" | "numeric" | "date",
-      },
-      {
-        attribute: "product-facetValueData.brand",
-        field: "product-facetValueData.brand.keyword",
+        attribute: "product-brand",
+        field: "product-brand.keyword",
         type: "string" as "string" | "numeric" | "date",
       },
     ],
