@@ -1,6 +1,6 @@
 "use client";
 
-import { InstantSearch, SearchBox } from "react-instantsearch";
+import { InstantSearch } from "react-instantsearch";
 import createClient from "@searchkit/instantsearch-client";
 import { useRefinementList, useHits } from "react-instantsearch";
 import React from "react";
@@ -23,59 +23,44 @@ const CustomRefinementList = ({
   return (
     <div>
       <h3>{title}</h3>
-
-      {/* Suodatinvaihtoehdot */}
-      <div>
-        <ul style={{ maxHeight: "200px", overflowY: "auto" }}>
-          {items.map((item) => (
-            <li key={item.label}>
-              <label style={{ display: "flex", cursor: "pointer" }}>
-                <input
-                  type="checkbox"
-                  checked={item.isRefined}
-                  onChange={() => refine(item.value)}
-                />
-                <span>
-                  {item.highlighted ? (
-                    <span
-                      dangerouslySetInnerHTML={{ __html: item.highlighted }}
-                    />
-                  ) : (
-                    item.label
-                  )}
-                </span>
-                <span style={{ marginLeft: "auto" }}>({item.count})</span>
-              </label>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <ul>
+        {items.map((item) => (
+          <li key={item.label}>
+            <label className="flex cursor-pointer">
+              <input
+                type="checkbox"
+                checked={item.isRefined}
+                onChange={() => refine(item.value)}
+              />
+              <span>
+                {item.highlighted ? (
+                  <span
+                    dangerouslySetInnerHTML={{ __html: item.highlighted }}
+                  />
+                ) : (
+                  item.label
+                )}
+              </span>
+              <span className="ml-auto">({item.count})</span>
+            </label>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
 
-// Mukautettu Hits-komponentti käyttäen useHits-hookia
 const CustomHits = () => {
   const { items } = useHits();
 
   return (
     <div>
       <h3>Tuotteet</h3>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-          gap: "20px",
-        }}
-      >
+      <div className="grid grid-cols-3 gap-5">
         {items.map((hit) => (
           <div
             key={hit.objectID}
-            style={{
-              border: "1px solid #eee",
-              padding: "15px",
-              borderRadius: "5px",
-            }}
+            className="rounded border border-gray-900 p-4"
           >
             <h4>{hit.productVariantName}</h4>
 
@@ -94,21 +79,15 @@ const searchClient = createClient({
 export default function Search() {
   return (
     <InstantSearch searchClient={searchClient} indexName="vendure-variants">
-      <div>
-        <div>
-          <div>
-            <h2>Suodata</h2>
-            <CustomRefinementList
-              title="Kategoriat"
-              attribute="product-category"
-            />
-            <CustomRefinementList title="Brändit" attribute="product-brand" />
-          </div>
+      <div className="flex gap-32">
+        <div className="flex flex-col gap-5">
+          <CustomRefinementList
+            title="Kategoriat"
+            attribute="product-category"
+          />
+          <CustomRefinementList title="Brändit" attribute="product-brand" />
         </div>
         <div>
-          <div>
-            <SearchBox placeholder="Etsi tuotteita..." />
-          </div>
           <CustomHits />
         </div>
       </div>
