@@ -20,6 +20,7 @@ const apiConfig = {
       "collectionSlugs",
       "facetIds",
       "facetValueIds",
+      "product-facetValueData",
     ],
     facet_attributes: [
       {
@@ -40,6 +41,16 @@ const apiConfig = {
       {
         attribute: "product-facetValueSlugs",
         field: "product-facetValueSlugs.keyword",
+        type: "string" as "string" | "numeric" | "date",
+      },
+      {
+        attribute: "product-facetValueData.category",
+        field: "product-facetValueData.category.keyword",
+        type: "string" as "string" | "numeric" | "date",
+      },
+      {
+        attribute: "product-facetValueData.brand",
+        field: "product-facetValueData.brand.keyword",
         type: "string" as "string" | "numeric" | "date",
       },
     ],

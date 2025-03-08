@@ -61,10 +61,41 @@ const CustomHits = () => {
   return (
     <div>
       <h3>Tuotteet</h3>
-      <div>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+          gap: "20px",
+        }}
+      >
         {items.map((hit) => (
-          <div key={hit.objectID}>
-            <h4>{hit.name}</h4>
+          <div
+            key={hit.objectID}
+            style={{
+              border: "1px solid #eee",
+              padding: "15px",
+              borderRadius: "5px",
+            }}
+          >
+            <h4>{hit.productVariantName}</h4>
+            {hit["product-facetValueData"] && (
+              <div>
+                {JSON.parse(hit["product-facetValueData"]).category && (
+                  <p>
+                    Kategoria:{" "}
+                    {JSON.parse(hit["product-facetValueData"]).category.join(
+                      ", ",
+                    )}
+                  </p>
+                )}
+                {JSON.parse(hit["product-facetValueData"]).brand && (
+                  <p>
+                    Brändi:{" "}
+                    {JSON.parse(hit["product-facetValueData"]).brand.join(", ")}
+                  </p>
+                )}
+              </div>
+            )}
             <p>Slug: {hit.slug}</p>
           </div>
         ))}
@@ -86,11 +117,11 @@ export default function Search() {
             <h2>Suodata</h2>
             <CustomRefinementList
               title="Kategoriat"
-              attribute="product-facetValueSlugs"
+              attribute="product-facetValueData.category"
             />
             <CustomRefinementList
               title="Brändit"
-              attribute="product-facetValueSlugs"
+              attribute="product-facetValueData.brand"
             />
           </div>
         </div>
