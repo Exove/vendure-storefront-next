@@ -37,6 +37,11 @@ const apiConfig = {
         field: "facetValueIds.keyword",
         type: "string" as "string" | "numeric" | "date",
       },
+      {
+        attribute: "product-facetValueSlugs",
+        field: "product-facetValueSlugs.keyword",
+        type: "string" as "string" | "numeric" | "date",
+      },
     ],
   },
 };
