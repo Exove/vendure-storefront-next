@@ -4,6 +4,8 @@ import { InstantSearch } from "react-instantsearch";
 import createClient from "@searchkit/instantsearch-client";
 import { useRefinementList, useHits } from "react-instantsearch";
 import React from "react";
+import type { Hit } from "instantsearch.js";
+import { SearchHit } from "@/components/searchbox";
 
 // Mukautettu komponentti RefinementList-suodattimelle käyttäen hookia
 interface CustomRefinementListProps {
@@ -53,11 +55,22 @@ const CustomRefinementList = ({
 const CustomHits = () => {
   const { items } = useHits();
 
+  const typedHits = items as unknown as Hit<SearchHit>[];
+
+  // Group hits by slug
+  const uniqueItems = new Map();
+  typedHits.forEach((hit) => {
+    if (!uniqueItems.has(hit.slug)) {
+      uniqueItems.set(hit.slug, hit);
+    }
+  });
+  const uniqueHits = Array.from(uniqueItems.values());
+
   return (
     <div>
       <h3>Tuotteet</h3>
       <div className="grid grid-cols-3 gap-5">
-        {items.map((hit) => (
+        {uniqueHits.map((hit) => (
           <div
             key={hit.objectID}
             className="rounded border border-gray-900 p-4"

@@ -18,7 +18,7 @@ import { useTranslations } from "next-intl";
 import { formatCurrency } from "@/common/utils";
 import SidePanel from "./side-panel";
 
-interface SearchHit {
+export interface SearchHit {
   slug: string;
   productName: string;
   productPreview: string;
