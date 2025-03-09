@@ -17,6 +17,9 @@ interface ESAggregation {
   buckets: Array<{
     key: string;
     doc_count: number;
+    distinct_slugs?: {
+      value: number;
+    };
   }>;
 }
 
@@ -67,9 +70,30 @@ export async function POST(request: Request) {
         aggs: {
           categories: {
             terms: { field: "product-category.keyword", size: 20 },
+            aggs: {
+              distinct_slugs: {
+                cardinality: {
+                  field: "slug.keyword",
+                },
+              },
+            },
           },
           brands: {
             terms: { field: "product-brand.keyword", size: 20 },
+            aggs: {
+              distinct_slugs: {
+                cardinality: {
+                  field: "slug.keyword",
+                },
+              },
+            },
+          },
+        },
+        collapse: {
+          field: "slug.keyword",
+          inner_hits: {
+            name: "variants",
+            size: 10,
           },
         },
       },
@@ -88,11 +112,22 @@ export async function POST(request: Request) {
     const categoryBuckets = aggregations?.categories?.buckets || [];
     const brandBuckets = aggregations?.brands?.buckets || [];
 
+    // Päivitetään suodattimien doc_count arvot käyttämään distinct_slugs-arvoa
+    const categoryFilters = categoryBuckets.map((bucket) => ({
+      key: bucket.key,
+      doc_count: bucket.distinct_slugs?.value || bucket.doc_count,
+    }));
+
+    const brandFilters = brandBuckets.map((bucket) => ({
+      key: bucket.key,
+      doc_count: bucket.distinct_slugs?.value || bucket.doc_count,
+    }));
+
     // Palautetaan hakutulokset ja suodattimet
     return NextResponse.json({
       results,
-      categories: categoryBuckets,
-      brands: brandBuckets,
+      categories: categoryFilters,
+      brands: brandFilters,
     });
   } catch (error) {
     console.error("Elasticsearch-haku epäonnistui:", error);
