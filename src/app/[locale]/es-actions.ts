@@ -11,6 +11,7 @@ export interface ElasticsearchSearchParams {
 // ES-vastaustyypit
 interface ESSource {
   productVariantName?: string;
+  productName?: string;
   slug?: string;
   [key: string]: unknown;
 }
@@ -111,6 +112,7 @@ export const searchElasticsearchAction = async (
   const results = hits.map((hit) => ({
     id: hit._id,
     productVariantName: hit._source?.productVariantName || "",
+    productName: hit._source?.productName || "",
     slug: hit._source?.slug || "",
   }));
 

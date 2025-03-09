@@ -124,9 +124,7 @@ export default function Search() {
             ) : (
               searchResults.map((result) => (
                 <div key={result.id} className="rounded border p-4">
-                  <h4 className="mb-2 font-medium">
-                    {result.productVariantName}
-                  </h4>
+                  <h4 className="mb-2 font-medium">{result.productName}</h4>
                   <p className="text-sm text-gray-600">Slug: {result.slug}</p>
                 </div>
               ))
