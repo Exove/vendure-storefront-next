@@ -1,109 +1,167 @@
 "use client";
 
-import { InstantSearch } from "react-instantsearch";
-import createClient from "@searchkit/instantsearch-client";
-import { useRefinementList, useHits } from "react-instantsearch";
-import React from "react";
-import type { Hit } from "instantsearch.js";
-import { SearchHit } from "@/components/searchbox";
+import React, { useEffect, useState } from "react";
 
-// Mukautettu komponentti RefinementList-suodattimelle käyttäen hookia
-interface CustomRefinementListProps {
-  title: string;
-  attribute: string;
+// Tyypit hakutuloksille ja suodattimille
+interface ProductSearchHit {
+  productVariantName: string;
+  slug: string;
+  id: string;
 }
 
-const CustomRefinementList = ({
-  title,
-  attribute,
-}: CustomRefinementListProps) => {
-  const { items, refine } = useRefinementList({
-    attribute,
-    limit: 20,
-  });
-
-  return (
-    <div>
-      <h3>{title}</h3>
-      <ul>
-        {items.map((item) => (
-          <li key={item.label}>
-            <label className="flex cursor-pointer">
-              <input
-                type="checkbox"
-                checked={item.isRefined}
-                onChange={() => refine(item.value)}
-              />
-              <span>
-                {item.highlighted ? (
-                  <span
-                    dangerouslySetInnerHTML={{ __html: item.highlighted }}
-                  />
-                ) : (
-                  item.label
-                )}
-              </span>
-              <span className="ml-auto">({item.count})</span>
-            </label>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
-
-const CustomHits = () => {
-  const { items } = useHits();
-
-  const typedHits = items as unknown as Hit<SearchHit>[];
-
-  // Group hits by slug
-  const uniqueItems = new Map();
-  typedHits.forEach((hit) => {
-    if (!uniqueItems.has(hit.slug)) {
-      uniqueItems.set(hit.slug, hit);
-    }
-  });
-  const uniqueHits = Array.from(uniqueItems.values());
-
-  return (
-    <div>
-      <h3>Tuotteet</h3>
-      <div className="grid grid-cols-3 gap-5">
-        {uniqueHits.map((hit) => (
-          <div
-            key={hit.objectID}
-            className="rounded border border-gray-900 p-4"
-          >
-            <h4>{hit.productVariantName}</h4>
-
-            <p>Slug: {hit.slug}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-const searchClient = createClient({
-  url: "/api/search",
-});
+interface FilterOption {
+  key: string;
+  doc_count: number;
+}
 
 export default function Search() {
+  // Tilamuuttujat
+  const [searchResults, setSearchResults] = useState<ProductSearchHit[]>([]);
+  const [categories, setCategories] = useState<FilterOption[]>([]);
+  const [brands, setBrands] = useState<FilterOption[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  // Suorita haku valituilla suodattimilla
+  const performSearch = async () => {
+    setIsLoading(true);
+
+    try {
+      // Käytetään API-reittiä hakuun
+      const response = await fetch("/api/elasticsearch", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          selectedCategories,
+          selectedBrands,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Hakupyyntö epäonnistui");
+      }
+
+      const data = await response.json();
+
+      setSearchResults(data.results);
+      setCategories(data.categories);
+      setBrands(data.brands);
+    } catch (error) {
+      console.error("Haku epäonnistui:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Kategorian valinta
+  const toggleCategory = (category: string) => {
+    setSelectedCategories((prev) =>
+      prev.includes(category)
+        ? prev.filter((c) => c !== category)
+        : [...prev, category],
+    );
+  };
+
+  // Brändin valinta
+  const toggleBrand = (brand: string) => {
+    setSelectedBrands((prev) =>
+      prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand],
+    );
+  };
+
+  // Suoritetaan haku kun sivu latautuu tai suodattimet muuttuvat
+  useEffect(() => {
+    performSearch();
+  }, [selectedCategories, selectedBrands]); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
-    <InstantSearch searchClient={searchClient} indexName="vendure-variants">
-      <div className="flex gap-32">
-        <div className="flex flex-col gap-5">
-          <CustomRefinementList
-            title="Kategoriat"
-            attribute="product-category"
-          />
-          <CustomRefinementList title="Brändit" attribute="product-brand" />
+    <div className="p-4">
+      <h1 className="mb-6 text-2xl">Tuotehaku</h1>
+
+      <div className="flex gap-8">
+        {/* Suodattimet */}
+        <div className="w-1/4">
+          {/* Kategoriat */}
+          <div className="mb-6">
+            <h3 className="mb-2 font-bold">Kategoriat</h3>
+            {isLoading ? (
+              <p>Ladataan...</p>
+            ) : (
+              <ul>
+                {categories.map((category) => (
+                  <li key={category.key} className="mb-1">
+                    <label className="flex cursor-pointer items-center">
+                      <input
+                        type="checkbox"
+                        checked={selectedCategories.includes(category.key)}
+                        onChange={() => toggleCategory(category.key)}
+                        className="mr-2"
+                      />
+                      <span>{category.key}</span>
+                      <span className="ml-auto text-gray-500">
+                        ({category.doc_count})
+                      </span>
+                    </label>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          {/* Brändit */}
+          <div>
+            <h3 className="mb-2 font-bold">Brändit</h3>
+            {isLoading ? (
+              <p>Ladataan...</p>
+            ) : (
+              <ul>
+                {brands.map((brand) => (
+                  <li key={brand.key} className="mb-1">
+                    <label className="flex cursor-pointer items-center">
+                      <input
+                        type="checkbox"
+                        checked={selectedBrands.includes(brand.key)}
+                        onChange={() => toggleBrand(brand.key)}
+                        className="mr-2"
+                      />
+                      <span>{brand.key}</span>
+                      <span className="ml-auto text-gray-500">
+                        ({brand.doc_count})
+                      </span>
+                    </label>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
-        <div>
-          <CustomHits />
+
+        {/* Hakutulokset */}
+        <div className="w-3/4">
+          <h3 className="mb-4 font-bold">Tuotteet</h3>
+          {isLoading ? (
+            <p>Ladataan hakutuloksia...</p>
+          ) : (
+            <div className="grid grid-cols-3 gap-4">
+              {searchResults.length === 0 ? (
+                <p>Ei hakutuloksia</p>
+              ) : (
+                searchResults.map((result) => (
+                  <div key={result.id} className="rounded border p-4">
+                    <h4 className="mb-2 font-medium">
+                      {result.productVariantName}
+                    </h4>
+                    <p className="text-sm text-gray-600">Slug: {result.slug}</p>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
         </div>
       </div>
-    </InstantSearch>
+    </div>
   );
 }
