@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
   /* config options here */
   output: "standalone",
   images: {
+    domains: ["vendure.rebl-shop-staging.exove.eu"],
     remotePatterns: [
       {
         protocol: "https",
