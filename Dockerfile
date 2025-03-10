@@ -35,7 +35,7 @@ RUN --mount=type=secret,id=nextjs_build_secrets \
   else echo "Lockfile not found." && exit 1; \
   fi; \
   \
-  echo $(ls /runs/secrets/*); \
+  echo $(ls /run/secrets/*); \
   echo $(cat /app/.env); \
   # turn the .env into env vars as GraphQL codegen does not read .envs by default.
   # automatically export all variables;
