@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "vendure.rebl-shop-staging.exove.eu",
+        pathname: "/assets/**"
       },
       {
         protocol: "http",
