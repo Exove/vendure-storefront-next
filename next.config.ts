@@ -7,11 +7,11 @@ const nextConfig: NextConfig = {
   /* config options here */
   output: "standalone",
   images: {
-    domains: ["vendure.rebl-shop-staging.exove.eu"],
+    domains: ["vendure.vendure-storefront-next-demo.exove.eu"],
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "vendure.rebl-shop-staging.exove.eu",
+        hostname: "vendure.vendure-storefront-next-demo.exove.eu",
         pathname: "/assets/**"
       },
       {
