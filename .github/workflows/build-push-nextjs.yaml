@@ -46,8 +46,8 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           secrets: |
             "nextjs_build_secrets=
-            NEXT_PUBLIC_URL: ${{ vars.NEXT_PUBLIC_URL }}
-            NEXT_PUBLIC_ROOT_URL: ${{ vars.NEXT_PUBLIC_ROOT_URL }}
-            NEXT_PUBLIC_VENDURE_API_URL: ${{ vars.NEXT_PUBLIC_VENDURE_API_URL }}
+            NEXT_PUBLIC_URL=${{ vars.NEXT_PUBLIC_URL }}
+            NEXT_PUBLIC_ROOT_URL=${{ vars.NEXT_PUBLIC_ROOT_URL }}
+            NEXT_PUBLIC_VENDURE_API_URL=${{ vars.NEXT_PUBLIC_VENDURE_API_URL }}
             "
           push: true
