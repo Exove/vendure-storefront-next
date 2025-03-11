@@ -5,10 +5,10 @@ import { NextRequest, NextResponse } from "next/server";
 const apiConfig = {
   connection: {
     host: process.env.NEXT_PUBLIC_ELASTICSEARCH_HOST || "http://localhost:9200",
-    auth: {
-         username: ES_USERNAME,
-         password: ES_PASSWORD
-      },
+#    auth: {
+#         username: ES_USERNAME,
+#         password: ES_PASSWORD
+#      },
   },
   search_settings: {
     analysis: {
