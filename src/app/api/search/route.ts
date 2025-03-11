@@ -1,4 +1,4 @@
-import { ES_PASSWORD, ES_USERNAME } from "@/common/constants";
+//import { ES_PASSWORD, ES_USERNAME } from "@/common/constants";
 import Client from "@searchkit/api";
 import { NextRequest, NextResponse } from "next/server";
 
