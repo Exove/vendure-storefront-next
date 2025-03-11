@@ -16,3 +16,7 @@ export const FRONT_PAGE_COLLECTION_SLUG = "front-page";
 export const HIDDEN_FACET_GROUPS = ["visibility"] as string[];
 
 export const VENDURE_BEARER_TOKEN_KEY = "vendure-bearer-token-h3jrc34";
+
+export const ES_USERNAME = process.env.ELASTICSEARCH_USERNAME || "foo";
+
+export const ES_PASSWORD = process.env.ELASTICSEARCH_PASSWORD || "bar";
