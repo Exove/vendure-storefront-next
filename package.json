@@ -24,7 +24,7 @@
     "graphql-request": "^7.1.2",
     "lucide-react": "^0.460.0",
     "motion": "^11.11.17",
-    "next": "^15",
+    "next": "^15.5.7",
     "next-intl": "^3.25.1",
     "react": "^19",
     "react-dom": "^19",
